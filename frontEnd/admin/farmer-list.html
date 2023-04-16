@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recommender System | Farmers</title>
+
+    <script src="./dist/js/route-guard.js"></script>
+    <!-- Google Font: Source Sans Pro -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+    />
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css" />
+    <link rel="stylesheet" href="plugins/select2/css/select2.min.css" />
+    <link
+      rel="stylesheet"
+      href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"
+    />
+    <!-- jsGrid -->
+    <link rel="stylesheet" href="./plugins/jsgrid/jsgrid.min.css" />
+    <link rel="stylesheet" href="./plugins/jsgrid/jsgrid-theme.min.css" />
+  </head>
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <div class="_navbar"></div>
+      <!-- /.navbar -->
+
+      <!-- Main Sidebar Container -->
+      <div class="_sidebar"></div>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1>Lists of Farmers</h1>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item">
+                    <a href="#">Manage Farmers</a>
+                  </li>
+                  <li class="breadcrumb-item active">Farmer Lists</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="card">
+            <!-- <div class="card-header">
+              <h3 class="card-title">Lists of Farmers</h3>
+            </div> -->
+            <!-- /.card-header -->
+            <div class="card-body">
+              <div id="jsGrid1"></div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+
+      <!-- Control Sidebar -->
+      <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+        <div class="p-3">
+          <h5>Title</h5>
+          <p>Sidebar content</p>
+        </div>
+      </aside>
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- REQUIRED SCRIPTS -->
+
+    <!-- jQuery -->
+    <script src="./plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="./dist/js/adminlte.min.js"></script>
+    <!-- Initialize -->
+    <script src="./dist/js/components.js"></script>
+    <script src="./plugins/select2/js/select2.full.min.js"></script>
+    <script src="./plugins/moment/moment.min.js"></script>
+    <script src="./plugins/inputmask/jquery.inputmask.min.js"></script>
+    <!-- jsGrid -->
+    <script src="./plugins/jsgrid/demos/db.js"></script>
+    <script src="./plugins/jsgrid/jsgrid.min.js"></script>
+    <script>
+      "use strict";
+
+      $(function () {
+        //Initialize Select2 Elements
+        $(".select2").select2();
+
+        //Initialize Select2 Elements
+        $(".select2bs4").select2({
+          theme: "bootstrap4",
+        });
+        //Datemask dd/mm/yyyy
+        $("#datemask").inputmask("dd/mm/yyyy", { placeholder: "dd/mm/yyyy" });
+        //Datemask2 mm/dd/yyyy
+        $("#datemask2").inputmask("mm/dd/yyyy", { placeholder: "mm/dd/yyyy" });
+        //Money Euro
+        $("[data-mask]").inputmask();
+      });
+
+      $(function () {
+        $("#jsGrid1").jsGrid({
+          height: "100%",
+          minHeight: "100px",
+          width: "100%",
+
+          editing: true,
+          paging: true,
+          pageSize: 10,
+
+          data: db.clients,
+          deleteConfirm: function (item) {
+            return (
+              'The client "' + item.Age + '" will be removed. Are you sure?'
+            );
+          },
+          rowClick: function (args) {
+            showDetailsDialog("Edit", args.item);
+          },
+          fields: [
+            { name: "Name", type: "text", width: 100 },
+            { name: "Age", type: "number", width: 50 },
+            { name: "Location (Coordinates)", type: "text", width: 150 },
+            // {
+            //   name: "Country",
+            //   type: "select",
+            //   items: db.countries,
+            //   valueField: "Id",
+            //   textField: "Name",
+            // },
+            { name: "Crops", type: "text", width: 100 },
+            { name: "Area", type: "text", width: 50 },
+            { name: "Yield", type: "text", width: 50 },
+            { name: "Status", type: "text", width: 50 },
+            { type: "control", width: 50 },
+          ],
+        });
+      });
+    </script>
+  </body>
+</html>
