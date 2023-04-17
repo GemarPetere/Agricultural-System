@@ -6,7 +6,6 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const path = require("path");
 const sockets = require("./sockets");
-const fileupload = require('express-fileupload'); 
 require("dotenv").config();
 
 
@@ -32,7 +31,7 @@ app.use(express.json()); //n1
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(expressValidator());
-app.use(fileupload({useTempFiles: true}))
+app.use(express.urlencoded({extended: false}))
 
 
 //static folder
