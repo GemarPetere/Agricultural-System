@@ -71,14 +71,10 @@ export default async function sendPostRequest(route, userInfo) {
   }
 }
 
-export  async function sendPutRequest(route, userInfo) {
+export async function sendPutRequest(route, userInfo) {
   const userData = {
     method: "PUT",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userInfo),
+    body: userInfo,
   };
 
   try {

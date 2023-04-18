@@ -159,27 +159,8 @@ const form = document.querySelector("#recruitForm");
 if (form) {
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    const obj = {
-      firstName: recruitForm.elements["first-name"].value,
-      middleName: recruitForm.elements["middleInitial"].value,
-      lastName: recruitForm.elements["last-name"].value,
-      suffix: recruitForm.elements["suffix"].value,
-      address: recruitForm.elements["address"].value,
-      birthDate: recruitForm.elements["date"].value,
-      age: recruitForm.elements["age"].value,
-      gender: recruitForm.elements["gender"].value,
-      status: recruitForm.elements["civil-status"].value,
-      religion: recruitForm.elements["religion"].value,
-      contactNo: recruitForm.elements["contact-number"].value,
-      landArea: recruitForm.elements["land-area"].value,
-    };
 
-    /*  const json = JSON.stringify(obj);
-  const blob = new Blob([json], {
-    type: 'application/json'
-  });
- */
-    const file = document.querySelector("#image");
+    let file = document.querySelector("input[type='file']");
     const formData = {
       firstName: recruitForm.elements["first-name"].value,
       middleName: recruitForm.elements["middleInitial"].value,
@@ -199,9 +180,14 @@ if (form) {
     sendPostRequest("/farmer/recruitement", formData)
       .then((res) => {
         console.log(res.data._id);
-        sendPutRequest(`/farmer/recruitement/image/${res.data._id}`, {
-          image: file.files[0],
-        });
+        let imageFile = file.files[0];
+
+        console.log(imageFile);
+
+        const imageData = new FormData();
+        imageData.append('image', imageFile)
+
+        sendPutRequest(`/farmer/recruitement/image/${res.data._id}`, imageData);
       })
       .catch((err) => {
         console.error(err);
