@@ -73,13 +73,13 @@ exports.farmerImage = async (req, res) => {
   console.log(req.body);
   try {
     const { tempFilePath } = req.files.image;
-    const { id } = req.params.id
+    const { id } = req.params
 
     const uploadedResponse = await cloudinary.uploader.upload(tempFilePath, {
       upload_preset: "farmer-image",
     });
 
-    console.log(uploadedResponse)
+    console.log(req.params)
     Farmer.updateOne(
       { _id: id },
       { $set: { "image": uploadedResponse } },
