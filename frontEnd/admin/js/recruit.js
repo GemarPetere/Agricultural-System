@@ -1,19 +1,19 @@
-import sendPostRequest from "../../assets/js/common.js";
+import sendPostRequest, { sendPutRequest } from "../../assets/js/common.js";
 
 $(function () {
-    //Initialize Select2 Elements
-    $(".select2").select2();
+  //Initialize Select2 Elements
+  $(".select2").select2();
 
-    //Initialize Select2 Elements
-    $(".select2bs4").select2({
-        theme: "bootstrap4",
-    });
-    //Datemask dd/mm/yyyy
-    $("#datemask").inputmask("dd/mm/yyyy", { placeholder: "dd/mm/yyyy" });
-    //Datemask2 mm/dd/yyyy
-    $("#datemask2").inputmask("mm/dd/yyyy", { placeholder: "mm/dd/yyyy" });
-    //Money Euro
-    $("[data-mask]").inputmask();
+  //Initialize Select2 Elements
+  $(".select2bs4").select2({
+    theme: "bootstrap4",
+  });
+  //Datemask dd/mm/yyyy
+  $("#datemask").inputmask("dd/mm/yyyy", { placeholder: "dd/mm/yyyy" });
+  //Datemask2 mm/dd/yyyy
+  $("#datemask2").inputmask("mm/dd/yyyy", { placeholder: "mm/dd/yyyy" });
+  //Money Euro
+  $("[data-mask]").inputmask();
 });
 
 //     // Initialize Map
@@ -106,8 +106,8 @@ $(function () {
 //       // }
 //     });
 
-//     /* 
-//   Create a popup, specify its options 
+//     /*
+//   Create a popup, specify its options
 //   and properties, and add it to the map.
 // */
 //     const popup = new mapboxgl.Popup({ offset: [0, -15] })
@@ -117,7 +117,7 @@ $(function () {
 //       )
 //       .addTo(map);
 
-//     /* 
+//     /*
 // Add an event listener that runs
 // when a user clicks on the map element.
 // */
@@ -133,27 +133,80 @@ $(function () {
 
 //       // Code from the next step will go here.
 //     });
-
-
+/* 
 const recruitForm = document.getElementById("recruitForm");
-let formData = {};
+const submitBtn = document.querySelector("button[value=submitBtn]");
+const imageInput = document.getElementById("image");
+// let formData = {};
+
 recruitForm.addEventListener("submit", (e) => {
-    e.preventDefault()
-    formData.firstName = recruitForm.elements['firstName'].value;
-    formData.lastName = recruitForm.elements['lastName'].value;
-    formData.middleInitial = recruitForm.elements['middleInitial'].value;
-    formData.suffix = recruitForm.elements['suffix'].value;
-    formData.address = recruitForm.elements['address'].value;
-    formData.date = recruitForm.elements['date'].value;
-    formData.age = recruitForm.elements['age'].value;
-    formData.gender = recruitForm.elements['gender'].value;
-    formData.civilStatus = recruitForm.elements['civilStatus'].value;
-    formData.religion = recruitForm.elements['religion'].value;
-    formData.contactNumber = recruitForm.elements['contactNumber'].value;
-    formData.landArea = recruitForm.elements['landArea'].value;
+  e.preventDefault();
+
+  let formData = new FormData(recruitForm);
+
+ /*  //formData.append("image", imageInput.files[0]);
+  for (const [key, value] of formData) {
+    console.log(`${key}: ${value}`);
+  } 
+  formData.append('first-name', 'gemar')
+  console.log(formData)
+
+  sendPostRequest("/farmer/recruitement", formData).then((res) => {
+    console.log(res);
+  });
+});*/
+const form = document.querySelector("#recruitForm");
+if (form) {
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const obj = {
+      firstName: recruitForm.elements["first-name"].value,
+      middleName: recruitForm.elements["middleInitial"].value,
+      lastName: recruitForm.elements["last-name"].value,
+      suffix: recruitForm.elements["suffix"].value,
+      address: recruitForm.elements["address"].value,
+      birthDate: recruitForm.elements["date"].value,
+      age: recruitForm.elements["age"].value,
+      gender: recruitForm.elements["gender"].value,
+      status: recruitForm.elements["civil-status"].value,
+      religion: recruitForm.elements["religion"].value,
+      contactNo: recruitForm.elements["contact-number"].value,
+      landArea: recruitForm.elements["land-area"].value,
+    };
+
+    /*  const json = JSON.stringify(obj);
+  const blob = new Blob([json], {
+    type: 'application/json'
+  });
+ */
+    const file = document.querySelector("#image");
+    const formData = {
+      firstName: recruitForm.elements["first-name"].value,
+      middleName: recruitForm.elements["middleInitial"].value,
+      lastName: recruitForm.elements["last-name"].value,
+      suffix: recruitForm.elements["suffix"].value,
+      address: recruitForm.elements["address"].value,
+      birthDate: recruitForm.elements["date"].value,
+      age: recruitForm.elements["age"].value,
+      gender: recruitForm.elements["gender"].value,
+      status: recruitForm.elements["civil-status"].value,
+      religion: recruitForm.elements["religion"].value,
+      contactNo: recruitForm.elements["contact-number"].value,
+      landArea: recruitForm.elements["land-area"].value,
+    };
     console.log(formData);
 
-    sendPostRequest("/form/recruitement", formData).then(res => {
-        console.log(res);
-    })
-})
+    sendPostRequest("/farmer/recruitement", formData)
+      .then((res) => {
+        console.log(res.data._id);
+        sendPutRequest(`/farmer/recruitement/image/${res.data._id}`, {
+          image: file.files[0],
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  });
+} else {
+  console.log("wala");
+}

@@ -52,7 +52,7 @@ const data = {
   },
   image:{
     type:Object,
-    required: true
+    default:{}
   }
 };
 const userSchema = new Schema(data, { timestamps: true });

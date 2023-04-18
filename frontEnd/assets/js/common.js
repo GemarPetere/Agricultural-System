@@ -70,3 +70,22 @@ export default async function sendPostRequest(route, userInfo) {
     return error;
   }
 }
+
+export  async function sendPutRequest(route, userInfo) {
+  const userData = {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userInfo),
+  };
+
+  try {
+    const response = await fetch(apiBaseUrl + route, userData);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+}

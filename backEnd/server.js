@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const expressValidator = require("express-validator");
 const cookieParser = require("cookie-parser");
+const fileUpload = require('express-fileupload');
 const cors = require("cors");
 const path = require("path");
 const sockets = require("./sockets");
@@ -31,7 +32,7 @@ app.use(express.json()); //n1
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(expressValidator());
-app.use(express.urlencoded({extended: false}))
+app.use(fileUpload({useTempFiles:true}));
 
 
 //static folder

@@ -3,7 +3,6 @@ const Farmer = require("../models/Farmer");
 const FarmerCrop = require("../models/FarmerCrops");
 const cloudinary = require("../helpers/cloudinary");
 
-
 exports.recruit = async (req, res) => {
   // TODO: add validation that user has already sent a rating from this order for this product $ne: $message
   try {
@@ -20,8 +19,7 @@ exports.recruit = async (req, res) => {
       contactNo,
       landArea,
     } = req.body;
-  
-    console.log(req.body)
+
     if (
       !firstName ||
       !middleName ||
@@ -38,7 +36,7 @@ exports.recruit = async (req, res) => {
       return res.status(400).json({ error: "One of the data is Undefined" });
     }
 
-   /*  const uploadedResponse = await cloudinary.uploader.upload(tempFilePath, {
+    /*  const uploadedResponse = await cloudinary.uploader.upload(tempFilePath, {
       upload_preset: "farmer-image",
     });
  */
@@ -71,33 +69,39 @@ exports.recruit = async (req, res) => {
   }
 };
 
-exports.farmerImage = async(req, res) =>{
-  
-  try{
-    const { image } = req.files.path
+exports.farmerImage = async (req, res) => {
+  console.log(req.body);
+  try {
+    const { tempFilePath } = req.files.image;
+    const { id } = req.params.id
 
-    const uploadedResponse = await cloudinary.uploader.upload(image, {
+    const uploadedResponse = await cloudinary.uploader.upload(tempFilePath, {
       upload_preset: "farmer-image",
     });
 
-    Farmer.findOneAndUpdate({_id: id}, {$set:{image:uploadedResponse}}, (error, docs) =>{
-      if (error){
-        return res.status(400).json({
-          error: err,
-        });
+    console.log(uploadedResponse)
+    Farmer.updateOne(
+      { _id: id },
+      { $set: { "image": uploadedResponse } },
+      (error, docs) => {
+        if (error) {
+          return res.status(400).json({
+            error: err,
+          });
+        }
+        if (docs) {
+          return res.status(200).json({
+            message: "Image Uploaded",
+            body: docs,
+          });
+        }
       }
-      if(docs){
-        return res.status(200).json({
-          message: "Image Uploaded",
-          body: docs
-        });
-      }
-    })
-  }catch(error){
-    console.log(error)
-    res.status(500).json({error})
+    );
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
   }
-}
+};
 
 exports.farmerCrop = (req, res) => {
   const { crop } = req.body;
