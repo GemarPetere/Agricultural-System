@@ -54,10 +54,6 @@ const data = {
     type:Object,
     default:{}
   },
-  long:{
-    type:String,
-    default: "126.2173" 
-  },
   lat:{
     type:String,
     default:"6.951944838057917"
