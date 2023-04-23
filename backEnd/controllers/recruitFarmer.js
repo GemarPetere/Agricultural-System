@@ -190,11 +190,26 @@ exports.farmerCropDetails = async (req, res) =>{
 //         }
 //   }
 
-exports.getFarmer = async (req, res) => {
+exports.getFarmerList = async (req, res) => {
   try {
     await Farmer.find({})
-      .then((data) => {
-        return res.status(200).send(data);
+      .then((datas) => {
+        let resData = []
+        let Data = {}
+        datas.map(data =>{
+          const Name = `${data.firstName} ${data.lastName}`
+          const Age = data.age
+          const Status = data.status
+          const Contact = data.contactNo
+          const id = data._id
+          const image = data.image.url
+
+          Data = {Name, Age, Status, Contact, id, image}
+
+          resData.push(Data)
+
+        })
+        return res.status(200).send(resData);
       })
       .catch((err) => {
         return res.status(500).json(err);
