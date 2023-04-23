@@ -18,6 +18,8 @@ exports.recruit = async (req, res) => {
       religion,
       contactNo,
       landArea,
+      lat,
+      long
     } = req.body;
 
     if (
@@ -31,7 +33,9 @@ exports.recruit = async (req, res) => {
       !status ||
       !religion ||
       !contactNo ||
-      !landArea
+      !landArea ||
+      !lat ||
+      !long
     ) {
       return res.status(400).json({ error: "One of the data is Undefined" });
     }
@@ -52,6 +56,8 @@ exports.recruit = async (req, res) => {
       religion: religion,
       contactNo: contactNo,
       landArea: landArea,
+      lat:lat,
+      long:long
       //image: uploadedResponse,
     };
     const newRecruit = new Farmer(data);
@@ -131,6 +137,33 @@ exports.farmerCrop = (req, res) => {
     res.status(500).json({ error });
   }
 };
+
+exports.farmerCropDetails = async (req, res) =>{
+  try{
+    const { year, id } = req.params;
+    if(!year || !id){
+      return res.status(400).json(
+        { error: "One of the data is Undefined" }
+      );
+    }
+    const query = {
+      $and:[
+        {"year": year},
+        {"farmerId": id}
+      ]
+    }
+    const result = await FarmerCrop.find(query)
+    if(!result){
+      return res.status(404).json({
+        error: err,
+      }); 
+    }
+    res.status(200).json({ result });
+  }catch(error){
+    console.log(error)
+    res.status(500).json({error})
+  }
+}
 
 // exports.farmerImage = async (req, res) =>{
 //     try{
