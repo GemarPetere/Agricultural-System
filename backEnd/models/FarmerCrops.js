@@ -7,9 +7,21 @@ const data = {
     trim:true,
     ref:'RecruitmentForm'
   },
+  year:{
+    type: String,
+    trim:true,
+  },
   crop:{
     type:String,
     trim:true
+  },
+  landArea:{
+    type:Number,
+    default: 0
+  },
+  yield:{
+    type:Number,
+    default: 0
   }
 };
 const farmerCrop = new Schema(data, { timestamps: true });

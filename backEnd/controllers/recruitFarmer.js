@@ -104,7 +104,7 @@ exports.farmerImage = async (req, res) => {
 };
 
 exports.farmerCrop = (req, res) => {
-  const { crop } = req.body;
+  const { crop, year, landArea, yield } = req.body;
   const { id } = req.params;
   try {
     if (!crop || !id) {
@@ -112,6 +112,9 @@ exports.farmerCrop = (req, res) => {
     }
     const data = {
       crop: crop,
+      year: year,
+      landArea: landArea,
+      yield:yield,
       farmerId: id,
     };
     const newCrop = new FarmerCrop(data);
