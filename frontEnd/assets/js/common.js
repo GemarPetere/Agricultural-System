@@ -85,3 +85,7 @@ export async function sendPutRequest(route, userInfo) {
     return error;
   }
 }
+
+export async function sendGetRequest(){
+  
+}

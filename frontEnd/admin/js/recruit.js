@@ -1,5 +1,51 @@
 import sendPostRequest, { sendPutRequest } from "../../assets/js/common.js";
 
+const mapContainer = document.getElementById("map");
+const addressField = document.getElementById("address");
+let map;
+
+function _getPosition() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(_loadMap.bind(this), function () {
+      alert("Could not get your position");
+    });
+  }
+}
+
+function _loadMap(position) {
+  const { latitude } = position.coords;
+  const { longitude } = position.coords;
+
+  console.log("Latitude: ", latitude);
+  console.log("Latitude: ", longitude);
+
+  console.log(`https://www.google.com/maps/@${latitude},${longitude},20z`);
+
+  const coords = [6.951944838057917, 126.21625900268556];
+  map = L.map("map").setView(coords, 13);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+
+  map.on("click", function (e) {
+    console.log(e);
+    const { lat, lng } = e.latlng;
+    formLat = lat;
+    formLng = lng;
+    $.get(
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`,
+      function (data) {
+        console.log(data);
+        addressField.value = data.display_name;
+      }
+    );
+  });
+}
+
+_getPosition();
+
 $(function () {
   //Initialize Select2 Elements
   $(".select2").select2();
@@ -16,150 +62,21 @@ $(function () {
   $("[data-mask]").inputmask();
 });
 
-//     // Initialize Map
-//     mapboxgl.accessToken =
-//       "pk.eyJ1IjoiYmVuamllYmVuIiwiYSI6ImNrNXQ1M3IyczBza2YzbnBib2VjbnRrNnQifQ.xhXbsTEg6vZmrjr27iSs3g";
+const form = document.querySelector("#recruitForm");
+const address = document.getElementById("address");
+let formLat;
+let formLng;
 
-//     let map = new mapboxgl.Map({
-//       container: "map",
-//       style: "mapbox://styles/mapbox/streets-v11",
-//       center: [126.219766, 6.959205],
-//       zoom: 15,
-//       attributionControl: false,
-//     });
-
-//     // Add geolocate control to the map.
-//     let geolocate = new mapboxgl.GeolocateControl({
-//       positionOptions: {
-//         enableHighAccuracy: true,
-//       },
-//       trackUserLocation: true,
-//     });
-
-//     map.addControl(geolocate);
-//     geolocate.on("geolocate", function (event) {
-//       // console.log('event fired: ', event);
-//       // console.log('Coords: ', event.coords);
-//       // console.log('Latitude', event.coords.latitude);
-//       // console.log('Longitude', event.coords.longitude);
-//       let coordinates = event.coords.longitude + "," + event.coords.latitude;
-//       let lngLatValues = {
-//         lng: event.coords.longitude,
-//         lat: event.coords.latitude,
-//       };
-
-//       let url =
-//         "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
-//         coordinates +
-//         ".json?access_token=pk.eyJ1IjoiYmVuamllYmVuIiwiYSI6ImNrNXQ1M3IyczBza2YzbnBib2VjbnRrNnQifQ.xhXbsTEg6vZmrjr27iSs3g";
-//       let xmlHttp = new XMLHttpRequest();
-//       xmlHttp.open("GET", url, false); // false for synchronous request
-//       xmlHttp.send(null);
-//       let result = JSON.parse(xmlHttp.responseText);
-
-//       let r = result.features[1].place_name;
-//       if (document.getElementById("address").value == "") {
-//         marker1 = new mapboxgl.Marker().setLngLat(lngLatValues).addTo(map);
-//         document.getElementById("address").value = "[" + coordinates + "]";
-//         document.getElementById("coordinatesPin").innerHTML =
-//           ":<strong>" + r + "</strong>";
-//         document.getElementById("location").value = r;
-//       } else {
-//         marker1.remove();
-//         marker1 = new mapboxgl.Marker().setLngLat(lngLatValues).addTo(map);
-//         document.getElementById("address").value = "[" + coordinates + "]";
-//         document.getElementById("coordinatesPin").innerHTML =
-//           ":<strong>" + r + "</strong>";
-//         document.getElementById("location").value = r;
-//       }
-//     });
-
-//     let marker1;
-//     map.on("click", function (e) {
-//       let t = JSON.stringify(e.lngLat.wrap());
-//       let u = JSON.parse(t);
-//       let coordinates = u["lng"] + "," + u["lat"];
-//       let url =
-//         "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
-//         coordinates +
-//         ".json?access_token=pk.eyJ1IjoiYmVuamllYmVuIiwiYSI6ImNrNXQ1M3IyczBza2YzbnBib2VjbnRrNnQifQ.xhXbsTEg6vZmrjr27iSs3g";
-
-//       let xmlHttp = new XMLHttpRequest();
-//       xmlHttp.open("GET", url, false); // false for synchronous request
-//       xmlHttp.send(null);
-//       let result = JSON.parse(xmlHttp.responseText);
-//       // let r=result.features[1].place_name.replace(/\d+|^\s+|\s+$/g,'');
-//       // let r = result.features[1].place_name;
-//       // if (document.getElementById("address").value == "") {
-//       //   marker1 = new mapboxgl.Marker().setLngLat(e.lngLat).addTo(map);
-//       //   document.getElementById("address").value = e.lngLat;
-//       //   document.getElementById("coordinatesPin").innerHTML =
-//       //     ":<strong>" + r + "</strong>";
-//       //   document.getElementById("location").value = r;
-//       // } else {
-//       //   marker1.remove();
-//       //   marker1 = new mapboxgl.Marker().setLngLat(e.lngLat).addTo(map);
-//       //   document.getElementById("address").value = e.lngLat;
-//       //   document.getElementById("coordinatesPin").innerHTML =
-//       //     ":<strong>" + r + "</strong>";
-//       //   document.getElementById("location").value = r;
-//       // }
-//     });
-
-//     /*
-//   Create a popup, specify its options
-//   and properties, and add it to the map.
-// */
-//     const popup = new mapboxgl.Popup({ offset: [0, -15] })
-//       .setLngLat(feature.geometry.coordinates)
-//       .setHTML(
-//         `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
-//       )
-//       .addTo(map);
-
-//     /*
-// Add an event listener that runs
-// when a user clicks on the map element.
-// */
-//     map.on("click", (event) => {
-//       // If the user clicked on one of your markers, get its information.
-//       const features = map.queryRenderedFeatures(event.point, {
-//         layers: ["YOUR_LAYER_NAME"], // replace with your layer name
-//       });
-//       if (!features.length) {
-//         return;
-//       }
-//       const feature = features[0];
-
-//       // Code from the next step will go here.
-//     });
-/* 
-const recruitForm = document.getElementById("recruitForm");
-const submitBtn = document.querySelector("button[value=submitBtn]");
-const imageInput = document.getElementById("image");
-// let formData = {};
-
-recruitForm.addEventListener("submit", (e) => {
+form.addEventListener("submit", function (e) {
   e.preventDefault();
 
-  let formData = new FormData(recruitForm);
-
- /*  //formData.append("image", imageInput.files[0]);
-  for (const [key, value] of formData) {
-    console.log(`${key}: ${value}`);
-  } 
-  formData.append('first-name', 'gemar')
-  console.log(formData)
-
-  sendPostRequest("/farmer/recruitement", formData).then((res) => {
-    console.log(res);
-  });
-});*/
-const form = document.querySelector("#recruitForm");
-if (form) {
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-
+  if (address.value == "") {
+    console.log("Address empty");
+  } else if (formLat == "") {
+    console.log("Latitude is empty");
+  } else if (formLng == "") {
+    console.log("Longitude is empty");
+  } else {
     let file = document.querySelector("input[type='file']");
     const formData = {
       firstName: recruitForm.elements["first-name"].value,
@@ -174,6 +91,8 @@ if (form) {
       religion: recruitForm.elements["religion"].value,
       contactNo: recruitForm.elements["contact-number"].value,
       landArea: recruitForm.elements["land-area"].value,
+      lat: `${formLat}`,
+      long: `${formLng}`,
     };
     console.log(formData);
 
@@ -185,14 +104,22 @@ if (form) {
         console.log(imageFile);
 
         const imageData = new FormData();
-        imageData.append('image', imageFile)
+        imageData.append("image", imageFile);
 
-        sendPutRequest(`/farmer/recruitement/image/${res.data._id}`, imageData);
+        sendPutRequest(
+          `/farmer/recruitement/image/${res.data._id}`,
+          imageData
+        ).then((res) => {
+          console.log(res);
+          if (res.body.ok) {
+            console.log("Success");
+          } else {
+            console.log("Unsuccessful");
+          }
+        });
       })
       .catch((err) => {
         console.error(err);
       });
-  });
-} else {
-  console.log("wala");
-}
+  }
+});

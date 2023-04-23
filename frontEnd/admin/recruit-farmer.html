@@ -22,6 +22,19 @@
       href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"
     />
     <script src="dist/js/components.js"></script>
+    <link
+      defer
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin=""
+    />
+    <script
+      defer
+      src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+      crossorigin=""
+    ></script>
   </head>
 
   <body class="hold-transition sidebar-mini">
@@ -118,7 +131,7 @@
                             id="address"
                             name="address"
                             class="form-control"
-                            value="test"
+                            disabled
                           />
                         </div>
                       </div>
@@ -150,7 +163,12 @@
                       <div class="col-4">
                         <div class="form-group">
                           <label for="inputName">Age</label>
-                          <input type="number" id="age" name="age" class="form-control" />
+                          <input
+                            type="number"
+                            id="age"
+                            name="age"
+                            class="form-control"
+                          />
                         </div>
                       </div>
                       <div class="col-4">
@@ -175,7 +193,11 @@
                             <option data-select2-id="02" value="male">
                               Male
                             </option>
-                            <option data-select2-id="03" value="female" selected="selected">
+                            <option
+                              data-select2-id="03"
+                              value="female"
+                              selected="selected"
+                            >
                               Female
                             </option>
                           </select>
@@ -194,22 +216,22 @@
                             aria-hidden="true"
                             value="test"
                           >
-                            <option selected="selected" data-select2-id="01">
+                            <option selected="selected" data-select2-id="04">
                               Single
                             </option>
-                            <option data-select2-id="02" value="married">
+                            <option data-select2-id="05" value="married">
                               Married
                             </option>
-                            <option data-select2-id="03" value="divorced">
+                            <option data-select2-id="06" value="divorced">
                               Divorced
                             </option>
-                            <option data-select2-id="04" value="separated">
+                            <option data-select2-id="07" value="separated">
                               Separated
                             </option>
-                            <option data-select2-id="05" value="widowed">
+                            <option data-select2-id="08" value="widowed">
                               Widowed
                             </option>
-                            <option data-select2-id="06" value="never-married">
+                            <option data-select2-id="09" value="never-married">
                               Never Married
                             </option>
                           </select>
@@ -313,7 +335,7 @@
                   </div>
                 </div>
                 <div class="card-body">
-                  <div id="map" style="height: 381px"></div>
+                  <div id="map" style="height: 400px"></div>
                 </div>
                 <!-- /.card-body -->
               </div>
@@ -325,14 +347,6 @@
       </div>
       <!-- /.content-wrapper -->
 
-      <!-- Control Sidebar -->
-      <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-        <div class="p-3">
-          <h5>Title</h5>
-          <p>Sidebar content</p>
-        </div>
-      </aside>
     </div>
     <!-- ./wrapper -->
 
@@ -347,7 +361,6 @@
     <script src="plugins/select2/js/select2.full.min.js"></script>
     <script src="plugins/moment/moment.min.js"></script>
     <script src="plugins/inputmask/jquery.inputmask.min.js"></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
 
     <script src="./js/recruit.js" type="module"></script>
   </body>
