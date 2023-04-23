@@ -15,6 +15,10 @@ const data = {
     type:String,
     trim:true
   },
+  cropArea:{
+    type: Number,
+    default:0
+  },
   landArea:{
     type:Number,
     default: 0

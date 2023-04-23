@@ -47,8 +47,8 @@ const data = {
     trim:true
   },
   landArea:{
-    type:String,
-    trim:true
+    type:Number,
+    default:0
   },
   image:{
     type:Object,
