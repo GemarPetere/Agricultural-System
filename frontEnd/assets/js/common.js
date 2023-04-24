@@ -52,7 +52,7 @@ export async function loginUser(userInfo, route) {
   }
 }
 
-export default async function sendPostRequest(route, userInfo) {
+export async function sendPostRequest(route, userInfo) {
   const userData = {
     method: "POST",
     headers: {
@@ -86,6 +86,13 @@ export async function sendPutRequest(route, userInfo) {
   }
 }
 
-export async function sendGetRequest(){
-  
+export async function sendGetRequest(route) {
+  console.log(apiBaseUrl + route);
+  try {
+    const response = await fetch(apiBaseUrl + route);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
 }
