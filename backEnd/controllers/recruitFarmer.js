@@ -218,3 +218,18 @@ exports.getFarmerList = async (req, res) => {
     console.log(error);
   }
 };
+
+exports.getFarmerDetails = async (req, res) =>{
+  try{
+    const { id } = req.params
+    await Farmer.find({_id:id})
+      .then((data) =>{
+        return res.status(200).json(data)
+      })
+      .catch((err) =>{
+        return res.status(500).json(err)
+      })
+  }catch(error){
+    console.log(error)
+  }
+}

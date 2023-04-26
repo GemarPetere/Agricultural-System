@@ -7,7 +7,8 @@ const  {
     recruit, 
     farmerCrop, 
     farmerImage, 
-    getFarmerList, 
+    getFarmerList,
+    getFarmerDetails, 
     farmerCropDetails 
 }  = require("../controllers/recruitFarmer")
 //const { mwMulterS3 } = require("../helpers/mwMulterS3")
@@ -16,6 +17,7 @@ router.put("/recruitement/image/:id", farmerImage)
 router.post("/recruitement", recruit)
 router.post("/recruitement/farmer-crop/:id",farmerCrop)
 router.get("/recruitement",getFarmerList)
+router.get("/recruitement/:id", getFarmerDetails)
 router.get("/recruitement/farmer-crop/:year/:id",farmerCropDetails)
 
 module.exports = router;
