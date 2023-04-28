@@ -1,4 +1,4 @@
-import sendPostRequest, { sendPutRequest } from "../../assets/js/common.js";
+import { sendPostRequest, sendPutRequest } from "../../assets/js/common.js";
 
 const mapContainer = document.getElementById("map");
 const addressField = document.getElementById("address");
@@ -123,3 +123,5 @@ form.addEventListener("submit", function (e) {
       });
   }
 });
+
+
