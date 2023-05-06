@@ -1,25 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Selection Recommender System</title>
+    <link defer rel="stylesheet" href="assets/css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Selection Recommender System</title>
-  <link defer rel="stylesheet" href="assets/css/style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
+  </head>
+  <header id="header"></header>
 
-  <script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
-</head>
-<header id="header"></header>
+  <body>
+    <div id="map" style="width: 100%; height: calc(100vh - 6rem)"></div>
 
-<body>
-  <div id="map" style="width: 100%; height: calc(100vh - 6rem)"></div>
-
-  <script defer type="module" src="assets/js/main.js"></script>
-  <script src="assets/js/map.js"></script>
-  <script type="module" src="assets/js/common.js"></script>
-</body>
-
+    <script defer type="module" src="assets/js/main.js"></script>
+    <script src="assets/js/map.js"></script>
+    <script type="module" src="assets/js/common.js"></script>
+  </body>
 </html>
