@@ -8,15 +8,20 @@ exports.recruit = async (req, res) => {
   try {
     const {
       firstName,
+      referenceControlNum,
       middleName,
       lastName,
       address,
+      barangay,
       gender,
       birthDate,
       age,
       status,
       religion,
       contactNo,
+      email,
+      highestEducation,
+      landOwnershipStatus,
       landArea,
       lat,
       long
@@ -115,7 +120,7 @@ exports.farmerImage = async (req, res) => {
 };
 
 exports.farmerCrop = (req, res) => {
-  const { crop, year, landArea, yield } = req.body;
+  const { crop, year, landArea, production, yield , netIncome } = req.body;
   const { id } = req.params;
   try {
     if (!crop || !id) {
