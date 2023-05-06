@@ -30,6 +30,10 @@ const data = {
     type: String,
     trim: true
   },
+  municipalCode:{
+    type: String,
+    trim: true
+  },
   gender: {
     type: String,
     trim: true,
