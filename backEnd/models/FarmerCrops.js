@@ -19,8 +19,16 @@ const data = {
     type:Number,
     default: 0
   },
+  production:{
+    type: Number,
+    default: 0
+  },
   yield:{
     type:Number,
+    default: 0
+  },
+  netIncome:{
+    type: Number,
     default: 0
   }
 };

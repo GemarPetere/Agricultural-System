@@ -46,15 +46,20 @@ exports.recruit = async (req, res) => {
  */
     const data = {
       firstName: firstName,
+      referenceControlNum: referenceControlNum,
       middleName: middleName,
       lastName: lastName,
       address: address,
+      barangay: barangay,
       gender: gender,
       birthdate: birthDate,
       age: age,
       status: status,
       religion: religion,
       contactNo: contactNo,
+      email: email,
+      highestEducation: highestEducation,
+      landOwnershipStatus: landOwnershipStatus,
       landArea: landArea,
       lat:lat,
       long:long
@@ -120,7 +125,9 @@ exports.farmerCrop = (req, res) => {
       crop: crop,
       year: year,
       landArea: landArea,
+      prduction: production,
       yield:yield,
+      netIncome: netIncome,
       farmerId: id,
     };
     const newCrop = new FarmerCrop(data);

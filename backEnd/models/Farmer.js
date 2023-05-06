@@ -6,6 +6,10 @@ const data = {
     type: String,
     trim: true
   },
+  referenceControlNum:{
+    type: String,
+    trim: true
+  },
   middleName: {
     type: String,
     trim: true,
@@ -21,6 +25,10 @@ const data = {
   address: {
     type: String,
     trim: true,
+  },
+  barangay:{
+    type: String,
+    trim: true
   },
   gender: {
     type: String,
@@ -46,6 +54,14 @@ const data = {
     type:String,
     trim:true
   },
+  email:{
+    type: String,
+    trim: true
+  },
+  highestEducation:{
+    type: String,
+    trim: true
+  },
   landArea:{
     type:Number,
     default:0
@@ -53,6 +69,10 @@ const data = {
   image:{
     type:Object,
     default:{}
+  },
+  landOwnershipStatus:{
+    type:String,
+    trim:true
   },
   lat:{
     type:String,
