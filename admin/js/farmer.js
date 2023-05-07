@@ -15,23 +15,60 @@ $(window).on("load", function () {
       `/farmer/recruitement/farmer-crop/${farmDataYear}/${res[0]._id}`
     ).then((crops) => {
       console.log(crops.result);
-      var donutChartCanvas2 = $("#donutChart2").get(0).getContext("2d");
-      var donutData = {
-        labels: ["Chrome", "IE", "FireFox", "Safari", "Opera", "Navigator"],
+      let landAreaChart = $("#donutChart2").get(0).getContext("2d");
+      let yieldChart = $("#donutChart3").get(0).getContext("2d");
+      let landAreaData = {
+        labels: [],
         datasets: [
           {
-            data: [700, 500, 400, 600, 300, 100],
-            backgroundColor: [
-              "#f56954",
-              "#00a65a",
-              "#f39c12",
-              "#00c0ef",
-              "#3c8dbc",
-              "#d2d6de",
-            ],
+            data: [],
           },
         ],
       };
+      let yieldData = {
+        labels: [],
+        datasets: [
+          {
+            data: [],
+          },
+        ],
+      };
+      for (let i = 0; i < crops.result.length; i++) {
+        landAreaData.datasets[0].data.push(crops.result[i].landArea);
+        landAreaData.labels.push(crops.result[i].crop);
+        yieldData.datasets[0].data.push(crops.result[i].yield);
+        yieldData.labels.push(crops.result[i].crop);
+      }
+      console.log(landAreaData);
+
+      let pieChartOptions = {
+        maintainAspectRatio: false,
+        responsive: true,
+        plugins: {
+          colorschemes: {
+            scheme: "office.Waveform6",
+          },
+        },
+      };
+      let barChartOptions = {
+        maintainAspectRatio: false,
+        responsive: true,
+        plugins: {
+          colorschemes: {
+            scheme: "brewer.Paired3",
+          },
+        },
+      };
+      new Chart(landAreaChart, {
+        type: "doughnut",
+        data: landAreaData,
+        options: pieChartOptions,
+      });
+      new Chart(yieldChart, {
+        type: "doughnut",
+        data: yieldData,
+        options: barChartOptions,
+      });
     });
     _loadMap(res[0].lat, res[0].long);
   });
@@ -59,9 +96,9 @@ function _loadMap(lat, lng) {
 function loadCharts() {}
 
 $(function () {
-  // var donutChartCanvas2 = $("#donutChart2").get(0).getContext("2d");
-  var donutChartCanvas3 = $("#donutChart3").get(0).getContext("2d");
-  var donutData = {
+  // let donutChartCanvas2 = $("#donutChart2").get(0).getContext("2d");
+  let donutChartCanvas3 = $("#donutChart3").get(0).getContext("2d");
+  let donutData = {
     labels: ["Chrome", "IE", "FireFox", "Safari", "Opera", "Navigator"],
     datasets: [
       {
@@ -77,18 +114,10 @@ $(function () {
       },
     ],
   };
-  var donutOptions = {
-    maintainAspectRatio: false,
-    responsive: true,
-  };
-  new Chart(donutChartCanvas2, {
-    type: "doughnut",
-    data: donutData,
-    options: donutOptions,
-  });
-  new Chart(donutChartCanvas3, {
-    type: "doughnut",
-    data: donutData,
-    options: donutOptions,
-  });
+
+  // new Chart(donutChartCanvas3, {
+  //   type: "doughnut",
+  //   data: donutData,
+  //   options: donutOptions,
+  // });
 });
