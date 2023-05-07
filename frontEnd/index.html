@@ -1,23 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Selection Recommender System</title>
-    <link defer rel="stylesheet" href="assets/css/style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recommender System</title>
+    <script src="./assets/js/initialize-components.js"></script>
+    <!-- Google Font: Source Sans Pro -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+    />
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="./dist/css/adminlte.min.css" />
+    <link rel="stylesheet" href="plugins/leaflet/leaflet.css">
+    <script defer src="./plugins/leaflet/leaflet.js"></script>
   </head>
-  <header id="header"></header>
+  <body class="hold-transition layout-top-nav">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <nav
+        class="main-header navbar navbar-expand-md navbar-light navbar-white shadow-sm"
+      >
+        
+        <!-- </div> -->
+      </nav>
+      <!-- /.navbar -->
 
-  <body>
-    <div id="map" style="width: 100%; height: calc(100vh - 6rem)"></div>
+      <!-- Content Wrapper. Contains page content -->
+      <div
+        id="map"
+        class="d-flex align-items-center justify-content-center"
+        style="height: calc(100vh - 57px)"
+      >
+        <img id="loader" src="./assets/Ripple-1s-200px.gif" alt="" width="70" />
+      </div>
+      <div class="content-wrapper">
+        <!-- Main content -->
+        <div class="content"></div>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+    </div>
+    <!-- ./wrapper -->
 
-    <script defer type="module" src="assets/js/main.js"></script>
-    <script src="assets/js/map.js"></script>
-    <script type="module" src="assets/js/common.js"></script>
+    <!-- REQUIRED SCRIPTS -->
+
+    <!-- jQuery -->
+    <script src="./plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="./dist/js/adminlte.min.js"></script>
+    <script src="./assets/js/map.js"></script>
   </body>
 </html>

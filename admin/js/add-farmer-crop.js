@@ -36,6 +36,8 @@ addCropForm.addEventListener("submit", function (e) {
     crop: e.target.elements.crop.value,
     landArea: e.target.elements.landArea.value,
     yield: e.target.elements.yield.value,
+    netIncome: e.target.elements.netIncome.value,
+    production: e.target.elements.netIncome.value,
   };
   console.log(newCrop);
   sendPostRequest(

@@ -4,8 +4,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Recommender System | Recruit</title>
+    <title>Add Farmer | Recommender System</title>
     <script src="./dist/js/route-guard.js"></script>
+    <script src="dist/js/components.js"></script>
 
     <!-- Google Font: Source Sans Pro -->
     <link
@@ -21,7 +22,6 @@
       rel="stylesheet"
       href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"
     />
-    <script src="dist/js/components.js"></script>
     <link
       defer
       rel="stylesheet"
@@ -53,7 +53,7 @@
           <div class="container-fluid">
             <div class="row mb-2">
               <div class="col-sm-6">
-                <h1>Register a Farmer</h1>
+                <h1>Add a Farmer</h1>
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -74,48 +74,106 @@
               <div class="card">
                 <div class="card-body">
                   <form id="recruitForm" enctype="multipart/form-data">
+                    <label>Reference Control No.</label>
                     <div class="row">
+                      <div class="col-3">
+                        <div class="form-group">
+                          <input
+                            type="number"
+                            id="refYear"
+                            name="refYear"
+                            placeholder="Year (YY)"
+                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                            maxlength="2"
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-3">
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            id="refMunCode"
+                            name="refMunCode"
+                            placeholder="Municipal Code"
+                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                            maxlength="2"
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            id="refBrgyCode"
+                            name="refBrgyCode"
+                            placeholder="Brgy Code"
+                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                            maxlength="2"
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            id="refConNum"
+                            name="refConNum"
+                            placeholder="Control Number"
+                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                            maxlength="5"
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-12">
+                      <label for="inputName">Full Name</label>
+
+                      </div>  
                       <div class="col-4">
                         <div class="form-group">
-                          <label for="inputName">First Name</label>
                           <input
                             type="text"
                             id="firstName"
                             name="first-name"
+                            placeholder="First Name"
                             class="form-control"
                           />
                         </div>
                       </div>
                       <div class="col-4">
                         <div class="form-group">
-                          <label for="inputName">Last Name</label>
                           <input
                             type="text"
                             id="lastName"
                             name="last-name"
+                            placeholder="Last Name"
                             class="form-control"
                           />
                         </div>
                       </div>
                       <div class="col-2">
                         <div class="form-group">
-                          <label for="inputName">M.I.</label>
                           <input
                             type="text"
                             id="middleInitial"
                             name="middleInitial"
                             class="form-control"
+                            placeholder="Middle Name"
                           />
                         </div>
                       </div>
                       <div class="col-2">
                         <div class="form-group">
-                          <label for="inputName">Suffix</label>
                           <input
                             type="text"
                             id="suffix"
                             name="suffix"
                             class="form-control"
+                            placeholder="Name Extension"
                           />
                         </div>
                       </div>
@@ -132,23 +190,18 @@
                           />
                         </div>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <!-- Date dd/mm/yyyy -->
                         <div class="form-group">
-                          <label>Date</label>
+                          <label>Date of Birth</label>
 
                           <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text"
-                                ><i class="far fa-calendar-alt"></i
-                              ></span>
-                            </div>
                             <input
-                              type="text"
-                              name="date"
+                              type="date"
+                              name="dateOfBirth"
                               class="form-control"
                               data-inputmask-alias="datetime"
-                              id="date"
+                              id="dateOfBirth"
                               data-inputmask-inputformat="dd/mm/yyyy"
                               data-mask
                             />
@@ -156,9 +209,20 @@
                           <!-- /.input group -->
                         </div>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <div class="form-group">
-                          <label for="inputName">Age</label>
+                          <label for="email">Email</label>
+                          <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-group">
+                          <label for="age">Age</label>
                           <input
                             type="number"
                             id="age"
@@ -167,7 +231,7 @@
                           />
                         </div>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <div class="form-group" data-select2-id="1">
                           <label>Gender</label>
                           <select
@@ -199,7 +263,7 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <div class="form-group" data-select2-id="2">
                           <label>Civil Status</label>
                           <select
@@ -232,7 +296,40 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
+                        <div class="form-group" data-select2-id="2">
+                          <label>Highest Formal Education</label>
+                          <select
+                            class="form-control select2bs4 select2-hidden-accessible"
+                            style="width: 100%"
+                            data-select2-id="2"
+                            id="highestEducation"
+                            name="highestEducation"
+                            tabindex="-1"
+                            aria-hidden="true"
+                          >
+                            <option selected="selected" data-select2-id="04">
+                              None
+                            </option>
+                            <option data-select2-id="05" value="married">
+                              Vocational
+                            </option>
+                            <option data-select2-id="06" value="divorced">
+                              Elementary
+                            </option>
+                            <option data-select2-id="07" value="separated">
+                              College
+                            </option>
+                            <option data-select2-id="08" value="widowed">
+                              High School
+                            </option>
+                            <option data-select2-id="09" value="never-married">
+                              Post Graduate
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-3">
                         <div class="form-group">
                           <label for="inputClientCompany">Religion</label>
                           <input
@@ -243,7 +340,7 @@
                           />
                         </div>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <div class="form-group">
                           <label for="inputName">Contact Number</label>
                           <input
@@ -253,6 +350,30 @@
                             name="contact-number"
                             class="form-control"
                           />
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="form-group" data-select2-id="2">
+                          <label>Land Ownership Status</label>
+                          <select
+                            class="form-control select2bs4 select2-hidden-accessible"
+                            style="width: 100%"
+                            data-select2-id="2"
+                            id="landOwnershipStatus"
+                            name="landOwnershipStatus"
+                            tabindex="-1"
+                            aria-hidden="true"
+                          >
+                            <option selected="selected" data-select2-id="04">
+                              REGISTERED OWNER
+                            </option>
+                            <option data-select2-id="05" value="married">
+                              TENANT
+                            </option>
+                            <option data-select2-id="06" value="divorced">
+                              LESSEE
+                            </option>
+                          </select>
                         </div>
                       </div>
                       <div class="col-4">
@@ -268,7 +389,7 @@
                           />
                         </div>
                       </div>
-                      <div class="col-6 d-flex align-items-center">
+                      <div class="col-4 d-flex align-items-center">
                         <div class="form-group">
                           <label for="exampleInputFile">Farmer Image</label>
                           <div class="input-group">

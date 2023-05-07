@@ -39,6 +39,7 @@ function _loadMap(position) {
       function (data) {
         console.log(data);
         addressField.value = data.display_name;
+        barangay = data.address.village;
       }
     );
   });
@@ -66,6 +67,7 @@ const form = document.querySelector("#recruitForm");
 const address = document.getElementById("address");
 let formLat;
 let formLng;
+let barangay;
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -78,18 +80,30 @@ form.addEventListener("submit", function (e) {
     console.log("Longitude is empty");
   } else {
     let file = document.querySelector("input[type='file']");
+    const refNum =
+      recruitForm.elements["refYear"].value +
+      "-" +
+      recruitForm.elements["refMunCode"].value +
+      "-" +
+      recruitForm.elements["refBrgyCode"].value +
+      "-" +
+      recruitForm.elements["refConNum"].value;
     const formData = {
+      refConNum: refNum,
       firstName: recruitForm.elements["first-name"].value,
       middleName: recruitForm.elements["middleInitial"].value,
       lastName: recruitForm.elements["last-name"].value,
       suffix: recruitForm.elements["suffix"].value,
       address: recruitForm.elements["address"].value,
-      birthDate: recruitForm.elements["date"].value,
+      barangay: barangay,
+      birthDate: recruitForm.elements["dateOfBirth"].value,
+      email: recruitForm.elements["email"].value,
       age: recruitForm.elements["age"].value,
       gender: recruitForm.elements["gender"].value,
       status: recruitForm.elements["civil-status"].value,
       religion: recruitForm.elements["religion"].value,
       contactNo: recruitForm.elements["contact-number"].value,
+      highestEducation: recruitForm.elements["highestEducation"].value,
       landArea: recruitForm.elements["land-area"].value,
       lat: `${formLat}`,
       long: `${formLng}`,
@@ -112,7 +126,24 @@ form.addEventListener("submit", function (e) {
         ).then((res) => {
           console.log(res);
           if (res.body.ok) {
-            console.log("Success");
+            recruitForm.elements["refYear"].value = "";
+            recruitForm.elements["refMunCode"].value = "";
+            recruitForm.elements["refBrgyCode"].value = "";
+            recruitForm.elements["refConNum"].value = "";
+            recruitForm.elements["first-name"].value = "";
+            recruitForm.elements["middleInitial"].value = "";
+            recruitForm.elements["last-name"].value = "";
+            (recruitForm.elements["suffix"].value = ""),
+              (recruitForm.elements["address"].value = "");
+            (recruitForm.elements["dateOfBirth"].value = ""),
+              (recruitForm.elements["email"].value = "");
+            recruitForm.elements["age"].value = "";
+            recruitForm.elements["gender"].value = "";
+            recruitForm.elements["civil-status"].value = "";
+            recruitForm.elements["religion"].value = "";
+            recruitForm.elements["contact-number"].value = "";
+            recruitForm.elements["highestEducation"].value = "";
+            recruitForm.elements["land-area"].value = "";
           } else {
             console.log("Unsuccessful");
           }
@@ -123,5 +154,3 @@ form.addEventListener("submit", function (e) {
       });
   }
 });
-
-
