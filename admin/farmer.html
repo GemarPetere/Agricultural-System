@@ -123,16 +123,14 @@
                       </button>
                     </div> -->
                   </div>
-                  <div class="card-body">
-                    <canvas
-                      id="donutChart"
-                      style="
-                        min-height: 250px;
-                        height: 250px;
-                        max-height: 250px;
-                        max-width: 100%;
-                      "
-                    ></canvas>
+                  <div class="card-body" id="listCrops">
+                    <ul class="list-group">
+                      <li class="list-group-item">Cras justo odio</li>
+                      <li class="list-group-item">Dapibus ac facilisis in</li>
+                      <li class="list-group-item">Morbi leo risus</li>
+                      <li class="list-group-item">Porta ac consectetur ac</li>
+                      <li class="list-group-item">Vestibulum at eros</li>
+                    </ul>
                   </div>
                   <!-- /.card-body -->
                 </div>
@@ -228,53 +226,5 @@
     <!-- AdminLTE App -->
     <script src="dist/js/adminlte.min.js"></script>
     <script src="./js/farmer.js" type="module"></script>
-    <script>
-      $(function () {
-        //-------------
-        //- DONUT CHART -
-        //-------------
-        // Get context with jQuery - using jQuery's .get() method.
-        var donutChartCanvas = $("#donutChart").get(0).getContext("2d");
-        var donutChartCanvas2 = $("#donutChart2").get(0).getContext("2d");
-        var donutChartCanvas3 = $("#donutChart3").get(0).getContext("2d");
-        var donutData = {
-          labels: ["Chrome", "IE", "FireFox", "Safari", "Opera", "Navigator"],
-          datasets: [
-            {
-              data: [700, 500, 400, 600, 300, 100],
-              backgroundColor: [
-                "#f56954",
-                "#00a65a",
-                "#f39c12",
-                "#00c0ef",
-                "#3c8dbc",
-                "#d2d6de",
-              ],
-            },
-          ],
-        };
-        var donutOptions = {
-          maintainAspectRatio: false,
-          responsive: true,
-        };
-        //Create pie or douhnut chart
-        // You can switch between pie and douhnut using the method below.
-        new Chart(donutChartCanvas, {
-          type: "doughnut",
-          data: donutData,
-          options: donutOptions,
-        });
-        new Chart(donutChartCanvas2, {
-          type: "doughnut",
-          data: donutData,
-          options: donutOptions,
-        });
-        new Chart(donutChartCanvas3, {
-          type: "doughnut",
-          data: donutData,
-          options: donutOptions,
-        });
-      });
-    </script>
   </body>
 </html>
