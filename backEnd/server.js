@@ -52,6 +52,7 @@ app.use(function (req, res, next) {
 //API Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/farmer", require("./routes/farmer"))
+app.use("/api",require("./routes/search"))
 
 
 
