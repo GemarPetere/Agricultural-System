@@ -1,5 +1,17 @@
 import { sendGetRequest, sendPostRequest } from "./common.js";
 
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
+
 $(function () {
   //Initialize Select2 Elements
   $(".select2").select2();
@@ -44,6 +56,20 @@ addCropForm.addEventListener("submit", function (e) {
     `/farmer/recruitement/farmer-crop/${e.target.elements.listFarmers.value}`,
     newCrop
   ).then((res) => {
+    Toast.fire({
+      icon: "success",
+      title: "Crops added successfully",
+    });
     console.log(res);
+    emptyFields();
   });
 });
+function emptyFields() {
+  e.target.elements.listFarmers.value = "";
+  e.target.elements.year.value = "";
+  e.target.elements.crop.value = "";
+  e.target.elements.landArea.value = "";
+  e.target.elements.yield.value = "";
+  e.target.elements.netIncome.value = "";
+  e.target.elements.production.value = "";
+}

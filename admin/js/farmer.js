@@ -9,14 +9,40 @@ console.log(farmDataYear);
 let map;
 
 $(window).on("load", function () {
+  // Get Farmer Details
   sendGetRequest(`/farmer/recruitement/${farmerId}`).then((res) => {
     console.log(res[0]);
+    document.getElementById("farmerDetails").insertAdjacentHTML(
+      "afterbegin",
+      `
+      <img
+      src="${res[0].image.secure_url}"
+      width="150"
+      height="150"
+      class="mr-4"
+      alt=""
+    />
+      <div class="d-flex flex-column">
+      <span style="font-size: 20px; font-weight: 500">
+      <strong>Name:</strong> ${res[0].firstName} ${res[0].lastName} 
+      </span>
+      <span style="font-size: 20px; font-weight: 500">
+        <strong>Age:</strong> ${res[0].age} years old
+      </span>
+      <span style="font-size: 20px; font-weight: 500">
+        <strong>Location:</strong> ${res[0].address}
+      </span>
+      </div>
+      `
+    );
+    // Get Farmer Crops Details
     sendGetRequest(
       `/farmer/recruitement/farmer-crop/${farmDataYear}/${res[0]._id}`
     ).then((crops) => {
-      console.log(crops.result);
+      // Initialize Charts
       let landAreaChart = $("#donutChart2").get(0).getContext("2d");
       let yieldChart = $("#donutChart3").get(0).getContext("2d");
+      let cropsLists = [];
       let landAreaData = {
         labels: [],
         datasets: [
@@ -38,8 +64,24 @@ $(window).on("load", function () {
         landAreaData.labels.push(crops.result[i].crop);
         yieldData.datasets[0].data.push(crops.result[i].yield);
         yieldData.labels.push(crops.result[i].crop);
+        cropsLists.push(crops.result[i].crop);
       }
-      console.log(landAreaData);
+      console.log(cropsLists.length);
+      if (cropsLists.length == 0) {
+        document.getElementById("listCrops").innerHTML =
+          "<p class='text-center'>No Data</p>";
+      } else {
+        cropsLists.forEach((crop) => {
+          document.getElementById("listCrops").insertAdjacentHTML(
+            "afterbegin",
+            `
+          <li class="list-group-item justify-content-between">
+            ${crop}
+          </li>
+          `
+          );
+        });
+      }
 
       let pieChartOptions = {
         maintainAspectRatio: false,
@@ -59,16 +101,27 @@ $(window).on("load", function () {
           },
         },
       };
-      new Chart(landAreaChart, {
-        type: "doughnut",
-        data: landAreaData,
-        options: pieChartOptions,
-      });
-      new Chart(yieldChart, {
-        type: "doughnut",
-        data: yieldData,
-        options: barChartOptions,
-      });
+
+      if (
+        landAreaData.datasets[0].data.length == 0 &&
+        yieldData.datasets[0].data.length == 0
+      ) {
+        document.getElementById("donutChart2").closest(".card-body").innerHTML =
+          "<p class='text-center'>No Data</p>";
+        document.getElementById("donutChart3").closest(".card-body").innerHTML =
+          "<p class='text-center'>No Data</p>";
+      } else {
+        new Chart(landAreaChart, {
+          type: "doughnut",
+          data: landAreaData,
+          options: pieChartOptions,
+        });
+        new Chart(yieldChart, {
+          type: "doughnut",
+          data: yieldData,
+          options: barChartOptions,
+        });
+      }
     });
     _loadMap(res[0].lat, res[0].long);
   });
