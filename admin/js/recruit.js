@@ -2,7 +2,22 @@ import { sendPostRequest, sendPutRequest } from "./common.js";
 
 const mapContainer = document.getElementById("map");
 const addressField = document.getElementById("address");
+const submitBtn = document.getElementById("submitBtn");
+let file = document.querySelector("input[type='file']");
+console.log(file.files);
 let map;
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
 
 function _getPosition() {
   if (navigator.geolocation) {
@@ -72,14 +87,83 @@ let barangay;
 form.addEventListener("submit", function (e) {
   e.preventDefault();
 
-  if (address.value == "") {
+  if (
+    recruitForm.elements["refYear"].value == "" ||
+    recruitForm.elements["refMunCode"].value == "" ||
+    recruitForm.elements["refBrgyCode"].value == "" ||
+    recruitForm.elements["refConNum"].value == ""
+  ) {
+    Toast.fire({
+      icon: "error",
+      title: "Please enter a valid reference number!",
+    });
+  } else if (
+    recruitForm.elements["first-name"].value == "" ||
+    recruitForm.elements["middleInitial"].value == "" ||
+    recruitForm.elements["last-name"].value == ""
+  ) {
+    Toast.fire({
+      icon: "error",
+      title: "Name cannot be empty!",
+    });
+  } else if (address.value == "") {
     console.log("Address empty");
-  } else if (formLat == "") {
-    console.log("Latitude is empty");
-  } else if (formLng == "") {
-    console.log("Longitude is empty");
+    Toast.fire({
+      icon: "error",
+      title: "Please select location on the map!",
+    });
+  } else if (recruitForm.elements["dateOfBirth"].value == "") {
+    Toast.fire({
+      icon: "error",
+      title: "Date of birth cannot be empty!",
+    });
+  } else if (recruitForm.elements["age"].value == "") {
+    Toast.fire({
+      icon: "error",
+      title: "Age cannot be empty!",
+    });
+  } else if (recruitForm.elements["gender"].value == "default") {
+    Toast.fire({
+      icon: "error",
+      title: "Please select a gender!",
+    });
+  } else if (recruitForm.elements["civilStatus"].value == "default") {
+    Toast.fire({
+      icon: "error",
+      title: "Please select a Civil Status!",
+    });
+  } else if (recruitForm.elements["gender"].value == "default") {
+    Toast.fire({
+      icon: "error",
+      title: "Please select a gender!",
+    });
+  } else if (recruitForm.elements["religion"].value == "") {
+    Toast.fire({
+      icon: "error",
+      title: "Please enter a religion!",
+    });
+  } else if (recruitForm.elements["contact-number"].value == "") {
+    Toast.fire({
+      icon: "error",
+      title: "Please enter a contact number!",
+    });
+  } else if (recruitForm.elements["landOwnershipStatus"].value == "default") {
+    Toast.fire({
+      icon: "error",
+      title: "Please select a Land Ownership Status!",
+    });
+  } else if (recruitForm.elements["land-area"].value == "") {
+    Toast.fire({
+      icon: "error",
+      title: "Please enter a land area!",
+    });
+  }
+  else if (file.files.length == 0) {
+    Toast.fire({
+      icon: "error",
+      title: "Please upload an Image of the farmer!",
+    });
   } else {
-    let file = document.querySelector("input[type='file']");
     const refNum =
       recruitForm.elements["refYear"].value +
       "-" +
@@ -88,6 +172,8 @@ form.addEventListener("submit", function (e) {
       recruitForm.elements["refBrgyCode"].value +
       "-" +
       recruitForm.elements["refConNum"].value;
+
+    submitBtn.disabled = true;
     const formData = {
       refConNum: refNum,
       firstName: recruitForm.elements["first-name"].value,
@@ -104,11 +190,11 @@ form.addEventListener("submit", function (e) {
       religion: recruitForm.elements["religion"].value,
       contactNo: recruitForm.elements["contact-number"].value,
       highestEducation: recruitForm.elements["highestEducation"].value,
+      landOwnershipStatus: recruitForm.elements["landOwnershipStatus"].value,
       landArea: recruitForm.elements["land-area"].value,
       lat: `${formLat}`,
       long: `${formLng}`,
     };
-    console.log(formData);
 
     sendPostRequest("/farmer/recruitement", formData)
       .then((res) => {
@@ -126,6 +212,11 @@ form.addEventListener("submit", function (e) {
         ).then((res) => {
           console.log(res);
           if (res.body.ok) {
+            submitBtn.disabled = false;
+            Toast.fire({
+              icon: "success",
+              title: "Farmer added successfully",
+            });
             recruitForm.elements["refYear"].value = "";
             recruitForm.elements["refMunCode"].value = "";
             recruitForm.elements["refBrgyCode"].value = "";

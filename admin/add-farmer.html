@@ -130,16 +130,15 @@
                         </div>
                       </div>
                       <div class="col-12">
-                      <label for="inputName">Full Name</label>
-
-                      </div>  
+                        <label for="inputName">Full Name</label>
+                      </div>
                       <div class="col-4">
                         <div class="form-group">
                           <input
                             type="text"
                             id="firstName"
                             name="first-name"
-                            placeholder="First Name"
+                            placeholder="First Name*"
                             class="form-control"
                           />
                         </div>
@@ -150,7 +149,7 @@
                             type="text"
                             id="lastName"
                             name="last-name"
-                            placeholder="Last Name"
+                            placeholder="Last Name*"
                             class="form-control"
                           />
                         </div>
@@ -162,7 +161,7 @@
                             id="middleInitial"
                             name="middleInitial"
                             class="form-control"
-                            placeholder="Middle Name"
+                            placeholder="Middle Name*"
                           />
                         </div>
                       </div>
@@ -193,7 +192,7 @@
                       <div class="col-3">
                         <!-- Date dd/mm/yyyy -->
                         <div class="form-group">
-                          <label>Date of Birth</label>
+                          <label>Date of Birth*</label>
 
                           <div class="input-group">
                             <input
@@ -246,6 +245,7 @@
                             <option
                               data-select2-id="01"
                               value="default"
+                              selected
                               disabled
                             >
                               Select a Gender
@@ -253,56 +253,45 @@
                             <option data-select2-id="02" value="male">
                               Male
                             </option>
-                            <option
-                              data-select2-id="03"
-                              value="female"
-                              selected="selected"
-                            >
+                            <option data-select2-id="03" value="female">
                               Female
                             </option>
                           </select>
                         </div>
                       </div>
                       <div class="col-3">
-                        <div class="form-group" data-select2-id="2">
+                        <div class="form-group">
                           <label>Civil Status</label>
                           <select
                             class="form-control select2bs4 select2-hidden-accessible"
                             style="width: 100%"
-                            data-select2-id="2"
                             id="civilStatus"
                             name="civil-status"
                             tabindex="-1"
                             aria-hidden="true"
                           >
-                            <option selected="selected" data-select2-id="04">
-                              Single
+                            <option
+                              selected="selected"
+                              disabled
+                              value="default"
+                            >
+                              Select a Civil Status
                             </option>
-                            <option data-select2-id="05" value="married">
-                              Married
-                            </option>
-                            <option data-select2-id="06" value="divorced">
-                              Divorced
-                            </option>
-                            <option data-select2-id="07" value="separated">
-                              Separated
-                            </option>
-                            <option data-select2-id="08" value="widowed">
-                              Widowed
-                            </option>
-                            <option data-select2-id="09" value="never-married">
-                              Never Married
-                            </option>
+                            <option>Single</option>
+                            <option value="married">Married</option>
+                            <option value="divorced">Divorced</option>
+                            <option value="separated">Separated</option>
+                            <option value="widowed">Widowed</option>
+                            <option value="never-married">Never Married</option>
                           </select>
                         </div>
                       </div>
                       <div class="col-3">
-                        <div class="form-group" data-select2-id="2">
-                          <label>Highest Formal Education</label>
+                        <div class="form-group">
+                          <label>Highest Education</label>
                           <select
                             class="form-control select2bs4 select2-hidden-accessible"
                             style="width: 100%"
-                            data-select2-id="2"
                             id="highestEducation"
                             name="highestEducation"
                             tabindex="-1"
@@ -311,21 +300,10 @@
                             <option selected="selected" data-select2-id="04">
                               None
                             </option>
-                            <option data-select2-id="05" value="married">
-                              Vocational
-                            </option>
-                            <option data-select2-id="06" value="divorced">
-                              Elementary
-                            </option>
-                            <option data-select2-id="07" value="separated">
-                              College
-                            </option>
-                            <option data-select2-id="08" value="widowed">
-                              High School
-                            </option>
-                            <option data-select2-id="09" value="never-married">
-                              Post Graduate
-                            </option>
+                            <option value="married">Vocational</option>
+                            <option value="divorced">Elementary</option>
+                            <option value="separated">College</option>
+                            <option value="widowed">High School</option>
                           </select>
                         </div>
                       </div>
@@ -364,15 +342,12 @@
                             tabindex="-1"
                             aria-hidden="true"
                           >
-                            <option selected="selected" data-select2-id="04">
-                              REGISTERED OWNER
+                            <option selected="selected" value="default">
+                              Select Land Ownership Status
                             </option>
-                            <option data-select2-id="05" value="married">
-                              TENANT
-                            </option>
-                            <option data-select2-id="06" value="divorced">
-                              LESSEE
-                            </option>
+                            <option>REGISTERED OWNER</option>
+                            <option value="married">TENANT</option>
+                            <option value="divorced">LESSEE</option>
                           </select>
                         </div>
                       </div>
@@ -477,6 +452,7 @@
     <script src="plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- AdminLTE App -->
     <script src="dist/js/adminlte.min.js"></script>
     <script src="plugins/select2/js/select2.full.min.js"></script>

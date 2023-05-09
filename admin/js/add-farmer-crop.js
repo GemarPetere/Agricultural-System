@@ -12,14 +12,44 @@ const Toast = Swal.mixin({
   },
 });
 
+const selectFields = document.querySelector(".select2-search__field");
+const availableCrops = [
+  "Rice",
+  "Corn",
+  "Cacao",
+  "Coffee",
+  "Vegetables",
+  "Chili",
+  "Rubber",
+  "Falcata",
+  "Banana",
+  "Palm Oil",
+];
+const cropsSelectField = document.getElementById("crop");
+
+availableCrops.reverse().forEach((crop) => {
+  const html = `<option value="${crop}" ${
+    crop == "Rice" ? "selected='true'" : ""
+  }>${crop}</option>`;
+  cropsSelectField.insertAdjacentHTML("afterbegin", html);
+});
+
 $(function () {
   //Initialize Select2 Elements
-  $(".select2").select2();
 
   //Initialize Select2 Elements
   $(".select2bs4").select2({
     theme: "bootstrap4",
+    tags: true,
+    createTag: function (params) {
+      return {
+        id: params.term,
+        text: params.term,
+        newOption: true,
+      };
+    },
   });
+
   //Datemask dd/mm/yyyy
   $("#datemask").inputmask("dd/mm/yyyy", { placeholder: "dd/mm/yyyy" });
   //Datemask2 mm/dd/yyyy
@@ -58,18 +88,15 @@ addCropForm.addEventListener("submit", function (e) {
   ).then((res) => {
     Toast.fire({
       icon: "success",
-      title: "Crops added successfully",
+      title: "Crop added successfully",
     });
     console.log(res);
-    emptyFields();
+    e.target.elements.listFarmers.value = "";
+    e.target.elements.year.value = "";
+    e.target.elements.crop.value = "";
+    e.target.elements.landArea.value = "";
+    e.target.elements.yield.value = "";
+    e.target.elements.netIncome.value = "";
+    e.target.elements.production.value = "";
   });
 });
-function emptyFields() {
-  e.target.elements.listFarmers.value = "";
-  e.target.elements.year.value = "";
-  e.target.elements.crop.value = "";
-  e.target.elements.landArea.value = "";
-  e.target.elements.yield.value = "";
-  e.target.elements.netIncome.value = "";
-  e.target.elements.production.value = "";
-}
