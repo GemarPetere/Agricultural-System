@@ -13,7 +13,6 @@ sendGetRequest("/farmer/recruitement").then((res) => {
     console.log(data);
     tableData.push(newObj);
   });
-  $(function () {
     $("#farmer-table")
       .DataTable({
         data: tableData,
@@ -32,4 +31,3 @@ sendGetRequest("/farmer/recruitement").then((res) => {
       .container()
       .appendTo("#example1_wrapper .col-md-6:eq(0)");
   });
-});

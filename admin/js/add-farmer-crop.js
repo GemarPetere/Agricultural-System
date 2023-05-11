@@ -1,5 +1,12 @@
 import { sendGetRequest, sendPostRequest } from "./common.js";
 
+const url = window.location.href;
+let farmerId = "";
+if (url.includes("?id=")) {
+  farmerId = url.slice(url.lastIndexOf("?id=") + 4);
+  console.log(farmerId);
+}
+
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
@@ -60,13 +67,23 @@ $(function () {
 
 let tableData = [];
 
-sendGetRequest("/farmer/recruitement").then((res) => {
-  res.map((data) => {
-    console.log(data);
-    const html = `<option value="${data.id}">${data.Name}</option>`;
-    document.getElementById("default").insertAdjacentHTML("afterend", html);
+if (farmerId == "") {
+  sendGetRequest("/farmer/recruitement").then((res) => {
+    res.map((data) => {
+      console.log(data);
+      const html = `<option value="${data.id}">${data.Name}</option>`;
+      document.getElementById("default").insertAdjacentHTML("afterend", html);
+    });
   });
-});
+} else {
+  sendGetRequest(`/farmer/recruitement/${farmerId}`).then((res) => {
+    res.map((data) => {
+      console.log(data);
+      const html = `<option value="${data._id}">${data.firstName} ${data.lastName}</option>`;
+      document.getElementById("listFarmers").insertAdjacentHTML("afterbegin", html);
+    });
+  });
+}
 
 const addCropForm = document.getElementById("add-crop-form");
 

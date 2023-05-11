@@ -4,14 +4,27 @@ const url = window.location.href;
 const farmerId = url.slice(url.lastIndexOf("?id=") + 4);
 const mapContainer = document.getElementById("farmerMap");
 const addressField = document.getElementById("address");
-let farmDataYear = new Date().getFullYear();
-console.log(farmDataYear);
+let defaultFarmDataYear = new Date().getFullYear().toString();
+let listOfYears = [defaultFarmDataYear];
+const cropingYears = Array.from(new Set(listOfYears));
+const addCropBtn = document.getElementById("add_crop-btn");
 let map;
+
+console.log(listOfYears);
+
+$(function () {
+  //Initialize Select2 Elements
+  $(".select2bs4").select2({
+    theme: "bootstrap4",
+    minimumResultsForSearch: -1,
+  });
+});
 
 $(window).on("load", function () {
   // Get Farmer Details
   sendGetRequest(`/farmer/recruitement/${farmerId}`).then((res) => {
     console.log(res[0]);
+    addCropBtn.href = `add-farmer-crop.html?id=${res[0]._id}`;
     document.getElementById("farmerDetails").insertAdjacentHTML(
       "afterbegin",
       `
@@ -37,8 +50,9 @@ $(window).on("load", function () {
     );
     // Get Farmer Crops Details
     sendGetRequest(
-      `/farmer/recruitement/farmer-crop/${farmDataYear}/${res[0]._id}`
+      `/farmer/recruitement/farmer-crop/${defaultFarmDataYear}/${res[0]._id}`
     ).then((crops) => {
+      console.log(crops);
       // Initialize Charts
       let landAreaChart = $("#donutChart2").get(0).getContext("2d");
       let yieldChart = $("#donutChart3").get(0).getContext("2d");
@@ -65,8 +79,16 @@ $(window).on("load", function () {
         yieldData.datasets[0].data.push(crops.result[i].yield);
         yieldData.labels.push(crops.result[i].crop);
         cropsLists.push(crops.result[i].crop);
+        listOfYears.push(crops.result[i].year);
       }
-      console.log(cropsLists.length);
+      // Initialize Years dropdown start
+      cropingYears.forEach((year) => {
+        const html = `<option value="${year}">${year}</option>`;
+        document
+          .getElementById("yearOfCroping")
+          .insertAdjacentHTML("afterbegin", html);
+      });
+      // Initialize Years dropdown end
       if (cropsLists.length == 0) {
         document.getElementById("listCrops").innerHTML =
           "<p class='text-center'>No Data</p>";
@@ -150,7 +172,7 @@ function loadCharts() {}
 
 $(function () {
   // let donutChartCanvas2 = $("#donutChart2").get(0).getContext("2d");
-  let donutChartCanvas3 = $("#donutChart3").get(0).getContext("2d");
+  let donutChartCanvas3 = $("#netIncomeChart").get(0).getContext("2d");
   let donutData = {
     labels: ["Chrome", "IE", "FireFox", "Safari", "Opera", "Navigator"],
     datasets: [
@@ -168,9 +190,19 @@ $(function () {
     ],
   };
 
-  // new Chart(donutChartCanvas3, {
-  //   type: "doughnut",
-  //   data: donutData,
-  //   options: donutOptions,
-  // });
+  let barChartOptions = {
+    maintainAspectRatio: false,
+    responsive: true,
+    plugins: {
+      colorschemes: {
+        scheme: "brewer.Paired3",
+      },
+    },
+  };
+
+  new Chart(donutChartCanvas3, {
+    type: "doughnut",
+    data: donutData,
+    options: barChartOptions,
+  });
 });

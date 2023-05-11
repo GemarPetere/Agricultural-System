@@ -87,7 +87,6 @@ export async function sendPutRequest(route, userInfo) {
 }
 
 export async function sendGetRequest(route) {
-  console.log(apiBaseUrl + route);
   try {
     const response = await fetch(apiBaseUrl + route);
     const data = await response.json();
