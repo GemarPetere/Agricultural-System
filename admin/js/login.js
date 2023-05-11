@@ -5,6 +5,17 @@ import { checkLogin } from "./common.js";
 
 const signupForm = document.getElementById("signupForm");
 const isUserLoggedIn = localStorage.getItem("user-token");
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 2500,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
 
 if (checkLogin()) {
   window.location.href = "../admin/index.html";
@@ -26,8 +37,13 @@ loginForm.addEventListener("submit", function (e) {
     if (res.token != "") {
       localStorage.setItem("userToken", res.token);
       localStorage.setItem("userID", res.user._id);
+      localStorage.setItem("userName", res.user.name);
+      localStorage.setItem("userEmail", res.user.email);
 
-      alert("Successfuly signed in")
+      Toast.fire({
+        icon: "success",
+        title: "Sign in successfully",
+      });
 
       setTimeout(() => {
         window.location.href = "../index.html";
