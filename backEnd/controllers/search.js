@@ -56,14 +56,15 @@ exports.searchCrops = async (req, res) =>{
         const { crop } = req.params
         await FarmerCrop.find({crop:crop})
           .then((datas) =>{
-            const searched = {}
-            const id = datas[0].farmerId
-            Farmer.find({_id:id})
-                .then((result) =>{
-                    searched.cropDetails = datas[0]
-                    searched.farmer = result
-                    return res.status(200).json(searched)
-                })
+            // const searched = []
+            // const id = datas[0].farmerId
+            // Farmer.find({_id:id})
+            //     .then((result) =>{
+            //         searched.cropDetails = datas[0]
+            //         searched.farmer = result
+            //         return res.status(200).json(searched)
+            //     })
+            return res.status(200).json(datas)
           })
           .catch((err) =>{
             console.log(err)
