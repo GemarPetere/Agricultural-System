@@ -5,47 +5,29 @@ const FarmerCrop = require("../models/FarmerCrops");
 
 exports.search = async (req, res) =>{
     try{
-        const { fName, lName } = req.params
-        await Farmer.find({$and:[{lastName:lName},{firstName:fName}]})
-          .then((datas) =>{
-            const searched = {}
-            const id = datas[0]._id
-            FarmerCrop.find({farmerId:id})
-                .then((result) =>{
-                    searched.farmer = datas[0]
-                    searched.cropsDetails = result
-                    return res.status(200).json(searched)
-                })
-          })
-          .catch((err) =>{
-            console.log(err)
-            return res.status(500).json(err)
-          })
-       
-      }catch(error){
-        console.log(error)
+      const { fName, lName } = req.params
+      const farmers = await Farmer.find({$and:[{lastName:lName},{firstName:fName}]})
+      const searched = []
+      for (const farmer of farmers) {
+        const cropsDetails = await FarmerCrop.find({ farmerId: farmer._id })
+        searched.push({ farmer, cropsDetails })
       }
+      return res.status(200).json(searched)
+    }catch(error){
+      console.log(error)
+    }
 }
 
 exports.searchBarangay = async (req, res) =>{
     try{
         const { barangay } = req.params
-        await Farmer.find({barangay:barangay})
-          .then((datas) =>{
-            const searched = {}
-            const id = datas[0]._id
-            FarmerCrop.find({farmerId:id})
-                .then((result) =>{
-                    searched.farmer = datas[0]
-                    searched.cropsDetails = result
-                    return res.status(200).json(searched)
-                })
-          })
-          .catch((err) =>{
-            console.log(err)
-            return res.status(500).json(err)
-          })
-       
+        const farmers = await Farmer.find({barangay:barangay})
+        const searched = []
+        for (const farmer of farmers) {
+          const cropsDetails = await FarmerCrop.find({ farmerId: farmer._id })
+          searched.push({ farmer, cropsDetails })
+        }
+        return res.status(200).json(searched)
       }catch(error){
         console.log(error)
       }
