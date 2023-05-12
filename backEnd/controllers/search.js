@@ -35,24 +35,14 @@ exports.searchBarangay = async (req, res) =>{
 
 exports.searchCrops = async (req, res) =>{
     try{
-        const { crop } = req.params
-        await FarmerCrop.find({crop:crop})
-          .then((datas) =>{
-            // const searched = []
-            // const id = datas[0].farmerId
-            // Farmer.find({_id:id})
-            //     .then((result) =>{
-            //         searched.cropDetails = datas[0]
-            //         searched.farmer = result
-            //         return res.status(200).json(searched)
-            //     })
-            return res.status(200).json(datas)
-          })
-          .catch((err) =>{
-            console.log(err)
-            return res.status(500).json(err)
-          })
-       
+        const { crop, year } = req.params
+        const crops = await FarmerCrop.find({$and:[{crop:crop}, {year:year}]})
+        const searched = []
+        for(const crop of crops){
+          const farmer = await Farmer.find({_id: crop.farmerId})
+          searched.push({crop, farmer})
+        }
+        return res.status(200).json(searched)
       }catch(error){
         console.log(error)
       }
