@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Search</title>
+    <script src="./assets/js/initialize-components.js"></script>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+    />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="./dist/css/adminlte.min.css" />
+  </head>
+  <body class="hold-transition layout-top-nav">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <nav
+        class="main-header navbar navbar-expand-md navbar-light navbar-white shadow-sm"
+      ></nav>
+      <!-- /.navbar -->
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <div class="container-fluid">
+            <h2 class="text-center display-4">Search</h2>
+          </div>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-8 offset-md-2">
+                <form id="searchForm" class="row">
+                  <div class="col-8 input-group input-group d-flex">
+                    <input
+                      type="search"
+                      id="searchValue"
+                      name="searchValue"
+                      class="form-control form-control"
+                      placeholder="Type your keywords here"
+                    />
+                    <div class="input-group-append">
+                      <button type="submit" class="btn btn-default">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-4 input-group d-flex align-items-center">
+                    <span>Search By: </span>
+                    <select class="form-control form-control ml-1" id="searchBy">
+                      <option value="farmer" selected>Farmer</option>
+                      <option value="barangay">Barangay</option>
+                      <option value="farmer">Farmer</option>
+                    </select>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-10 offset-md-1">
+                <div class="list-group" id="searchResults">
+                  <!-- <div class="list-group-item">
+                    <div class="row">
+                      <div class="col-auto">
+                        <img
+                          class="img-fluid"
+                          src="../../dist/img/photo1.png"
+                          alt="Photo"
+                          style="max-height: 160px"
+                        />
+                      </div>
+                      <div class="col px-4">
+                        <div>
+                          <div class="float-right">2021-04-20 10:14pm</div>
+                          <h3>Lorem ipsum dolor sit amet</h3>
+                          <p class="mb-0">
+                            consectetuer adipiscing elit. Aenean commodo ligula
+                            eget dolor. Aenean massa. Cum sociis natoque
+                            penatibus et magnis dis parturient montes, nascetur
+                            ridiculus mus.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery -->
+    <script src="./plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="./dist/js/adminlte.min.js"></script>
+    <script src="./assets/js/search.js" type="module"></script>
+  </body>
+</html>
