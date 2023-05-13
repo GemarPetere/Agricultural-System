@@ -21,10 +21,13 @@ exports.search = async (req, res) =>{
 exports.searchBarangay = async (req, res) =>{
     try{
         const { barangay } = req.params
+
+        const currentYear = new Date().getFullYear();
+
         const farmers = await Farmer.find({barangay:barangay})
         const searched = []
         for (const farmer of farmers) {
-          const cropsDetails = await FarmerCrop.find({ farmerId: farmer._id })
+          const cropsDetails = await FarmerCrop.find({ $and:[{farmerId: farmer._id }, {year:currentYear}]})
           searched.push({ farmer, cropsDetails })
         }
         return res.status(200).json(searched)
