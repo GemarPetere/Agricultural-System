@@ -5,8 +5,8 @@ const FarmerCrop = require("../models/FarmerCrops");
 
 exports.search = async (req, res) =>{
     try{
-      const { fName, lName } = req.params
-      const farmers = await Farmer.find({$and:[{lastName:lName},{firstName:fName}]})
+      const { name } = req.params
+      const farmers = await Farmer.find({$or:[{lastName:name},{firstName:name}]})
       const searched = []
       for (const farmer of farmers) {
         const cropsDetails = await FarmerCrop.find({ farmerId: farmer._id })
