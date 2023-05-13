@@ -11,7 +11,7 @@ const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
   showConfirmButton: false,
-  timer: 3000,
+  timer: 1000,
   timerProgressBar: true,
   didOpen: (toast) => {
     toast.addEventListener("mouseenter", Swal.stopTimer);
@@ -80,7 +80,9 @@ if (farmerId == "") {
     res.map((data) => {
       console.log(data);
       const html = `<option value="${data._id}">${data.firstName} ${data.lastName}</option>`;
-      document.getElementById("listFarmers").insertAdjacentHTML("afterbegin", html);
+      document
+        .getElementById("listFarmers")
+        .insertAdjacentHTML("afterbegin", html);
     });
   });
 }
@@ -90,7 +92,7 @@ const addCropForm = document.getElementById("add-crop-form");
 addCropForm.addEventListener("submit", function (e) {
   e.preventDefault();
   const newCrop = {
-    farmerId: e.target.elements.listFarmers.value,
+    farmerId: e.target.elements.listFarmers.value || farmerId,
     year: e.target.elements.year.value,
     crop: e.target.elements.crop.value,
     landArea: e.target.elements.landArea.value,
@@ -100,20 +102,26 @@ addCropForm.addEventListener("submit", function (e) {
   };
   console.log(newCrop);
   sendPostRequest(
-    `/farmer/recruitement/farmer-crop/${e.target.elements.listFarmers.value}`,
+    `/farmer/recruitement/farmer-crop/${
+      e.target.elements.listFarmers.value || farmerId
+    }`,
     newCrop
-  ).then((res) => {
-    Toast.fire({
-      icon: "success",
-      title: "Crop added successfully",
+  )
+    .then((res) => {
+      if (res.data) {
+        Toast.fire({
+          icon: "success",
+          title: "Crop added successfully",
+        });
+        setTimeout(() => {
+          location.reload();
+        }, 1100);
+      }
+    })
+    .catch((err) => {
+      Toast.fire({
+        icon: "success",
+        title: err.error,
+      });
     });
-    console.log(res);
-    e.target.elements.listFarmers.value = "";
-    e.target.elements.year.value = "";
-    e.target.elements.crop.value = "";
-    e.target.elements.landArea.value = "";
-    e.target.elements.yield.value = "";
-    e.target.elements.netIncome.value = "";
-    e.target.elements.production.value = "";
-  });
 });

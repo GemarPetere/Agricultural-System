@@ -237,6 +237,8 @@ $(window).on("load", function () {
         netIncomeData.labels.push(crops.result[i].crop);
       }
 
+      console.log(netIncomeData);
+
       if (cropsLists.length == 0) {
         document.getElementById("listCrops").innerHTML =
           "<p class='text-center'>No Data</p>";
