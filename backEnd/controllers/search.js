@@ -43,7 +43,8 @@ exports.searchCrops = async (req, res) =>{
         const searched = []
         for(const crop of crops){
           const farmer = await Farmer.find({_id: crop.farmerId})
-          searched.push({crop, farmer})
+          const farmers = farmer[0]
+          searched.push({crop, farmers})
         }
         return res.status(200).json(searched)
       }catch(error){
