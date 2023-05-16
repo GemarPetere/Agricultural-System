@@ -134,7 +134,7 @@ exports.farmerCrop = (req, res) => {
       crop: crop,
       year: year,
       landArea: landArea,
-      prduction: production,
+      production: production,
       yield:yield,
       netIncome: netIncome,
       farmerId: id,
