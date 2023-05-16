@@ -27,7 +27,7 @@ exports.searchBarangay = async (req, res) =>{
         const farmers = await Farmer.find({barangay:barangay})
         const searched = []
         for (const farmer of farmers) {
-          const cropsDetails = await FarmerCrop.find({ $and:[{farmerId: farmer._id }, {year:currentYear}]})
+          const cropsDetails = await FarmerCrop.find({ $and:[{farmerId:{$regrex: farmer._id}, $options:'i' }, {year:currentYear}]})
           searched.push({ farmer, cropsDetails })
         }
         return res.status(200).json(searched)
@@ -39,7 +39,7 @@ exports.searchBarangay = async (req, res) =>{
 exports.searchCrops = async (req, res) =>{
     try{
         const { crop, year } = req.params
-        const crops = await FarmerCrop.find({$and:[{crop:crop}, {year:year}]})
+        const crops = await FarmerCrop.find({$and:[{crop:{$regrex:crop}, $options:'i'}, {year:year}]})
         const searched = []
         for(const crop of crops){
           const farmer = await Farmer.find({_id: crop.farmerId})
