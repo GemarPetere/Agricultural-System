@@ -40,7 +40,7 @@ exports.searchCrops = async (req, res) =>{
     try{
         const { crop } = req.params
         const currentYear = new Date().getFullYear();
-        const crops = await FarmerCrop.find({$and:[{crop:crop}, {year:currentYear-1}]})
+        const crops = await FarmerCrop.find({$and:[{crop:{$regex:crop, $options:'i'}}, {year:currentYear-1}]})
         const searched = []
         for(const crop of crops){
           const farmer = await Farmer.find({_id: crop.farmerId})
