@@ -5,7 +5,7 @@ const { search, searchBarangay, searchCrops, searchDataBarangay } = require("../
 router.get("/search/farmer/:crop", searchCrops)
 router.get("/search2/:name", search)
 router.get("/search3/:barangay", searchBarangay)
-router.get("/search4/:barangay", searchDataBarangay)
+router.get("/search4/dashboard", searchDataBarangay)
 
 
 
