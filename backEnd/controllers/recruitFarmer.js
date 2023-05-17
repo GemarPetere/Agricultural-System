@@ -219,8 +219,9 @@ exports.getFarmerList = async (req, res) => {
           const Contact = data.contactNo
           const id = data._id
           const image = data.image.url
+          const activeStatus = data.activeStatus
 
-          Data = {Name, Age, Status, Contact, id, image}
+          Data = {Name, Age, Status, Contact, id, image, activeStatus}
 
           resData.push(Data)
 
