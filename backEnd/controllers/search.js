@@ -54,19 +54,29 @@ exports.searchCrops = async (req, res) =>{
 }
 
 exports.searchDataBarangay = async (req, res) =>{
-  const { barangay } = req.params
-  const farmers = await Farmer.find({barangay:{$regex:barangay, $options:'i'}})
+  try{
+    const farmers = await Farmer.find()
 
-  let x=0;
-  let landAreas=0;
-  const response = {}
-  farmers.map((farmer) =>{
-    if(farmer){
-      x++;
-      landAreas+=farmer.landArea
+    let x=0;
+    let landAreas=0;
+    const response = {}
+    farmers.map((farmer) =>{
+      if(farmer){
+        x++;
+        landAreas+=farmer.landArea
+      }
+    })
+
+    const farmerList = await Farmer.find().sort({ _id: -1 }).limit(10)
+
+    if(farmerList){
+      response.farmer = farmerList
+      response.farmerCount = x
+      response.farmedArea = landAreas
     }
-  })
-  response.farmer = x
-  response.farmedArea = landAreas
-  return res.status(200).json(response)
+    return res.status(200).json(response)
+  }catch(error){
+    console.log(error)
+    return res.status(500).json(error)
+  }
 }
