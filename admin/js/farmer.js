@@ -92,21 +92,42 @@ let yieldchart;
 let incomeChart;
 
 const initCharts = function () {
-  areachart = new Chart(landAreaChartContainer, {
-    type: "doughnut",
-    data: landAreaData,
-    options: pieChartOptions,
-  });
-  yieldchart = new Chart(yieldChartContainer, {
-    type: "doughnut",
-    data: yieldData,
-    options: barChartOptions,
-  });
-  incomeChart = new Chart(netIncomeChartContainer, {
-    type: "bar",
-    data: netIncomeData,
-    options: lineChartOptions,
-  });
+  if (areachart && yieldchart && incomeChart) {
+    areachart.destroy();
+    yieldchart.destroy();
+    incomeChart.destroy();
+    areachart = new Chart(landAreaChartContainer, {
+      type: "doughnut",
+      data: landAreaData,
+      options: pieChartOptions,
+    });
+    yieldchart = new Chart(yieldChartContainer, {
+      type: "doughnut",
+      data: yieldData,
+      options: pieChartOptions,
+    });
+    incomeChart = new Chart(netIncomeChartContainer, {
+      type: "bar",
+      data: netIncomeData,
+      options: lineChartOptions,
+    });
+  } else {
+    areachart = new Chart(landAreaChartContainer, {
+      type: "doughnut",
+      data: landAreaData,
+      options: pieChartOptions,
+    });
+    yieldchart = new Chart(yieldChartContainer, {
+      type: "doughnut",
+      data: yieldData,
+      options: pieChartOptions,
+    });
+    incomeChart = new Chart(netIncomeChartContainer, {
+      type: "bar",
+      data: netIncomeData,
+      options: lineChartOptions,
+    });
+  }
 };
 
 $(function () {
@@ -146,6 +167,7 @@ $(window).on("load", function () {
       </div>
       `
     );
+
     // Get croping years
     sendGetRequest(`/farmer/recruitement/farmer-crop/${res[0]._id}`).then(
       (res) => {
@@ -165,110 +187,103 @@ $(window).on("load", function () {
       }
     );
 
+    // Get Farmer Crops Details
+    sendGetRequest(
+      `/farmer/recruitement/farmer-crop/${defaultFarmDataYear}/${res[0]._id}`
+    )
+      .then((crops) => {
+        if (!crops.result.length <= 0) {
+          cropsLists = [];
+          reset();
+          for (let i = 0; i < crops.result.length; i++) {
+            landAreaData.datasets[0].data.push(crops.result[i].landArea);
+            landAreaData.labels.push(crops.result[i].crop);
+            yieldData.datasets[0].data.push(crops.result[i].yield);
+            yieldData.labels.push(crops.result[i].crop);
+            cropsLists.push(crops.result[i].crop);
+            netIncomeData.datasets[0].data.push(crops.result[i].netIncome);
+            netIncomeData.labels.push(crops.result[i].crop);
+          }
+          cropsLists.forEach((crop) => {
+            document.getElementById("listCrops").insertAdjacentHTML(
+              "afterbegin",
+              `
+              <li class="list-group-item justify-content-between">
+                ${crop}
+              </li>
+              `
+            );
+          });
+          document.querySelectorAll(".error_msg").forEach((err_msg) => {
+            err_msg.style.display = "none";
+          });
+          document.getElementById("donutChart2").style.display = "block";
+          document.getElementById("donutChart3").style.display = "block";
+          initCharts();
+        } else {
+          document.getElementById("listCrops").innerHTML =
+            "<p class='text-center'>No Data</p>";
+          document.getElementById("donutChart2").style.display = "none";
+          document.getElementById("donutChart3").style.display = "none";
+          document.querySelectorAll(".error_msg").forEach((err_msg) => {
+            err_msg.style.display = "block";
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // get crops details on Select Croping year
     const selectElement = $("#yearOfCroping");
     selectElement.on("change", function (event) {
       document.getElementById("listCrops").innerHTML = "";
       const selectedValue = event.target.value;
       sendGetRequest(
         `/farmer/recruitement/farmer-crop/${selectedValue}/${res[0]._id}`
-      ).then((crops) => {
-        console.log(crops);
-        cropsLists = [];
-        // Initialize Charts
-        reset();
-        for (let i = 0; i < crops.result.length; i++) {
-          landAreaData.datasets[0].data.push(crops.result[i].landArea);
-          landAreaData.labels.push(crops.result[i].crop);
-          yieldData.datasets[0].data.push(crops.result[i].yield);
-          yieldData.labels.push(crops.result[i].crop);
-          cropsLists.push(crops.result[i].crop);
-          netIncomeData.datasets[0].data.push(crops.result[i].netIncome);
-          netIncomeData.labels.push(crops.result[i].crop);
-        }
-
-        if (cropsLists.length == 0) {
-          document.getElementById("listCrops").innerHTML =
-            "<p class='text-center'>No Data</p>";
-        } else {
-          cropsLists.forEach((crop) => {
-            document.getElementById("listCrops").insertAdjacentHTML(
-              "afterbegin",
-              `
-            <li class="list-group-item justify-content-between">
-              ${crop}
-            </li>
-            `
-            );
-          });
-        }
-
-        if (
-          landAreaData.datasets[0].data.length == 0 &&
-          yieldData.datasets[0].data.length == 0
-        ) {
-          document
-            .getElementById("donutChart2")
-            .closest(".card-body").innerHTML =
-            "<p class='text-center'>No Data</p>";
-          document
-            .getElementById("donutChart3")
-            .closest(".card-body").innerHTML =
-            "<p class='text-center'>No Data</p>";
-        } else {
-          console.log(landAreaData);
-          console.log(yieldData);
-          if (areachart && yieldchart && incomeChart) {
-            areachart.destroy();
-            yieldchart.destroy();
-            incomeChart.destroy();
+      )
+        .then((crops) => {
+          if (!crops.result.length <= 0) {
+            cropsLists = [];
+            reset();
+            for (let i = 0; i < crops.result.length; i++) {
+              landAreaData.datasets[0].data.push(crops.result[i].landArea);
+              landAreaData.labels.push(crops.result[i].crop);
+              yieldData.datasets[0].data.push(crops.result[i].yield);
+              yieldData.labels.push(crops.result[i].crop);
+              cropsLists.push(crops.result[i].crop);
+              netIncomeData.datasets[0].data.push(crops.result[i].netIncome);
+              netIncomeData.labels.push(crops.result[i].crop);
+            }
+            cropsLists.forEach((crop) => {
+              document.getElementById("listCrops").insertAdjacentHTML(
+                "afterbegin",
+                `
+                <li class="list-group-item justify-content-between">
+                  ${crop}
+                </li>
+                `
+              );
+            });
+            document.querySelectorAll(".error_msg").forEach((err_msg) => {
+              err_msg.style.display = "none";
+            });
+            document.getElementById("donutChart2").style.display = "block";
+            document.getElementById("donutChart3").style.display = "block";
+            initCharts();
+          } else {
+            document.getElementById("listCrops").innerHTML =
+              "<p class='text-center'>No Data</p>";
+            document.getElementById("donutChart2").style.display = "none";
+            document.getElementById("donutChart3").style.display = "none";
+            document.querySelectorAll(".error_msg").forEach((err_msg) => {
+              err_msg.style.display = "block";
+            });
           }
-          initCharts();
-        }
-      });
-    });
-
-    // Get Farmer Crops Details
-    sendGetRequest(
-      `/farmer/recruitement/farmer-crop/${defaultFarmDataYear}/${res[0]._id}`
-    ).then((crops) => {
-      reset();
-      for (let i = 0; i < crops.result.length; i++) {
-        landAreaData.datasets[0].data.push(crops.result[i].landArea);
-        landAreaData.labels.push(crops.result[i].crop);
-        yieldData.datasets[0].data.push(crops.result[i].yield);
-        yieldData.labels.push(crops.result[i].crop);
-        cropsLists.push(crops.result[i].crop);
-        netIncomeData.datasets[0].data.push(crops.result[i].netIncome);
-        netIncomeData.labels.push(crops.result[i].crop);
-      }
-
-      if (cropsLists.length == 0) {
-        document.getElementById("listCrops").innerHTML =
-          "<p class='text-center'>No Data</p>";
-      } else {
-        cropsLists.forEach((crop) => {
-          document.getElementById("listCrops").insertAdjacentHTML(
-            "afterbegin",
-            `
-          <li class="list-group-item justify-content-between">
-            ${crop}
-          </li>
-          `
-          );
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      }
-
-      if (
-        landAreaData.datasets[0].data.length == 0 &&
-        yieldData.datasets[0].data.length == 0
-      ) {
-        document.getElementById("donutChart2").closest(".card-body").innerHTML =
-          "<p class='text-center'>No Data</p>";
-        document.getElementById("donutChart3").closest(".card-body").innerHTML =
-          "<p class='text-center'>No Data</p>";
-      } else {
-        initCharts();
-      }
     });
 
     _loadMap(res[0].lat, res[0].long);

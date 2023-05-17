@@ -10,6 +10,34 @@
 
   <!-- Right navbar links -->
   <ul class="navbar-nav ml-auto">
+    <li class="nav-item dropdown">
+      <!-- SEARCH FORM -->
+      <form class="form-inline ml-0 ml-md-3" id="searchForm">
+        <div class="input-group input-group-md">
+          <input
+            class="form-control form-control-navbar"
+            type="search"
+            name="searchtItem"
+            id="searchtItem"
+            placeholder="Search"
+            aria-label="Search"
+          />
+          <div class="input-group-append">
+            <button class="btn btn-default" type="submit">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <div class="input-group d-flex align-items-center ml-3">
+          <span>Search By: </span>
+          <select class="custom-select ml-1" id="searchBy">
+            <option value="farmer" selected>Farmer</option>
+            <option value="barangay">Barangay</option>
+            <option value="farmer">Farmer</option>
+          </select>
+        </div>
+      </form>
+    </li>
     <li class="nav-item dropdown user-menu">
       <a
         href="#"
@@ -26,6 +54,7 @@
         <span class="d-none d-md-inline mx-2" id="user_name"></span
         ><i class="fas fa-caret-down"></i>
       </a>
+
       <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         <!-- User image -->
         <li class="user-header bg-primary rounded-top">
@@ -66,5 +95,14 @@
     localStorage.removeItem("userName");
     localStorage.removeItem("userEmail");
     window.location.href = "index.html";
+  });
+
+  searchForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const searchBy = e.target.searchBy.value;
+    console.log(e.target.elements[0].value);
+    if (e.target.elements[0].value != "")
+      window.location.href = `search.html?q=${e.target.elements[0].value}?type=${searchBy}`;
+    else console.log("Query is empty");
   });
 </script>
