@@ -52,3 +52,21 @@ exports.searchCrops = async (req, res) =>{
         console.log(error)
       }
 }
+
+exports.searchDataBarangay = async (req, res) =>{
+  const { barangay } = req.params
+  const farmers = await Farmer.find({barangay:{$regex:barangay, $options:'i'}})
+
+  let x=0;
+  let landAreas=0;
+  const response = {}
+  farmers.map((farmer) =>{
+    if(farmer){
+      x++;
+      landAreas+=farmer.landArea
+    }
+  })
+  response.farmer = x
+  response.farmedArea = landAreas
+  return res.status(200).json(response)
+}
