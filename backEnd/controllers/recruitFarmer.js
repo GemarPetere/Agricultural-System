@@ -96,7 +96,7 @@ exports.farmerImage = async (req, res) => {
     const { id } = req.params
 
     const uploadedResponse = await cloudinary.uploader.upload(tempFilePath, {
-      upload_preset: "ml_default",
+      upload_preset: "farmer-image",
     });
 
     console.log(req.params)
