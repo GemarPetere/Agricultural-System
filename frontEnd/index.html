@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css" />
     <!-- Theme style -->
     <link rel="stylesheet" href="./dist/css/adminlte.min.css" />
-    <link rel="stylesheet" href="plugins/leaflet/leaflet.css">
+    <link rel="stylesheet" href="plugins/leaflet/leaflet.css" />
     <script defer src="./plugins/leaflet/leaflet.js"></script>
   </head>
   <body class="hold-transition layout-top-nav">
@@ -22,11 +22,51 @@
       <!-- Navbar -->
       <nav
         class="main-header navbar navbar-expand-md navbar-light navbar-white shadow-sm"
-      >
-      </nav>
+      ></nav>
       <!-- /.navbar -->
 
       <!-- Content Wrapper. Contains page content -->
+      <!-- Main content -->
+      <section
+        class="content position-absolute w-100"
+        style="z-index: 999; bottom: 50%"
+      >
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-8 offset-md-2 bg-white p-3 shadow-lg rounded-lg">
+              <form id="searchForm" class="row">
+                <div class="col-8 input-group input-group d-flex">
+                  <input
+                    type="search"
+                    id="searchValue"
+                    name="searchValue"
+                    class="form-control form-control"
+                    placeholder="Type your keywords here"
+                  />
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-default">
+                      <i class="fa fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-4 input-group d-flex align-items-center">
+                  <span>Search By: </span>
+                  <select class="form-control form-control ml-1" id="searchBy">
+                    <option value="farmer" selected>Farmer</option>
+                    <option value="barangay">Barangay</option>
+                    <option value="crop">Crop</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-10 offset-md-1">
+              <div class="list-group" id="searchResults"></div>
+            </div>
+          </div>
+        </div>
+      </section>
       <div
         id="map"
         class="d-flex align-items-center justify-content-center"
@@ -52,5 +92,17 @@
     <!-- AdminLTE App -->
     <script src="./dist/js/adminlte.min.js"></script>
     <script src="./assets/js/map.js"></script>
+    <script>
+      const searchForm = document.getElementById("searchForm");
+
+      searchForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const searchBy = e.target.searchBy.value;
+        console.log(e.target.elements[0].value);
+        if (e.target.elements[0].value != "")
+          window.location.href = `search.html?q=${e.target.elements[0].value}?type=${searchBy}`;
+        else console.log("Query is empty");
+      });
+    </script>
   </body>
 </html>

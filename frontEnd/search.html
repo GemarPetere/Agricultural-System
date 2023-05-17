@@ -55,7 +55,10 @@
                   </div>
                   <div class="col-4 input-group d-flex align-items-center">
                     <span>Search By: </span>
-                    <select class="form-control form-control ml-1" id="searchBy">
+                    <select
+                      class="form-control form-control ml-1"
+                      id="searchBy"
+                    >
                       <option value="farmer" selected>Farmer</option>
                       <option value="barangay">Barangay</option>
                       <option value="crop">Crop</option>
@@ -66,32 +69,18 @@
             </div>
             <div class="row mt-3">
               <div class="col-md-10 offset-md-1">
-                <div class="list-group" id="searchResults">
-                  <!-- <div class="list-group-item">
-                    <div class="row">
-                      <div class="col-auto">
-                        <img
-                          class="img-fluid"
-                          src="../../dist/img/photo1.png"
-                          alt="Photo"
-                          style="max-height: 160px"
-                        />
-                      </div>
-                      <div class="col px-4">
-                        <div>
-                          <div class="float-right">2021-04-20 10:14pm</div>
-                          <h3>Lorem ipsum dolor sit amet</h3>
-                          <p class="mb-0">
-                            consectetuer adipiscing elit. Aenean commodo ligula
-                            eget dolor. Aenean massa. Cum sociis natoque
-                            penatibus et magnis dis parturient montes, nascetur
-                            ridiculus mus.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div> -->
+                <div id="searchChartContainer">
+                  <canvas
+                    id="searchChart"
+                    style="
+                      min-height: 250px;
+                      height: 250px;
+                      max-height: 250px;
+                      max-width: 50%;
+                    "
+                  ></canvas>
                 </div>
+                <div class="list-group" id="searchResults"></div>
               </div>
             </div>
           </div>
@@ -106,6 +95,10 @@
     <script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="./dist/js/adminlte.min.js"></script>
+    <script src="././plugins/chart.js/Chart.min.js"></script>
     <script src="./assets/js/search.js" type="module"></script>
+    <script>
+      
+    </script>
   </body>
 </html>

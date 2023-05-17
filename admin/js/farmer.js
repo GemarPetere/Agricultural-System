@@ -11,9 +11,9 @@ let defaultFarmDataYear = new Date().getFullYear().toString();
 let listOfYears = [defaultFarmDataYear];
 let cropingYears;
 const colors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff"];
-let landAreaChart = $("#donutChart2").get(0).getContext("2d");
-let yieldChart = $("#donutChart3").get(0).getContext("2d");
-let netIncomeChart = $("#netIncomeChart").get(0).getContext("2d");
+let landAreaChartContainer = $("#donutChart2").get(0).getContext("2d");
+let yieldChartContainer = $("#donutChart3").get(0).getContext("2d");
+let netIncomeChartContainer = $("#netIncomeChart").get(0).getContext("2d");
 let landAreaData = {
   labels: [],
   datasets: [
@@ -92,17 +92,17 @@ let yieldchart;
 let incomeChart;
 
 const initCharts = function () {
-  areachart = new Chart(landAreaChart, {
+  areachart = new Chart(landAreaChartContainer, {
     type: "doughnut",
     data: landAreaData,
     options: pieChartOptions,
   });
-  yieldchart = new Chart(yieldChart, {
+  yieldchart = new Chart(yieldChartContainer, {
     type: "doughnut",
     data: yieldData,
     options: barChartOptions,
   });
-  incomeChart = new Chart(netIncomeChart, {
+  incomeChart = new Chart(netIncomeChartContainer, {
     type: "bar",
     data: netIncomeData,
     options: lineChartOptions,
@@ -172,6 +172,7 @@ $(window).on("load", function () {
       sendGetRequest(
         `/farmer/recruitement/farmer-crop/${selectedValue}/${res[0]._id}`
       ).then((crops) => {
+        console.log(crops);
         cropsLists = [];
         // Initialize Charts
         reset();
@@ -214,9 +215,13 @@ $(window).on("load", function () {
             .closest(".card-body").innerHTML =
             "<p class='text-center'>No Data</p>";
         } else {
-          areachart.destroy();
-          yieldchart.destroy();
-          incomeChart.destroy();
+          console.log(landAreaData);
+          console.log(yieldData);
+          if (areachart && yieldchart && incomeChart) {
+            areachart.destroy();
+            yieldchart.destroy();
+            incomeChart.destroy();
+          }
           initCharts();
         }
       });
@@ -236,8 +241,6 @@ $(window).on("load", function () {
         netIncomeData.datasets[0].data.push(crops.result[i].netIncome);
         netIncomeData.labels.push(crops.result[i].crop);
       }
-
-      console.log(netIncomeData);
 
       if (cropsLists.length == 0) {
         document.getElementById("listCrops").innerHTML =

@@ -2,7 +2,7 @@
 
 // Initialize Home Page Map
 const mapContainer = document.getElementById("map");
-const loaderContainer = document.getElementById("loader");
+const loaderContainer = document.querySelector(".content-wrapper");
 let map;
 
 function _getPosition() {
@@ -25,7 +25,7 @@ function _loadMap(position) {
   const coords = [latitude, longitude];
   map = L.map("map");
   map.on("load", function (e) {
-    loaderContainer.classList.add("hidden");
+    loaderContainer.style.minHeight = "0";
   });
   map.setView(coords, 13);
 
