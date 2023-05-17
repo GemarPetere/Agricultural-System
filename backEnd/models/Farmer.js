@@ -78,6 +78,10 @@ const data = {
     type:String,
     trim:true
   },
+  activeStatus:{
+    type: Boolean,
+    default: true
+  },
   lat:{
     type:String,
     default:"6.951944838057917"

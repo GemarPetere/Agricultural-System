@@ -264,3 +264,27 @@ exports.getFarmerCrops = async (req, res) =>{
     console.log(error)
   }
 }
+
+exports.putActiveStatus = async (req, res) =>{
+  try{
+    const { id } = req.params
+    const { action } = req.body
+    await Farmer.findOneAndUpdate({_id: id}, {$set:{activeStatus: action}})
+          .then(function(){
+            Farmer.find({_id:id})
+              .then(data =>{
+                if(data){
+                  let response = {}
+                  response.activeStatus = data[0].activeStatus
+                  response.message = "Successfully Update Status"
+                  return res.status(200).json(response)
+                }
+              })
+          })
+          .catch(error =>{
+            return res.status(500).json(error)
+          })
+  }catch(error){
+    console.log(error)
+  }
+}
