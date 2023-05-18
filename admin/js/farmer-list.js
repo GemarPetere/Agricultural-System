@@ -48,15 +48,25 @@ sendGetRequest("/farmer/recruitement").then((res) => {
       console.log(e.target.innerText);
       const userData = {
         method: "PUT",
-        body: { action: e.target.innerText == "Activate" ? false : true },
+        body: {
+          action: e.target.innerText == "Activate" ? "Active" : "Inactive",
+        },
       };
-      console.log(e.target.innerText == "Activate" ? true : false);
 
       editFarmerStatus(`/farmer/recruitement/farmer/${e.target.dataset.id}`, {
         action: e.target.innerText == "Activate" ? true : false,
-      }).then((res) => {
-        console.log(res);
-      });
+      })
+        .then((res) => {
+          console.log(res);
+          if (res && res.activeStatus != null) {
+            location.reload();
+          } else {
+            console.error("could not update status!");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     });
   });
 });

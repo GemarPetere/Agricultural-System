@@ -89,10 +89,14 @@ export async function sendPutRequest(route, userInfo) {
 export async function editFarmerStatus(route, userInfo) {
   const userData = {
     method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(userInfo),
   };
 
-  console.log("User Data: ",userData);
+  console.log("User Data: ", userData);
 
   try {
     const response = await fetch(apiBaseUrl + route, userData);
