@@ -262,9 +262,13 @@ function search(searchItem, searchBy) {
         options: {
           maintainAspectRatio: false,
           scales: {
-            y: {
-              beginAtZero: true,
-            },
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
           },
         },
       });
