@@ -18,8 +18,6 @@ let chartData = {
 };
 let chart;
 
-console.log("Url: ", url);
-
 function search(searchItem, searchBy) {
   // Search by farmer
   if (searchBy == "farmer") {
@@ -86,10 +84,8 @@ function search(searchItem, searchBy) {
   }
   // Seach by Brgy
   if (searchBy == "barangay") {
-    console.log(searchBy);
     sendGetRequest(`/search3/${searchItem}`).then((res) => {
       searchResultsContainer.innerHTML = "";
-      console.log(res);
       if (res.length == 0) {
         document.getElementById("searchChartContainer").style.display = "none";
 
@@ -106,11 +102,18 @@ function search(searchItem, searchBy) {
       chartData.datasets[0].label = "";
       chartData.datasets[0].data.length = 0;
       chartData.labels.length = 0;
+
       for (let i = 0; i < res.length; i++) {
-        console.log(i);
-        chartData.datasets[0].label = `Crops in Brgy.${res[0].farmer.barangay}`;
-        chartData.datasets[0].data.push(res[i].cropsDetails[0].production);
-        chartData.labels.push(res[i].cropsDetails[0].crop);
+        if (res[i].cropsDetails.length != 0) {
+          chartData.datasets[0].label = `Crops in Brgy.${res[0].farmer.barangay}`;
+          for (let index = 0; index < res[i].cropsDetails.length; index++) {
+            chartData.datasets[0].data.push(
+              res[i].cropsDetails[index].production
+            );
+            chartData.labels.push(res[i].cropsDetails[index].crop);
+          }
+          console.log(res);
+        }
         let date = new Date(res[i].farmer.updatedAt);
         html = `
             <div class="list-group-item mb-2">
@@ -156,20 +159,22 @@ function search(searchItem, searchBy) {
             `;
         searchResultsContainer.insertAdjacentHTML("afterbegin", html);
       }
-      console.log(chartData);
       if (chart) {
         chart.destroy();
       }
       chart = new Chart(ctx, {
         type: "bar",
         data: chartData,
-        fillColor: getRandomColor(),
         options: {
           maintainAspectRatio: false,
           scales: {
-            y: {
-              beginAtZero: true,
-            },
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
           },
         },
       });

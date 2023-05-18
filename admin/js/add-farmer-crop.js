@@ -72,7 +72,7 @@ if (farmerId == "") {
     res.map((data) => {
       console.log(data);
       const html = `<option value="${data.id}">${data.Name}</option>`;
-      document.getElementById("default").insertAdjacentHTML("afterend", html);
+      document.getElementById("listFarmers").insertAdjacentHTML("afterbegin", html);
     });
   });
 } else {

@@ -86,6 +86,23 @@ export async function sendPutRequest(route, userInfo) {
   }
 }
 
+export async function editFarmerStatus(route, userInfo) {
+  const userData = {
+    method: "PUT",
+    body: JSON.stringify(userInfo),
+  };
+
+  console.log("User Data: ",userData);
+
+  try {
+    const response = await fetch(apiBaseUrl + route, userData);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
+
 export async function sendGetRequest(route) {
   try {
     const response = await fetch(apiBaseUrl + route);

@@ -77,6 +77,15 @@ let barChartOptions = {
       scheme: "office.Waveform6",
     },
   },
+  scales: {
+    yAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+        },
+      },
+    ],
+  },
 };
 let lineChartOptions = {
   maintainAspectRatio: false,
@@ -85,6 +94,15 @@ let lineChartOptions = {
     colorschemes: {
       scheme: "office.Waveform6",
     },
+  },
+  scales: {
+    yAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+        },
+      },
+    ],
   },
 };
 let areachart;
