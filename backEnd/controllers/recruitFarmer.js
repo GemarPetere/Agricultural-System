@@ -270,7 +270,7 @@ exports.putActiveStatus = async (req, res) =>{
   try{
     const { id } = req.params
     const { action } = req.body
-    await Farmer.findOneAndUpdate({_id: id}, {$set:{activeStatus: action}})
+    await Farmer.updateOne({_id: id}, {$set:{activeStatus: action}})
           .then(function(){
             Farmer.find({_id:id})
               .then(data =>{
