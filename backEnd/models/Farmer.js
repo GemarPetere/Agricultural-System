@@ -79,8 +79,8 @@ const data = {
     trim:true
   },
   activeStatus:{
-    type: Boolean,
-    default: true
+    type: String,
+    default: "Active"
   },
   lat:{
     type:String,
