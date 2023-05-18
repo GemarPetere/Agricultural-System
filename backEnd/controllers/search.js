@@ -73,7 +73,7 @@ exports.searchCrops = async (req, res) =>{
 
 exports.searchDataBarangay = async (req, res) =>{
   try{
-    const farmers = await Farmer.find()
+    const farmers = await Farmer.find({activeStatus:true})
 
     let x=0;
     let landAreas=0;
