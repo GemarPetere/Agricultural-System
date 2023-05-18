@@ -4,6 +4,7 @@ const mapContainer = document.getElementById("map");
 const totalFarmers = document.getElementById("totalFarmers");
 const totalLandArea = document.getElementById("totalLandArea");
 let farmerCoords = [];
+let farmerMarkerDetails = [];
 let tableData = [];
 let map;
 
@@ -28,7 +29,13 @@ function _loadMap(position) {
   map = L.map("map").setView(coords, 13);
 
   for (let i = 0; i < farmerCoords.length; i++) {
-    L.marker(farmerCoords[i]).addTo(map);
+    var marker = L.marker(farmerCoords[i][0]).addTo(map);
+    marker.on("mouseover", function () {
+      if (!this.isPopupOpen())
+        this.bindTooltip(
+          `<span><strong>Name:</strong> ${farmerCoords[i][1].Name}</span><br><span><strong>Brgy:</strong> ${farmerCoords[i][1].Barangay}</span>`
+        ).openTooltip();
+    });
     // L.tooltip(farmerCoords[i], {
     //   parmanent: true,
     //   content: "Hello world!<br />This is a nice tooltip.",
@@ -45,8 +52,15 @@ sendGetRequest("/search4/dashboard").then((res) => {
   if (res) {
     totalFarmers.innerText = res.farmerCount;
     totalLandArea.innerText = res.farmedArea;
+    console.log(res);
     for (let i = 0; i < res.farmer.length; i++) {
-      farmerCoords.push([res.farmer[i].lat, res.farmer[i].long]);
+      farmerCoords.push([
+        [res.farmer[i].lat, res.farmer[i].long],
+        {
+          Name: res.farmer[i].firstName + " " + res.farmer[i].lastName,
+          Barangay: res.farmer[i].barangay,
+        },
+      ]);
     }
     console.log(farmerCoords);
     _getPosition();
@@ -81,5 +95,3 @@ sendGetRequest("/search4/dashboard").then((res) => {
       .appendTo("#example1_wrapper .col-md-6:eq(0)");
   }
 });
-
-sendGetRequest("/farmer/recruitement").then((res) => {});
