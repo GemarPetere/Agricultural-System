@@ -6,7 +6,16 @@ const FarmerCrop = require("../models/FarmerCrops");
 exports.search = async (req, res) =>{
     try{
       const { name } = req.params
-      const farmers = await Farmer.find({$or:[{lastName:{$regex: name, $options: 'i'}},{firstName:{$regex: name, $options: 'i'}}]})
+      const farmers = await Farmer.find({
+        $and: [
+          {
+            $or: [
+              { lastName: { $regex: name, $options: 'i' } },
+              { firstName: { $regex: name, $options: 'i' } },
+            ],
+          },
+          { activeStatus: true }, // added requirement for activeStatus field
+        ]})
       const searched = []
       for (const farmer of farmers) {
         const cropsDetails = await FarmerCrop.find({ farmerId: farmer._id })
@@ -24,7 +33,12 @@ exports.searchBarangay = async (req, res) =>{
 
         const currentYear = new Date().getFullYear();
 
-        const farmers = await Farmer.find({barangay:{$regex:barangay, $options:'i'}})
+        const farmers = await Farmer.find({
+          $and: [
+            { barangay: { $regex: barangay, $options: 'i' } },
+            { activeStatus: true }, // added requirement for activeStatus field
+          ],
+        })
         const searched = []
         for (const farmer of farmers) {
           const cropsDetails = await FarmerCrop.find({ $and:[{farmerId: farmer._id }, {year:currentYear-1}]})
@@ -43,7 +57,11 @@ exports.searchCrops = async (req, res) =>{
         const crops = await FarmerCrop.find({$and:[{crop:{$regex:crop, $options:'i'}}, {year:currentYear-1}]})
         const searched = []
         for(const crop of crops){
-          const farmer = await Farmer.find({_id: crop.farmerId})
+          const farmer = await Farmer.find({ $and: [
+              { _id: crop.farmerId },
+              { activeStatus: true }, // added requirement for activeStatus field
+            ],
+          })
           const farmers = farmer[0]
           searched.push({crop, farmers})
         }

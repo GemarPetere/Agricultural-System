@@ -208,7 +208,7 @@ exports.farmerCropDetails = async (req, res) =>{
 
 exports.getFarmerList = async (req, res) => {
   try {
-    await Farmer.find({})
+    await Farmer.find({activeStatus: true})
       .then((datas) => {
         let resData = []
         let Data = {}
