@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login</title>
+    <title>Signup</title>
     <!-- Google Font: Source Sans Pro -->
     <link
       rel="stylesheet"
@@ -27,9 +27,39 @@
           <a href="javascript:;" class="h1"><b>System Reccommender</b></a>
         </div>
         <div class="card-body">
-          <p class="login-box-msg">Enter your account details to sign in.</p>
+          <p class="login-box-msg">Enter your account details to sign up.</p>
 
-          <form id="loginForm" method="post">
+          <form id="signupForm" method="post">
+            <div class="input-group mb-3">
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                class="form-control"
+                placeholder="First Name"
+                required
+              />
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-user"></span>
+                </div>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                class="form-control"
+                placeholder="Last Name"
+                required
+              />
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-user"></span>
+                </div>
+              </div>
+            </div>
             <div class="input-group mb-3">
               <input
                 id="email-address"
@@ -69,9 +99,6 @@
               </div>
               <!-- /.col -->
             </div>
-            <div class="text-center">
-              <span class="text-sm">Don't have an account? <a href="signup.html">Click here</a></span>
-            </div>
           </form>
         </div>
         <!-- /.card-body -->
@@ -89,6 +116,6 @@
     <script src="./dist/js/adminlte.min.js"></script>
     <!-- <script type="module" src="./js/main.js"></script> -->
     <script type="module" src="./js/common.js"></script>
-    <script type="module" src="./js/login.js"></script>
+    <script type="module" src="./js/signup.js"></script>
   </body>
 </html>
