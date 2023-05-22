@@ -67,7 +67,7 @@ sendGetRequest("/search4/dashboard").then((res) => {
 
     res.farmer.map((data) => {
       let newObj = {
-        Name: `<img src="${data.image.secure_url}" width="26" class="rounded-circle"> ${data.firstName} ${data.lastName}`,
+        Name: `<img src="${data.image.secure_url}" width="26" height="26" class="rounded-circle"> ${data.firstName} ${data.lastName}`,
         Age: data.age,
         Contact: data.contactNo,
         Barangay: data.barangay,
