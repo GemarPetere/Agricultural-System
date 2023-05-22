@@ -6,7 +6,7 @@ sendGetRequest("/farmer/recruitement").then((res) => {
   console.log(res);
   res.map((data) => {
     let newObj = {
-      Name: `<img src="${data.image}" width="26" class="rounded-circle"> ${data.Name}`,
+      Name: `<img src="${data.image}" width="26" height="26" class="rounded-circle"> ${data.Name}`,
       Age: data.Age,
       Contact: data.Contact,
       Status: `<div class="rounded py-1 text-center ${
