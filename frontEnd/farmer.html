@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farmer</title>
+    <script src="./assets/js/initialize-components.js"></script>
+    <!-- Google Font: Source Sans Pro -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+      type="text/css"
+    />
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css" />
+    <!-- Ionicons -->
+    <link
+      rel="stylesheet"
+      href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"
+    />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css" />
+    <!-- Map -->
+    <link
+      defer
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="plugins/select2/css/select2.min.css" />
+    <link
+      rel="stylesheet"
+      href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"
+    />
+    <script
+      defer
+      src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+      crossorigin=""
+    ></script>
+  </head>
+  <body class="hold-transition layout-top-nav ">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <nav
+        class="main-header navbar navbar-expand-md navbar-light navbar-white shadow-sm"
+      ></nav>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1 class="m-0">Farmer Profile</h1>
+              </div>
+              <!-- /.col -->
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="#">Admin</a></li>
+                  <li class="breadcrumb-item active">Farmer Profile</li>
+                </ol>
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex" id="farmerDetails"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="col-3">
+                  <div class="form-group" data-select2-id="2">
+                    <label>Year</label>
+                    <select
+                      class="form-control select2bs4 select2-hidden-accessible"
+                      style="width: 100%"
+                      id="yearOfCroping"
+                      name="yearOfCroping"
+                      tabindex="-1"
+                      aria-hidden="true"
+                    ></select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <!-- DONUT CHART -->
+                <div class="card card-default" style="min-height: 336.109px">
+                  <div class="card-header">
+                    <h3 class="card-title">Crops</h3>
+                    <!-- <button class="btn btn-primary">Add Crop</button> -->
+                    <div class="card-tools">
+                      <a
+                      href="javascript:;"
+                        type="button"
+                        class="btn btn-tool link-primary bg-primary"
+                        id="add_crop-btn"
+                      >
+                        Add Crop
+                      </a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <ul class="list-group" id="listCrops"></ul>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+              <div class="col-lg-3">
+                <!-- DONUT CHART -->
+                <div class="card card-default">
+                  <div class="card-header">
+                    <h3 class="card-title">Area</h3>
+                  </div>
+                  <div class="card-body">
+                    <p class='text-center error_msg'>No Data</p>
+                    <canvas
+                      id="donutChart2"
+                      style="
+                        min-height: 250px;
+                        height: 250px;
+                        max-height: 250px;
+                        max-width: 100%;
+                      "
+                    ></canvas>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+              <div class="col-lg-3">
+                <!-- DONUT CHART -->
+                <div class="card card-default">
+                  <div class="card-header">
+                    <h3 class="card-title">Yield</h3>
+                  </div>
+                  <div class="card-body yieldContainer">
+                    <p class='text-center error_msg'>No Data</p>
+                    <canvas
+                      id="donutChart3"
+                      style="
+                        min-height: 250px;
+                        height: 250px;
+                        max-height: 250px;
+                        max-width: 100%;
+                      "
+                    ></canvas>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+              <div class="col-lg-3">
+                <!-- DONUT CHART -->
+                <div class="card card-default">
+                  <div class="card-body">
+                    <div id="farmerMap" style="height: 296px"></div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+              <div class="col-lg-6">
+                <!-- DONUT CHART -->
+                <div class="card card-default">
+                  <div class="card-header">
+                    <h3 class="card-title">Net Income</h3>
+                  </div>
+                  <div class="card-body">
+                    <canvas
+                      id="netIncomeChart"
+                      style="
+                        min-height: 250px;
+                        height: 250px;
+                        max-height: 250px;
+                        max-width: 100%;
+                      "
+                    ></canvas>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+
+              <!-- /.card -->
+            </div>
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+      </div>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- jQuery -->
+    <script src="./plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- ChartJS -->
+    <script src="././plugins/chart.js/Chart.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="./plugins/select2/js/select2.full.min.js"></script>
+    <script src="./plugins/moment/moment.min.js"></script>
+    <script src="./plugins/inputmask/jquery.inputmask.min.js"></script>
+    <script src="./dist/js/adminlte.min.js"></script>
+    <script src="./dist/js/chartjs-plugin-colorschemes.js"></script>
+    <script src="./assets/js/farmer.js" type="module"></script>
+  </body>
+</html>

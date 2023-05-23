@@ -37,7 +37,8 @@ function search(searchItem, searchBy) {
         console.log(i);
         let date = new Date(res[i].farmer.updatedAt);
         html = `
-            <div class="list-group-item mb-2">
+        <a href="farmer.html?id=${res[i].farmer._id}">
+        <div class="list-group-item mb-2" style="color:#000;">
                     <div class="row">
                       <div class="col-auto">
                         <img
@@ -77,6 +78,7 @@ function search(searchItem, searchBy) {
                       </div>
                     </div>
                   </div>
+        </a>
             `;
         searchResultsContainer.insertAdjacentHTML("afterbegin", html);
       }
@@ -116,7 +118,8 @@ function search(searchItem, searchBy) {
         }
         let date = new Date(res[i].farmer.updatedAt);
         html = `
-            <div class="list-group-item mb-2">
+        <a href="farmer.html?id=${res[i].farmer._id}">
+        <div class="list-group-item mb-2" style="color:#000;">
                     <div class="row">
                       <div class="col-auto">
                         <img
@@ -156,6 +159,7 @@ function search(searchItem, searchBy) {
                       </div>
                     </div>
                   </div>
+        </a>
             `;
         searchResultsContainer.insertAdjacentHTML("afterbegin", html);
       }
@@ -209,7 +213,8 @@ function search(searchItem, searchBy) {
         console.log(i);
         let date = new Date(res[i].farmers.updatedAt);
         html = `
-            <div class="list-group-item mb-2">
+            <a href="farmer.html?id=${res[i].farmers._id}">
+            <div class="list-group-item mb-2" style="color:#000;">
                     <div class="row">
                       <div class="col-auto">
                         <img
@@ -249,6 +254,7 @@ function search(searchItem, searchBy) {
                       </div>
                     </div>
                   </div>
+            </a>
             `;
         searchResultsContainer.insertAdjacentHTML("afterbegin", html);
       }
