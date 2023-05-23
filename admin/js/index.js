@@ -20,10 +20,10 @@ function _loadMap(position) {
   const { latitude } = position.coords;
   const { longitude } = position.coords;
 
-  console.log("Latitude: ", latitude);
-  console.log("Latitude: ", longitude);
+  // console.log("Latitude: ", latitude);
+  // console.log("Latitude: ", longitude);
 
-  console.log(`https://www.google.com/maps/@${latitude},${longitude},10z`);
+  // console.log(`https://www.google.com/maps/@${latitude},${longitude},10z`);
 
   const coords = [6.951944838057917, 126.21625900268556];
   map = L.map("map").setView(coords, 13);
@@ -33,7 +33,9 @@ function _loadMap(position) {
     marker.on("mouseover", function () {
       if (!this.isPopupOpen())
         this.bindTooltip(
-          `<span><strong>Name:</strong> ${farmerCoords[i][1].Name}</span><br><span><strong>Brgy:</strong> ${farmerCoords[i][1].Barangay}</span>`
+          `<span><strong>Name:</strong> ${farmerCoords[i][1].Name}</span>
+          <br><span><strong>Brgy:</strong> ${farmerCoords[i][1].Barangay}</span>
+          <br><span><strong>Area:</strong> ${farmerCoords[i][1].LandArea}</span>`
         ).openTooltip();
     });
     // L.tooltip(farmerCoords[i], {
@@ -52,13 +54,13 @@ sendGetRequest("/search4/dashboard").then((res) => {
   if (res) {
     totalFarmers.innerText = res.farmerCount;
     totalLandArea.innerText = res.farmedArea;
-    console.log(res);
     for (let i = 0; i < res.farmer.length; i++) {
       farmerCoords.push([
         [res.farmer[i].lat, res.farmer[i].long],
         {
           Name: res.farmer[i].firstName + " " + res.farmer[i].lastName,
           Barangay: res.farmer[i].barangay,
+          LandArea: res.farmer[i].landArea
         },
       ]);
     }
@@ -66,6 +68,7 @@ sendGetRequest("/search4/dashboard").then((res) => {
     _getPosition();
 
     res.farmer.map((data) => {
+      console.log(data);
       let newObj = {
         Name: `<img src="${data.image.secure_url}" width="26" height="26" class="rounded-circle"> ${data.firstName} ${data.lastName}`,
         Age: data.age,
