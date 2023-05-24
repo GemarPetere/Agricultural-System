@@ -29,9 +29,7 @@ exports.search = async (req, res) =>{
 
 exports.searchBarangay = async (req, res) =>{
     try{
-        const { barangay } = req.params
-
-        const currentYear = new Date().getFullYear();
+        const { barangay, year } = req.params
 
         const farmers = await Farmer.find({
           $and: [
@@ -41,7 +39,7 @@ exports.searchBarangay = async (req, res) =>{
         })
         const searched = []
         for (const farmer of farmers) {
-          const cropsDetails = await FarmerCrop.find({ $and:[{farmerId: farmer._id }, {year:currentYear-1}]})
+          const cropsDetails = await FarmerCrop.find({ $and:[{farmerId: farmer._id }, {year:year}]})
           searched.push({ farmer, cropsDetails })
         }
         return res.status(200).json(searched)
@@ -52,9 +50,8 @@ exports.searchBarangay = async (req, res) =>{
 
 exports.searchCrops = async (req, res) =>{
     try{
-        const { crop } = req.params
-        const currentYear = new Date().getFullYear();
-        const crops = await FarmerCrop.find({$and:[{crop:{$regex:crop, $options:'i'}}, {year:currentYear-1}]})
+        const { crop, year } = req.params
+        const crops = await FarmerCrop.find({$and:[{crop:{$regex:crop, $options:'i'}}, {year:year}]})
         const searched = []
         for(const crop of crops){
           const farmer = await Farmer.find({ $and: [
