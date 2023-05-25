@@ -159,7 +159,7 @@ $(function () {
 $(window).on("load", function () {
   // Get Farmer Details
   sendGetRequest(`/farmer/recruitement/${farmerId}`).then((res) => {
-    addCropBtn.href = `add-farmer-crop.html?id=${res[0]._id}`;
+    // addCropBtn.href = `add-farmer-crop.html?id=${res[0]._id}`;
 
     // Show Farmer Details
     document.getElementById("farmerDetails").insertAdjacentHTML(
