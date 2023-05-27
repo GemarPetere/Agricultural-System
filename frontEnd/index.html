@@ -56,6 +56,10 @@
                     <option value="barangay">Barangay</option>
                     <option value="crop">Crop</option>
                   </select>
+                  <select
+                    class="form-control form-control ml-1"
+                    id="searchYear"
+                  ></select>
                 </div>
               </form>
             </div>
@@ -94,13 +98,29 @@
     <script src="./assets/js/map.js"></script>
     <script>
       const searchForm = document.getElementById("searchForm");
+      const searchYearContainer = document.getElementById("searchYear");
+      const currentYear = new Date().getFullYear();
+      let lastFiveyears = [];
+
+      // populate last 5 years array
+      for (let i = 0; i < 5; i++) {
+        if (lastFiveyears.length == 0) {
+          lastFiveyears.push(currentYear);
+        } else {
+          lastFiveyears.push(lastFiveyears.slice(-1) - 1);
+        }
+        searchYearContainer.insertAdjacentHTML(
+          "afterbegin",
+          `<option value="${lastFiveyears[i]}">${lastFiveyears[i]}</option>`
+        );
+      }
 
       searchForm.addEventListener("submit", function (e) {
         e.preventDefault();
         const searchBy = e.target.searchBy.value;
         console.log(e.target.elements[0].value);
         if (e.target.elements[0].value != "")
-          window.location.href = `search.html?q=${e.target.elements[0].value}?type=${searchBy}`;
+          window.location.href = `search.html?q=${e.target.elements[0].value}?type=${searchBy}?year=${searchYearContainer.value}`;
         else console.log("Query is empty");
       });
     </script>
