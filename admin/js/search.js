@@ -3,9 +3,27 @@ import { sendGetRequest } from "./common.js";
 const url = window.location.href;
 let searchItem;
 let searchBy;
+const searchYearContainer = document.getElementById("searchYear");
+const currentYear = new Date().getFullYear();
+let lastFiveyears = [];
+
 const searchResultsContainer = document.getElementById("searchResults");
 const searchForm = document.getElementById("searchForm");
 const ctx = document.getElementById("searchChart");
+
+// populate last 5 years array
+for (let i = 0; i < 5; i++) {
+  if (lastFiveyears.length == 0) {
+    lastFiveyears.push(currentYear);
+  } else {
+    lastFiveyears.push(lastFiveyears.slice(-1) - 1);
+  }
+  searchYearContainer.insertAdjacentHTML(
+    "afterbegin",
+    `<option value="${lastFiveyears[i]}">${lastFiveyears[i]}</option>`
+  );
+}
+
 let chartData = {
   labels: [],
   datasets: [
@@ -18,11 +36,26 @@ let chartData = {
 };
 let chart;
 
-function search(searchItem, searchBy) {
+// Search from Url
+if (url.includes("?q=")) {
+  searchItem = url.slice(url.lastIndexOf("?q=") + 3, url.lastIndexOf("?type="));
+  searchBy = url.slice(
+    url.lastIndexOf("?type=") + 6,
+    url.lastIndexOf("?year=")
+  );
+  const srchYear = url.slice(url.lastIndexOf("?year=") + 6);
+  console.log(searchItem);
+  console.log(searchBy);
+  console.log(srchYear);
+  search(searchItem, searchBy, srchYear);
+}
+
+function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
+  console.log(`/search2/${searchItem}/${searchYear}`);
   // Search by farmer
   if (searchBy == "farmer") {
     document.getElementById("searchChartContainer").style.display = "none";
-    sendGetRequest(`/search2/${searchItem}`).then((res) => {
+    sendGetRequest(`/search2/${searchItem}/${searchYear}`).then((res) => {
       searchResultsContainer.innerHTML = "";
       console.log(res);
       if (res.length == 0) {
@@ -86,7 +119,7 @@ function search(searchItem, searchBy) {
   }
   // Seach by Brgy
   if (searchBy == "barangay") {
-    sendGetRequest(`/search3/${searchItem}`).then((res) => {
+    sendGetRequest(`/search3/${searchItem}/${searchYear}`).then((res) => {
       searchResultsContainer.innerHTML = "";
       if (res.length == 0) {
         document.getElementById("searchChartContainer").style.display = "none";
@@ -186,7 +219,7 @@ function search(searchItem, searchBy) {
   }
   // Search by Crop
   if (searchBy == "crop") {
-    sendGetRequest(`/search/farmer/${searchItem}`).then((res) => {
+    sendGetRequest(`/search/farmer/${searchItem}/${searchYear}`).then((res) => {
       searchResultsContainer.innerHTML = "";
       chartData.datasets[0].label = "";
       chartData.datasets[0].data.length = 0;
@@ -282,19 +315,12 @@ function search(searchItem, searchBy) {
   }
 }
 
-// Search from Url
-if (url.includes("?q=")) {
-  searchItem = url.slice(url.lastIndexOf("?q=") + 3, url.lastIndexOf("?type="));
-  searchBy = url.slice(url.lastIndexOf("?type=") + 6);
-  search(searchItem, searchBy);
-}
-
 searchForm.addEventListener("submit", function (e) {
   e.preventDefault();
   const searchItem = e.target.elements.searchValue.value;
   const searchBy = e.target.searchBy.value;
   if (searchItem != "") {
-    search(searchItem, searchBy);
+    search(searchItem, searchBy, searchYearContainer.value);
   }
 });
 
