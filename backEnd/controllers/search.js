@@ -5,7 +5,7 @@ const FarmerCrop = require("../models/FarmerCrops");
 
 exports.search = async (req, res) =>{
     try{
-      const { name } = req.params
+      const { name, year } = req.params
       const farmers = await Farmer.find({
         $and: [
           {
@@ -18,7 +18,7 @@ exports.search = async (req, res) =>{
         ]})
       const searched = []
       for (const farmer of farmers) {
-        const cropsDetails = await FarmerCrop.find({ farmerId: farmer._id })
+        const cropsDetails = await FarmerCrop.find({ $and:[{farmerId: farmer._id }, {year:year}] })
         searched.push({ farmer, cropsDetails })
       }
       return res.status(200).json(searched)
