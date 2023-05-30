@@ -95,3 +95,44 @@ exports.searchDataBarangay = async (req, res) =>{
     return res.status(500).json(error)
   }
 }
+
+exports.matiCrops = async (req, res) =>{
+  try{
+    const { year } = req.params
+   await FarmerCrop.find({year:year}, (err, datas) =>{
+      if(err){
+        return res.status(404).json({
+          message:"Data not Found"
+        })
+      }
+      const cropLandAreas = {};
+      // Iterate over the data array
+      for (let i = 0; i < datas.length; i++) {
+        const item = datas[i];
+        const crop = item.crop;
+        const landArea = item.landArea;
+
+        // Increment the landArea value for the crop in the object
+        if (crop in cropLandAreas) {
+          cropLandAreas[crop] += landArea;
+        } else {
+          cropLandAreas[crop] = landArea;
+        }
+      }
+
+      // Generate the new object with the accumulated landArea for each crop
+
+      return res.status(200).json({
+        message:"Data Found",
+        body:cropLandAreas
+      })
+    })
+
+  }catch(error){
+    console.log(error)
+    return res.status(500).json({
+      message:"Server Error",
+      body: error
+    })
+  }
+}
