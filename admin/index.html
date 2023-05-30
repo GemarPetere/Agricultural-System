@@ -120,7 +120,7 @@
               <!-- ./col -->
               <div class="col-lg-4 col-6">
                 <!-- small box -->
-                <div class="small-box bg-warning">
+                <div class="small-box bg-success">
                   <div class="inner">
                     <h3 id="totalFarmers">0</h3>
 
@@ -137,7 +137,7 @@
               <!-- ./col -->
               <div class="col-lg-4 col-6">
                 <!-- small box -->
-                <div class="small-box bg-danger">
+                <div class="small-box bg-warning">
                   <div class="inner">
                     <h3 id="totalLandArea">0</h3>
 
@@ -149,6 +149,21 @@
                   <a href="#" class="small-box-footer"
                     >More info <i class="fas fa-arrow-circle-right"></i
                   ></a>
+                </div>
+              </div>
+              <!-- ./col -->
+              <!-- ./col -->
+              <div class="col-lg-4 col-6">
+                <!-- small box -->
+                <div
+                  class="small-box bg-default d-flex justify-content-between align-items-center"
+                >
+                  <p class="pl-2" style="font-weight: 600; font-size: 18px;">Crops in Mati City for <span id="currentYear"></span></p>
+                  <canvas
+                    id="totalCrops"
+                    class="p-2"
+                    style="max-height: 270px; max-width: 270px"
+                  ></canvas>
                 </div>
               </div>
               <!-- ./col -->
@@ -179,7 +194,7 @@
                 <!-- /.card -->
               </div>
               <div class="col-6">
-                <div class="card" style="height: 500px;">
+                <div class="card" style="height: 500px">
                   <div class="card-header">
                     <div class="card-title">Farmers Locations</div>
                   </div>
@@ -208,6 +223,8 @@
     <!-- jQuery -->
     <script src="./plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
+    <!-- ChartJS -->
+    <script src="./plugins/chart.js/Chart.min.js"></script>
     <script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="./dist/js/adminlte.min.js"></script>

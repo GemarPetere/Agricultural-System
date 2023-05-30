@@ -3,10 +3,44 @@ import { sendGetRequest } from "./common.js";
 const mapContainer = document.getElementById("map");
 const totalFarmers = document.getElementById("totalFarmers");
 const totalLandArea = document.getElementById("totalLandArea");
+const currYear = new Date().getFullYear();
+let totalCropsChart = $("#totalCrops").get(0).getContext("2d");
 let farmerCoords = [];
 let farmerMarkerDetails = [];
 let tableData = [];
 let map;
+// Generate random background colors
+const colors = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"];
+const backgroundColors = colors.map(() => {
+  const r = Math.floor(Math.random() * 255);
+  const g = Math.floor(Math.random() * 255);
+  const b = Math.floor(Math.random() * 255);
+  return `rgb(${r}, ${g}, ${b})`;
+});
+
+let totalCropsData = {
+  labels: [],
+  datasets: [
+    {
+      data: [],
+      backgroundColor: backgroundColors,
+    },
+  ],
+};
+
+let chartOptions = {
+  maintainAspectRatio: false,
+  responsive: true,
+  plugins: {
+    colorschemes: {
+      scheme: "office.Waveform6",
+    },
+  },
+  legend: {
+    position: 'right'
+    // display: false, // Hide the legend
+  },
+};
 
 function _getPosition() {
   if (navigator.geolocation) {
@@ -60,7 +94,7 @@ sendGetRequest("/search4/dashboard").then((res) => {
         {
           Name: res.farmer[i].firstName + " " + res.farmer[i].lastName,
           Barangay: res.farmer[i].barangay,
-          LandArea: res.farmer[i].landArea
+          LandArea: res.farmer[i].landArea,
         },
       ]);
     }
@@ -98,3 +132,21 @@ sendGetRequest("/search4/dashboard").then((res) => {
       .appendTo("#example1_wrapper .col-md-6:eq(0)");
   }
 });
+
+sendGetRequest(`/search5/${currYear}`)
+  .then((data) => {
+    console.log(data);
+document.getElementById("currentYear").innerText = currYear
+    for (let [key, value] of Object.entries(data.body)) {
+      totalCropsData.labels.push(key);
+      totalCropsData.datasets[0].data.push(value);
+      new Chart(totalCropsChart, {
+        type: "pie",
+        data: totalCropsData,
+        options: chartOptions,
+      });
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+  });
