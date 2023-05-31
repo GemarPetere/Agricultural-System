@@ -141,15 +141,15 @@ sendGetRequest(`/search5/${currYear}`)
     for (let [key, value] of Object.entries(data.body)) {
       totalCropsData.labels.push(key);
       totalCropsData.datasets[0].data.push(value);
-      if (chart) {
-        chart.destroy();
-      } else {
-        chart = new Chart(totalCropsChart, {
-          type: "pie",
-          data: totalCropsData,
-          options: chartOptions,
-        });
-      }
+    }
+    if (chart) {
+      chart.destroy();
+    } else {
+      chart = new Chart(totalCropsChart, {
+        type: "pie",
+        data: totalCropsData,
+        options: chartOptions,
+      });
     }
   })
   .catch((err) => {
