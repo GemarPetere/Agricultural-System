@@ -137,7 +137,7 @@ sendGetRequest("/search4/dashboard").then((res) => {
 sendGetRequest(`/search5/${currYear}`)
   .then((data) => {
     console.log(data);
-    document.getElementById("currentYear").innerText = currYear;
+    // document.getElementById("currentYear").innerText = currYear;
     for (let [key, value] of Object.entries(data.body)) {
       totalCropsData.labels.push(key);
       totalCropsData.datasets[0].data.push(value);
