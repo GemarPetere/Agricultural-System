@@ -5,6 +5,7 @@ const totalFarmers = document.getElementById("totalFarmers");
 const totalLandArea = document.getElementById("totalLandArea");
 const currYear = new Date().getFullYear();
 let totalCropsChart = $("#totalCrops").get(0).getContext("2d");
+let chart;
 let farmerCoords = [];
 let farmerMarkerDetails = [];
 let tableData = [];
@@ -37,7 +38,7 @@ let chartOptions = {
     },
   },
   legend: {
-    position: 'right'
+    position: "right",
     // display: false, // Hide the legend
   },
 };
@@ -136,15 +137,19 @@ sendGetRequest("/search4/dashboard").then((res) => {
 sendGetRequest(`/search5/${currYear}`)
   .then((data) => {
     console.log(data);
-document.getElementById("currentYear").innerText = currYear
+    document.getElementById("currentYear").innerText = currYear;
     for (let [key, value] of Object.entries(data.body)) {
       totalCropsData.labels.push(key);
       totalCropsData.datasets[0].data.push(value);
-      new Chart(totalCropsChart, {
-        type: "pie",
-        data: totalCropsData,
-        options: chartOptions,
-      });
+      if (chart) {
+        chart.destroy();
+      } else {
+        chart = new Chart(totalCropsChart, {
+          type: "pie",
+          data: totalCropsData,
+          options: chartOptions,
+        });
+      }
     }
   })
   .catch((err) => {
