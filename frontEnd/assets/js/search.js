@@ -236,7 +236,7 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
         searchResultsContainer.innerHTML = "";
         searchResultsContainer.insertAdjacentHTML(
           "afterbegin",
-          `<h3 class="text-center py-5">No data was Found</h3>`
+          `<h3 class="text-center py-5 text-white">No data was Found</h3>`
         );
       } else {
         document.getElementById("searchChartContainer").style.display = "block";
