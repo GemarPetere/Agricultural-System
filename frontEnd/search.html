@@ -15,8 +15,17 @@
     <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css" />
     <!-- Theme style -->
     <link rel="stylesheet" href="./dist/css/adminlte.min.css" />
+    <style>
+    
+      .content-wrapper {
+        background: url("./assets/searchBG.jpeg") !important;
+        background-size: cover !important;
+        background-position: center center;
+        background-repeat: no-repeat;
+      }
+    </style>
   </head>
-  <body class="hold-transition layout-top-nav">
+  <body class="searchBody hold-transition layout-top-nav">
     <div class="wrapper">
       <!-- Navbar -->
       <nav
@@ -29,7 +38,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <div class="container-fluid">
-            <h2 class="text-center display-4">Search</h2>
+            <h2 class="text-center display-4 text-white">Search</h2>
           </div>
         </section>
 
@@ -54,7 +63,7 @@
                     </div>
                   </div>
                   <div class="col-4 input-group d-flex align-items-center">
-                    <span>Search By: </span>
+                    <span class="text-white">Search By: </span>
                     <select
                       class="form-control form-control ml-1"
                       id="searchBy"
@@ -66,8 +75,7 @@
                     <select
                       class="form-control form-control ml-1"
                       id="searchYear"
-                    >
-                    </select>
+                    ></select>
                   </div>
                 </form>
               </div>
@@ -102,8 +110,6 @@
     <script src="./dist/js/adminlte.min.js"></script>
     <script src="././plugins/chart.js/Chart.min.js"></script>
     <script src="./assets/js/search.js" type="module"></script>
-    <script>
-      
-    </script>
+    <script></script>
   </body>
 </html>
