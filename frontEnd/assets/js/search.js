@@ -226,9 +226,9 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
       console.log(res);
       chartData.labels.length = 0;
       for (let i = 0; i < res.length; i++) {
-        chartData.datasets[0].label = `Barangay's with ${res[0].crop.crop}`;
+        chartData.datasets[0].label = `Barangay's with ${res[i].crop.crop}`;
         chartData.datasets[0].data.push(res[i].crop.production);
-        chartData.labels.push(res[0].farmers.barangay);
+        chartData.labels.push(res[i].farmers.barangay);
       }
       if (res.length == 0) {
         document.getElementById("searchChartContainer").style.display = "none";
