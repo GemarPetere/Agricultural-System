@@ -130,24 +130,50 @@ exports.farmerCrop = (req, res) => {
     if (!crop || !id) {
       return res.status(400).json({ error: "One of the data is Undefined" });
     }
-    const data = {
-      crop: crop,
-      year: year,
-      landArea: landArea,
-      production: production,
-      yield:yield,
-      netIncome: netIncome,
-      farmerId: id,
-    };
-    const newCrop = new FarmerCrop(data);
-    newCrop.save((err, data) => {
-      if (err) {
-        return res.status(400).json({
-          error: err,
+    FarmerCrop.findOne({
+      $and:[
+        {crop:crop},
+        {year:year},
+        {farmerId:id}
+      ]
+    }).then((data) =>{
+      if(data){
+        console.log("Sulod permi")
+        const dataCrop = {
+          $inc:{
+            landArea: landArea,
+            yield: yield
+          }
+        }
+        FarmerCrop.findOneAndUpdate({farmerId:id}, dataCrop )
+          .then((result) =>{
+            return res.status(200).json({
+              message:"Added Crops",
+              body: result
+            })
+          })
+      }else{
+        const data = {
+          crop: crop,
+          year: year,
+          landArea: landArea,
+          production: production,
+          yield:yield,
+          netIncome: netIncome,
+          farmerId: id,
+        };
+        const newCrop = new FarmerCrop(data);
+        newCrop.save((err, data) => {
+          if (err) {
+            return res.status(400).json({
+              error: err,
+            });
+          }
+          res.status(200).json({ data });
         });
       }
-      res.status(200).json({ data });
-    });
+    })
+    
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
