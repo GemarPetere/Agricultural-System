@@ -147,10 +147,7 @@ exports.farmerCrop = (req, res) => {
         }
         FarmerCrop.findOneAndUpdate({farmerId:id}, dataCrop )
           .then((result) =>{
-            return res.status(200).json({
-              message:"Added Crops",
-              body: result
-            })
+            return res.status(200).json({result})
           })
       }else{
         const data = {
