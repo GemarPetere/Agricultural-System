@@ -127,6 +127,9 @@ exports.farmerCrop = (req, res) => {
   const { crop, year, landArea, production, yield , netIncome } = req.body;
   const { id } = req.params;
   try {
+    if(landArea >= 300000){
+      return res.status(400).json({ error: "Invalid Input of landarea" });
+    }
     if (!crop || !id) {
       return res.status(400).json({ error: "One of the data is Undefined" });
     }
@@ -203,31 +206,6 @@ exports.farmerCropDetails = async (req, res) =>{
     res.status(500).json({error})
   }
 }
-
-// exports.farmerImage = async (req, res) =>{
-//     try{
-//             //image file fetching from request
-//             req.body.images = await Promise.all(req.files.map(async (file) =>{
-//                 return `${process.env.IMGIX_SUBDOMAIN}/${file.key}`
-//             }))
-//             console.log(req.body.images[0])
-//             Farmer.findOneAndUpdate({_id:mongoose.Types.ObjectId(req.params.id)},
-//                 {
-//                     "imageUrl":req.body.images[0]
-//                 })
-//                 .then(function(){
-//                     Farmer.findOne({_id:mongoose.Types.ObjectId(req.params.id)})
-//                     .then((data) =>{
-//                         return res.status(200).send(data);
-//                     })
-//                     .catch(err =>{
-//                         return res.status(500).json(err)
-//                     })
-//                 })
-//         }catch(error){
-//           return error
-//         }
-//   }
 
 exports.getFarmerList = async (req, res) => {
   try {
