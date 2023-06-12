@@ -123,16 +123,23 @@ exports.farmerImage = async (req, res) => {
   }
 };
 
-exports.farmerCrop = (req, res) => {
+exports.farmerCrop = async (req, res) => {
   const { crop, year, landArea, production, yield , netIncome } = req.body;
   const { id } = req.params;
   try {
-    if(landArea >= 300000){
-      return res.status(400).json({ error: "Invalid Input of landarea" });
-    }
+    
     if (!crop || !id) {
       return res.status(400).json({ error: "One of the data is Undefined" });
     }
+
+    const farmerData = await Farmer.find({_id:id})
+    if(farmerData.length > 0 ){
+      const landarea = farmerData[0].landArea
+      if(landarea < landArea){
+        return res.status(400).json({ error: "Invalid Input, Reached the limit" });
+      }
+    }
+    
     FarmerCrop.findOne({
       $and:[
         {crop:crop},
@@ -141,7 +148,7 @@ exports.farmerCrop = (req, res) => {
       ]
     }).then((data) =>{
       if(data){
-        console.log("Sulod permi")
+       
         const dataCrop = {
           $inc:{
             landArea: landArea,
