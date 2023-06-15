@@ -194,7 +194,7 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
                   </div>
         </a>
             `;
-        searchResultsContainer.insertAdjacentHTML("afterbegin", html);
+        // searchResultsContainer.insertAdjacentHTML("afterbegin", html);
       }
       if (chart) {
         chart.destroy();
@@ -289,7 +289,7 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
                   </div>
             </a>
             `;
-        searchResultsContainer.insertAdjacentHTML("afterbegin", html);
+        // searchResultsContainer.insertAdjacentHTML("afterbegin", html);
       }
       if (chart) {
         chart.destroy();
