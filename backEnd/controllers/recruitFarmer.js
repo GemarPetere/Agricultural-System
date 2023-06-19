@@ -151,7 +151,7 @@ exports.farmerImage = async (req, res) => {
 };
 
 exports.farmerCrop = async (req, res) => {
-  const { crop, year, landArea, production, yield , netIncome, addressId } = req.body;
+  const { crop, year, landArea, production, yield , netIncome, farmId } = req.body;
   const { id } = req.params;
   try {
     
@@ -172,7 +172,7 @@ exports.farmerCrop = async (req, res) => {
         {crop:crop},
         {year:year},
         {farmerId:id},
-        {addressId:addressId}
+        {farmId:farmId}
       ]
     }).then((data) =>{
       if(data){
@@ -196,7 +196,7 @@ exports.farmerCrop = async (req, res) => {
           yield:yield,
           netIncome: netIncome,
           farmerId: id,
-          addressId: addressId
+          farmId: farmId
         };
         const newCrop = new FarmerCrop(data);
         newCrop.save((err, data) => {
@@ -218,7 +218,7 @@ exports.farmerCrop = async (req, res) => {
 
 exports.farmerCropDetails = async (req, res) =>{
   try{
-    const { year, id, addressId } = req.params;
+    const { year, id, farmId } = req.params;
     if(!year || !id){
       return res.status(400).json(
         { error: "One of the data is Undefined" }
@@ -228,7 +228,7 @@ exports.farmerCropDetails = async (req, res) =>{
       $and:[
         {"year": year},
         {"farmerId": id},
-        {"addressId": addressId}
+        {"farmId": farmId}
       ]
     }
     const result = await FarmerCrop.find(query)
@@ -280,8 +280,8 @@ exports.getFarmerDetails = async (req, res) =>{
     Farmer.find({_id:id})
       .then((data) =>{
         FarmerAddress.find({farmerId:data[0]._id})
-        .then((addressData) =>{
-          return res.status(200).json({data, addressData})
+        .then((farmData) =>{
+          return res.status(200).json({data, farmData})
         })
         .catch((err) =>{
           return res.status(404).json(err)
@@ -315,10 +315,10 @@ exports.getFarmerDetails = async (req, res) =>{
 //By category of Barnagay to get the crops registered of Farmer
 exports.getFarmerCrops = (req, res) =>{
   try{
-    const {farmerId, addressId } = req.params
+    const {farmerId, farmId } = req.params
     console.log("Sulod man")
     console.log(farmerId, addressId)
-    FarmerCrop.find({$and:[{farmerId: farmerId},{addressId: addressId}]})
+    FarmerCrop.find({$and:[{farmerId: farmerId},{farmId: farmId}]})
       .then((result) =>{
         if(result){
           return res.status(200).json(result)

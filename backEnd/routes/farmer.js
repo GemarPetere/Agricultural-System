@@ -21,7 +21,7 @@ router.post("/recruitement", recruit)
 router.post("/recruitement/farmer-crop/:id",farmerCrop)
 router.get("/recruitement",getFarmerList)
 router.get("/recruitement/:id", getFarmerDetails)
-router.get("/recruitement/farmer-crop/:year/:id/:addressId",farmerCropDetails)
-router.get("/recruitement/crop-barangay/:farmerId/:addressId", getFarmerCrops)
+router.get("/recruitement/farmer-crop/:year/:id/:farmId",farmerCropDetails)
+router.get("/recruitement/crop-barangay/:farmerId/:farmId", getFarmerCrops)
 
 module.exports = router;

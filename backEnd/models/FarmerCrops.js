@@ -7,7 +7,7 @@ const data = {
     trim:true,
     ref:'RecruitmentForm'
   },
-  addressId:{
+  farmId:{
     type:String,
     trim:true,
     ref: 'FarmerAddress'
