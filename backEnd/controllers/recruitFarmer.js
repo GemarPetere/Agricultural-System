@@ -175,6 +175,8 @@ exports.farmerCrop = async (req, res) => {
         const dataCrop = {
           $inc:{
             landArea: landArea,
+            netIncome: netIncome,
+            production:production,
             yield: yield
           }
         }
