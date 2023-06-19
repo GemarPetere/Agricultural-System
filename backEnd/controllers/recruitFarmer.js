@@ -36,7 +36,7 @@ exports.recruit = async (req, res) => {
     //   !gender ||
     //   !birthDate ||
     //   !age ||
-    //   !status ||
+    //!status ||
     //   !religion ||
     //   !contactNo ||
     //   !landArea
@@ -276,7 +276,20 @@ exports.getFarmerDetails = async (req, res) =>{
       .then((data) =>{
         FarmerAddress.find({farmerId:data[0]._id})
         .then((farmData) =>{
-          return res.status(200).json({data, farmData})
+          FarmerCrop.find({$and:[{farmerId:data[0]._id},{farmId:farmData[0]._id}]})
+          .then((cropDatas) =>{
+            let cropYear = []
+            cropDatas.forEach((cropData) =>{
+              cropYear.push(cropData.year)
+            })
+            const result = {
+              farmer: data,
+              farm: farmData,
+              crop: cropYear
+            }
+            return res.status(200).json(result)
+            //return res.status(200).json({data, farmData})
+          })
         })
         .catch((err) =>{
           return res.status(404).json(err)
@@ -311,8 +324,7 @@ exports.getFarmerDetails = async (req, res) =>{
 exports.getFarmerCrops = (req, res) =>{
   try{
     const {farmerId, farmId } = req.params
-    console.log("Sulod man")
-    console.log(farmerId, addressId)
+    
     FarmerCrop.find({$and:[{farmerId: farmerId},{farmId: farmId}]})
       .then((result) =>{
         if(result){
