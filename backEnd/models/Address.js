@@ -22,6 +22,14 @@ const data = {
     landArea:{
         type:Number,
         default:0
+    },
+    lat:{
+        type:String,
+        trim:true
+    },
+    long:{
+        type:String,
+        trim:true
     }
 };
 const userSchema = new Schema(data, { timestamps: true });

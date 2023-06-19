@@ -26,7 +26,9 @@ exports.recruit = async (req, res) => {
       email,
       highestEducation,
       landOwnershipStatus,
-      landArea
+      landArea,
+      lat,
+      long
     } = req.body;
 
     if (
@@ -54,7 +56,9 @@ exports.recruit = async (req, res) => {
         barangay: barangay,
         municipalCode: municipalCode,
         landArea:landArea,
-        farmerId: farmerId
+        farmerId: farmerId,
+        lat:lat,
+        long:long
       }
       
       const newAddress = new FarmerAddress(addressData);
@@ -90,7 +94,9 @@ exports.recruit = async (req, res) => {
           barangay: barangay,
           municipalCode: municipalCode,
           landArea:landArea,
-          farmerId: saveNewFarmer._id
+          farmerId: saveNewFarmer._id,
+          lat:lat,
+          long:long
         }
 
         const newAddress = new FarmerAddress(dataAddress);
