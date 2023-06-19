@@ -271,15 +271,22 @@ exports.getFarmerList = async (req, res) => {
 exports.getFarmerDetails = async (req, res) =>{
   try{
     const { id } = req.params
-    await Farmer.find({_id:id})
+    Farmer.find({_id:id})
       .then((data) =>{
-        return res.status(200).json(data)
+        FarmerAddress.find({farmerId:data[0]._id})
+        .then((addressData) =>{
+          return res.status(200).json({data, addressData})
+        })
+        .catch((err) =>{
+          return res.status(404).json(err)
+        })
       })
       .catch((err) =>{
-        return res.status(500).json(err)
+        return res.status(404).json(err)
       })
   }catch(error){
     console.log(error)
+    return res.status(500).json(err)
   }
 }
 
