@@ -9,8 +9,8 @@ const User = require("../models/User");
 
 
 exports.signup = (req, res) => {
-  
-    User.findOne({ email: req.body?.email }, (err, user) => {
+    const { email } = req.body
+    User.findOne({ email: email }, (err, user) => {
       if (err) {
         return res.status(400).json({
           error: dbErrorHandler(err),

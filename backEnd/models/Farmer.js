@@ -22,18 +22,6 @@ const data = {
     type: String,
     trim: true,
   },
-  address: {
-    type: String,
-    trim: true,
-  },
-  barangay:{
-    type: String,
-    trim: true
-  },
-  municipalCode:{
-    type: String,
-    trim: true
-  },
   gender: {
     type: String,
     trim: true,
@@ -66,10 +54,6 @@ const data = {
     type: String,
     trim: true
   },
-  landArea:{
-    type:Number,
-    default:0
-  },
   image:{
     type:Object,
     default:{}
@@ -81,14 +65,6 @@ const data = {
   activeStatus:{
     type: Boolean,
     default: true
-  },
-  lat:{
-    type:String,
-    default:"6.951944838057917"
-  },
-  long:{
-    type:String,
-    default:"126.21625900268556"
   }
 };
 const userSchema = new Schema(data, { timestamps: true });

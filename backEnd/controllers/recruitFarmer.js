@@ -2,11 +2,13 @@ const mongoose = require("mongoose");
 const Farmer = require("../models/Farmer");
 const FarmerCrop = require("../models/FarmerCrops");
 const cloudinary = require("../helpers/cloudinary");
+const FarmerAddress = require("../models/Address")
 
 exports.recruit = async (req, res) => {
   // TODO: add validation that user has already sent a rating from this order for this product $ne: $message
   try {
     const {
+      farmerId,
       firstName,
       referenceControlNum,
       middleName,
@@ -24,9 +26,7 @@ exports.recruit = async (req, res) => {
       email,
       highestEducation,
       landOwnershipStatus,
-      landArea,
-      lat,
-      long
+      landArea
     } = req.body;
 
     if (
@@ -40,49 +40,70 @@ exports.recruit = async (req, res) => {
       !status ||
       !religion ||
       !contactNo ||
-      !landArea ||
-      !lat ||
-      !long
+      !landArea
     ) {
       return res.status(400).json({ error: "One of the data is Undefined" });
     }
 
-    /*  const uploadedResponse = await cloudinary.uploader.upload(tempFilePath, {
-      upload_preset: "farmer-image",
-    });
- */
-    const data = {
-      firstName: firstName,
-      referenceControlNum: referenceControlNum,
-      middleName: middleName,
-      lastName: lastName,
-      suffix: suffix,
-      address: address,
-      barangay: barangay,
-      municipalCode:municipalCode,
-      gender: gender,
-      birthdate: birthDate,
-      age: age,
-      status: status,
-      religion: religion,
-      contactNo: contactNo,
-      email: email,
-      highestEducation: highestEducation,
-      landOwnershipStatus: landOwnershipStatus,
-      landArea: landArea,
-      lat:lat,
-      long:long
-      //image: uploadedResponse,
-    };
-    const newRecruit = new Farmer(data);
-    newRecruit.save((err, data) => {
-      if (err) {
-        return res.status(400).json({
-          error: err,
-        });
+ 
+    const farmerFound = await Farmer.find({_id:farmerId})
+    console.log(farmerFound)
+    if(farmerFound.length > 0){
+      const addressData = {
+        address: address,
+        barangay: barangay,
+        municipalCode: municipalCode,
+        landArea:landArea,
+        farmerId: farmerId
       }
-      res.status(200).json({ data });
-    });
+      
+      const newAddress = new FarmerAddress(addressData);
+        const saveNewAddress = await newAddress.save();
+        if(saveNewAddress){
+          res.status(200).json({
+            message: "Saved Farmer",
+            body: saveNewAddress
+          })
+        }
+    }else{
+      const data = {
+        firstName: firstName,
+        referenceControlNum: referenceControlNum,
+        middleName: middleName,
+        lastName: lastName,
+        suffix: suffix,
+        gender: gender,
+        birthdate: birthDate,
+        age: age,
+        status: status,
+        religion: religion,
+        contactNo: contactNo,
+        email: email,
+        highestEducation: highestEducation,
+        landOwnershipStatus: landOwnershipStatus
+      };
+      const newRecruit = new Farmer(data);
+      const saveNewFarmer = await newRecruit.save();
+      if(saveNewFarmer){
+        const dataAddress ={
+          address: address,
+          barangay: barangay,
+          municipalCode: municipalCode,
+          landArea:landArea,
+          farmerId: saveNewFarmer._id
+        }
+
+        const newAddress = new FarmerAddress(dataAddress);
+        const saveNewAddress = await newAddress.save();
+        if(saveNewAddress){
+          res.status(200).json({
+            message: "Saved New Farmer",
+            body: {saveNewFarmer,saveNewAddress}
+          })
+        }
+      }
+    }
+    
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
@@ -99,7 +120,7 @@ exports.farmerImage = async (req, res) => {
       upload_preset: "farmer-image",
     });
 
-    console.log(req.params)
+  
     Farmer.updateOne(
       { _id: id },
       { $set: { "image": uploadedResponse } },
@@ -124,7 +145,7 @@ exports.farmerImage = async (req, res) => {
 };
 
 exports.farmerCrop = async (req, res) => {
-  const { crop, year, landArea, production, yield , netIncome } = req.body;
+  const { crop, year, landArea, production, yield , netIncome, addressId } = req.body;
   const { id } = req.params;
   try {
     
@@ -144,7 +165,8 @@ exports.farmerCrop = async (req, res) => {
       $and:[
         {crop:crop},
         {year:year},
-        {farmerId:id}
+        {farmerId:id},
+        {addressId:addressId}
       ]
     }).then((data) =>{
       if(data){
@@ -168,6 +190,7 @@ exports.farmerCrop = async (req, res) => {
           yield:yield,
           netIncome: netIncome,
           farmerId: id,
+          addressId: addressId
         };
         const newCrop = new FarmerCrop(data);
         newCrop.save((err, data) => {
@@ -189,7 +212,7 @@ exports.farmerCrop = async (req, res) => {
 
 exports.farmerCropDetails = async (req, res) =>{
   try{
-    const { year, id } = req.params;
+    const { year, id, addressId } = req.params;
     if(!year || !id){
       return res.status(400).json(
         { error: "One of the data is Undefined" }
@@ -198,7 +221,8 @@ exports.farmerCropDetails = async (req, res) =>{
     const query = {
       $and:[
         {"year": year},
-        {"farmerId": id}
+        {"farmerId": id},
+        {"addressId": addressId}
       ]
     }
     const result = await FarmerCrop.find(query)
@@ -259,18 +283,41 @@ exports.getFarmerDetails = async (req, res) =>{
   }
 }
 
-exports.getFarmerCrops = async (req, res) =>{
+// exports.getFarmerCrops = async (req, res) =>{
+//   try{
+//     const { id } = req.params
+//     await FarmerCrop.find({farmerId: id})
+//         .then((result)=>{
+//           return res.status(200).json(result)
+//         })
+//       .catch((err) =>{
+//         return res.status(500).json(err)
+//       })
+//   }catch(error){
+//     console.log(error)
+//   }
+// }
+
+
+//By category of Barnagay to get the crops registered of Farmer
+exports.getFarmerCrops = (req, res) =>{
   try{
-    const { id } = req.params
-    await FarmerCrop.find({farmerId: id})
-        .then((result)=>{
+    const {farmerId, addressId } = req.params
+    console.log("Sulod man")
+    console.log(farmerId, addressId)
+    FarmerCrop.find({$and:[{farmerId: farmerId},{addressId: addressId}]})
+      .then((result) =>{
+        if(result){
           return res.status(200).json(result)
-        })
+        }
+      })
       .catch((err) =>{
         return res.status(500).json(err)
       })
+
   }catch(error){
     console.log(error)
+    res.status(500).json(error)
   }
 }
 

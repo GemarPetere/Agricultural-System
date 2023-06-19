@@ -7,6 +7,11 @@ const data = {
     trim:true,
     ref:'RecruitmentForm'
   },
+  addressId:{
+    type:String,
+    trim:true,
+    ref: 'FarmerAddress'
+  },
   year:{
     type: String,
     trim:true,
