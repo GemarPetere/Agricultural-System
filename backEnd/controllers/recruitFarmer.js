@@ -31,18 +31,18 @@ exports.recruit = async (req, res) => {
       long
     } = req.body;
 
-    if (
-      address ||
-      !gender ||
-      !birthDate ||
-      !age ||
-      !status ||
-      !religion ||
-      !contactNo ||
-      !landArea
-    ) {
-      return res.status(400).json({ error: "One of the data is Undefined" });
-    }
+    // if (
+    //   address ||
+    //   !gender ||
+    //   !birthDate ||
+    //   !age ||
+    //   !status ||
+    //   !religion ||
+    //   !contactNo ||
+    //   !landArea
+    // ) {
+    //   return res.status(400).json({ error: "One of the data is Undefined" });
+    // }
 
  
     const farmerFound = await Farmer.find({_id:farmerId})
