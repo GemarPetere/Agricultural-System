@@ -32,10 +32,7 @@ exports.recruit = async (req, res) => {
     } = req.body;
 
     if (
-      !firstName ||
-      !middleName ||
-      !lastName ||
-      !address ||
+      address ||
       !gender ||
       !birthDate ||
       !age ||
@@ -49,12 +46,11 @@ exports.recruit = async (req, res) => {
 
  
     const farmerFound = await Farmer.find({_id:farmerId})
-    console.log(farmerFound)
+    
     if(farmerFound.length > 0){
       const addressData = {
         address: address,
         barangay: barangay,
-        municipalCode: municipalCode,
         landArea:landArea,
         farmerId: farmerId,
         lat:lat,
@@ -92,7 +88,6 @@ exports.recruit = async (req, res) => {
         const dataAddress ={
           address: address,
           barangay: barangay,
-          municipalCode: municipalCode,
           landArea:landArea,
           farmerId: saveNewFarmer._id,
           lat:lat,
