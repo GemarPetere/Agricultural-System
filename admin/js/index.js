@@ -87,6 +87,7 @@ function _loadMap(position) {
 
 sendGetRequest("/search4/dashboard").then((res) => {
   if (res) {
+    console.log(res);
     totalFarmers.innerText = res.farmerCount;
     totalLandArea.innerText = res.farmedArea;
     for (let i = 0; i < res.farmer.length; i++) {
@@ -108,7 +109,7 @@ sendGetRequest("/search4/dashboard").then((res) => {
         Name: `<img src="${data.image.secure_url}" width="26" height="26" class="rounded-circle"> ${data.firstName} ${data.lastName}`,
         Age: data.age,
         Contact: data.contactNo,
-        Barangay: data.barangay,
+        landOwnershipStatus: data.landOwnershipStatus,
       };
       tableData.push(newObj);
     });
@@ -120,7 +121,7 @@ sendGetRequest("/search4/dashboard").then((res) => {
           { data: "Name" },
           { data: "Age" },
           { data: "Contact" },
-          { data: "Barangay" },
+          { data: "landOwnershipStatus" },
         ],
         responsive: true,
         bPaginate: false,

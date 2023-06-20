@@ -33,6 +33,7 @@ const availableCrops = [
   "Palm Oil",
 ];
 const cropsSelectField = document.getElementById("crop");
+const farmSelectField = document.getElementById("farm");
 
 availableCrops.reverse().forEach((crop) => {
   const html = `<option value="${crop}" ${
@@ -72,13 +73,20 @@ if (farmerId == "") {
     res.map((data) => {
       console.log(data);
       const html = `<option value="${data.id}">${data.Name}</option>`;
-      document.getElementById("listFarmers").insertAdjacentHTML("afterbegin", html);
+      document
+        .getElementById("listFarmers")
+        .insertAdjacentHTML("afterbegin", html);
     });
   });
 } else {
   sendGetRequest(`/farmer/recruitement/${farmerId}`).then((res) => {
-    res.map((data) => {
+    console.log(res);
+    res.farm.forEach(data => {
       console.log(data);
+      const html = `<option value="${data._id}">${data.barangay}</option>`;
+      farmSelectField.insertAdjacentHTML("afterbegin", html);
+    })
+    res.farmer.map((data) => {
       const html = `<option value="${data._id}">${data.firstName} ${data.lastName}</option>`;
       document
         .getElementById("listFarmers")
@@ -92,7 +100,7 @@ const addCropForm = document.getElementById("add-crop-form");
 addCropForm.addEventListener("submit", function (e) {
   e.preventDefault();
   const newCrop = {
-    farmerId: e.target.elements.listFarmers.value || farmerId,
+    farmId: e.target.elements.farm.value || farmerId,
     year: e.target.elements.year.value,
     crop: e.target.elements.crop.value,
     landArea: e.target.elements.landArea.value,

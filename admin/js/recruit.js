@@ -198,7 +198,7 @@ form.addEventListener("submit", function (e) {
 
     sendPostRequest("/farmer/recruitement", formData)
       .then((res) => {
-        console.log(res.data._id);
+        console.log(res.body.saveNewFarmer._id);
         let imageFile = file.files[0];
 
         console.log(imageFile);
@@ -207,7 +207,7 @@ form.addEventListener("submit", function (e) {
         imageData.append("image", imageFile);
 
         sendPutRequest(
-          `/farmer/recruitement/image/${res.data._id}`,
+          `/farmer/recruitement/image/${res.body.saveNewFarmer._id}`,
           imageData
         ).then((res) => {
           console.log(res);

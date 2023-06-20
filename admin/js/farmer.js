@@ -1,11 +1,13 @@
 import { sendGetRequest } from "./common.js";
 
 const addCropBtn = document.getElementById("add_crop-btn");
-let map;
+const addFarmBtn = document.getElementById("add_farm-btn");
 const url = window.location.href;
 const farmerId = url.slice(url.lastIndexOf("?id=") + 4);
 const mapContainer = document.getElementById("farmerMap");
 const addressField = document.getElementById("address");
+const selectFarm = document.getElementById("listOfFarms");
+
 let cropsLists = [];
 let defaultFarmDataYear = new Date().getFullYear().toString();
 let listOfYears = [defaultFarmDataYear];
@@ -14,6 +16,11 @@ const colors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff"];
 let landAreaChartContainer = $("#donutChart2").get(0).getContext("2d");
 let yieldChartContainer = $("#donutChart3").get(0).getContext("2d");
 let netIncomeChartContainer = $("#netIncomeChart").get(0).getContext("2d");
+let farmDatas = {};
+let currentfarm;
+let map;
+let farmyear;
+
 let landAreaData = {
   labels: [],
   datasets: [
@@ -159,14 +166,43 @@ $(function () {
 $(window).on("load", function () {
   // Get Farmer Details
   sendGetRequest(`/farmer/recruitement/${farmerId}`).then((res) => {
-    addCropBtn.href = `add-farmer-crop.html?id=${res[0]._id}`;
+    console.log(res);
+    res.farm.forEach((data) => {
+      farmDatas[data.barangay] = data._id;
+    });
 
+    currentfarm = farmDatas[Object.keys(farmDatas)[0]];
+
+    for (const key in farmDatas) {
+      if (farmDatas.hasOwnProperty(key)) {
+        const html = `<option value="${farmDatas[key]}">${key}</option>`;
+        selectFarm.insertAdjacentHTML("afterbegin", html);
+      }
+    }
+
+    res.crop.forEach((year) => {
+      listOfYears.push(year);
+    });
+    cropingYears = Array.from(new Set(listOfYears)).reverse();
+    // Initialize Years dropdown start
+    cropingYears.forEach((year) => {
+      const html = `<option value="${year}" ${
+        year == defaultFarmDataYear ? "selected" : ""
+      }>${year}</option>`;
+      document
+        .getElementById("yearOfCroping")
+        .insertAdjacentHTML("afterbegin", html);
+    });
+
+    farmyear = document.getElementById("yearOfCroping").value;
+    addCropBtn.href = `add-farmer-crop.html?id=${res.farmer[0]._id}`;
+    addFarmBtn.href = `add-farm.html?id=${res.farmer[0]._id}`;
     // Show Farmer Details
     document.getElementById("farmerDetails").insertAdjacentHTML(
       "afterbegin",
       `
       <img
-      src="${res[0].image.secure_url}"
+      src="${res.farmer[0].image.secure_url}"
       width="150"
       height="150"
       class="mr-4"
@@ -174,137 +210,73 @@ $(window).on("load", function () {
     />
       <div class="d-flex flex-column">
       <span style="font-size: 20px; font-weight: 500">
-      <strong>Name:</strong> ${res[0].firstName} ${res[0].lastName} 
+      <strong>Name:</strong> ${res.farmer[0].firstName} ${res.farmer[0].lastName} 
       </span>
       <span style="font-size: 20px; font-weight: 500">
-        <strong>Age:</strong> ${res[0].age} years old
+        <strong>Age:</strong> ${res.farmer[0].age} years old
       </span>
       <span style="font-size: 20px; font-weight: 500">
-        <strong>Location:</strong> ${res[0].address}
+        <strong>Location:</strong> ${res.farm[0].address}
       </span>
       </div>
       `
     );
 
-    // Get croping years
-    sendGetRequest(`/farmer/recruitement/farmer-crop/${res[0]._id}`).then(
-      (res) => {
-        res.forEach((res) => {
-          listOfYears.push(res.year);
-        });
-        cropingYears = Array.from(new Set(listOfYears)).reverse();
-        // Initialize Years dropdown start
-        cropingYears.forEach((year) => {
-          const html = `<option value="${year}" ${
-            year == defaultFarmDataYear ? "selected" : ""
-          }>${year}</option>`;
-          document
-            .getElementById("yearOfCroping")
-            .insertAdjacentHTML("afterbegin", html);
-        });
-      }
-    );
-
-    // Get Farmer Crops Details
-    sendGetRequest(
-      `/farmer/recruitement/farmer-crop/${defaultFarmDataYear}/${res[0]._id}`
-    )
-      .then((crops) => {
-        if (!crops.result.length <= 0) {
-          cropsLists = [];
-          reset();
-          for (let i = 0; i < crops.result.length; i++) {
-            landAreaData.datasets[0].data.push(crops.result[i].landArea);
-            landAreaData.labels.push(crops.result[i].crop);
-            yieldData.datasets[0].data.push(crops.result[i].yield);
-            yieldData.labels.push(crops.result[i].crop);
-            cropsLists.push(crops.result[i].crop);
-            netIncomeData.datasets[0].data.push(crops.result[i].netIncome);
-            netIncomeData.labels.push(crops.result[i].crop);
-          }
-          cropsLists.forEach((crop) => {
-            document.getElementById("listCrops").insertAdjacentHTML(
-              "afterbegin",
-              `
-              <li class="list-group-item justify-content-between">
-                ${crop}
-              </li>
-              `
-            );
-          });
-          document.querySelectorAll(".error_msg").forEach((err_msg) => {
-            err_msg.style.display = "none";
-          });
-          document.getElementById("donutChart2").style.display = "block";
-          document.getElementById("donutChart3").style.display = "block";
-          initCharts();
-        } else {
-          document.getElementById("listCrops").innerHTML =
-            "<p class='text-center'>No Data</p>";
-          document.getElementById("donutChart2").style.display = "none";
-          document.getElementById("donutChart3").style.display = "none";
-          document.querySelectorAll(".error_msg").forEach((err_msg) => {
-            err_msg.style.display = "block";
-          });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    getFarmerCrops(farmyear, res.farmer[0]._id, currentfarm);
 
     // get crops details on Select Croping year
-    const selectElement = $("#yearOfCroping");
-    selectElement.on("change", function (event) {
-      document.getElementById("listCrops").innerHTML = "";
-      const selectedValue = event.target.value;
-      sendGetRequest(
-        `/farmer/recruitement/farmer-crop/${selectedValue}/${res[0]._id}`
-      )
-        .then((crops) => {
-          if (!crops.result.length <= 0) {
-            cropsLists = [];
-            reset();
-            for (let i = 0; i < crops.result.length; i++) {
-              landAreaData.datasets[0].data.push(crops.result[i].landArea);
-              landAreaData.labels.push(crops.result[i].crop);
-              yieldData.datasets[0].data.push(crops.result[i].yield);
-              yieldData.labels.push(crops.result[i].crop);
-              cropsLists.push(crops.result[i].crop);
-              netIncomeData.datasets[0].data.push(crops.result[i].netIncome);
-              netIncomeData.labels.push(crops.result[i].crop);
-            }
-            cropsLists.forEach((crop) => {
-              document.getElementById("listCrops").insertAdjacentHTML(
-                "afterbegin",
-                `
-                <li class="list-group-item justify-content-between">
-                  ${crop}
-                </li>
-                `
-              );
-            });
-            document.querySelectorAll(".error_msg").forEach((err_msg) => {
-              err_msg.style.display = "none";
-            });
-            document.getElementById("donutChart2").style.display = "block";
-            document.getElementById("donutChart3").style.display = "block";
-            initCharts();
-          } else {
-            document.getElementById("listCrops").innerHTML =
-              "<p class='text-center'>No Data</p>";
-            document.getElementById("donutChart2").style.display = "none";
-            document.getElementById("donutChart3").style.display = "none";
-            document.querySelectorAll(".error_msg").forEach((err_msg) => {
-              err_msg.style.display = "block";
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
+    // const selectElement = $("#yearOfCroping");
+    // selectElement.on("change", function (event) {
+    //   document.getElementById("listCrops").innerHTML = "";
+    //   const selectedValue = event.target.value;
+    //   sendGetRequest(
+    //     `/farmer/recruitement/farmer-crop/${selectedValue}/${res[0]._id}`
+    //   )
+    //     .then((crops) => {
+    //       if (!crops.result.length <= 0) {
+    //         cropsLists = [];
+    //         reset();
+    //         for (let i = 0; i < crops.result.length; i++) {
+    //           landAreaData.datasets[0].data.push(crops.result[i].landArea);
+    //           landAreaData.labels.push(crops.result[i].crop);
+    //           yieldData.datasets[0].data.push(crops.result[i].yield);
+    //           yieldData.labels.push(crops.result[i].crop);
+    //           cropsLists.push(crops.result[i].crop);
+    //           netIncomeData.datasets[0].data.push(crops.result[i].netIncome);
+    //           netIncomeData.labels.push(crops.result[i].crop);
+    //         }
+    //         cropsLists.forEach((crop) => {
+    //           document.getElementById("listCrops").insertAdjacentHTML(
+    //             "afterbegin",
+    //             `
+    //             <li class="list-group-item justify-content-between">
+    //               ${crop}
+    //             </li>
+    //             `
+    //           );
+    //         });
+    //         document.querySelectorAll(".error_msg").forEach((err_msg) => {
+    //           err_msg.style.display = "none";
+    //         });
+    //         document.getElementById("donutChart2").style.display = "block";
+    //         document.getElementById("donutChart3").style.display = "block";
+    //         initCharts();
+    //       } else {
+    //         document.getElementById("listCrops").innerHTML =
+    //           "<p class='text-center'>No Data</p>";
+    //         document.getElementById("donutChart2").style.display = "none";
+    //         document.getElementById("donutChart3").style.display = "none";
+    //         document.querySelectorAll(".error_msg").forEach((err_msg) => {
+    //           err_msg.style.display = "block";
+    //         });
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // });
 
-    _loadMap(res[0].lat, res[0].long);
+    _loadMap(res.farm[0].lat, res.farm[0].long);
   });
 });
 
@@ -328,6 +300,7 @@ function _loadMap(lat, lng) {
 }
 
 function reset() {
+  document.getElementById("listCrops").innerHTML = "";
   netIncomeData.labels = [];
   cropsLists = [];
   landAreaData.labels = [];
@@ -337,3 +310,56 @@ function reset() {
   netIncomeData.datasets[0].data = [];
   netIncomeData.datasets[0].labels = [];
 }
+
+const getFarmerCrops = function (year = new Date().getFullYear(), id, farm) {
+  console.log(`/farmer/recruitement/farmer-crop/${year}/${id}/${farm}`);
+  // Get Farmer Crops Details
+  sendGetRequest(`/farmer/recruitement/farmer-crop/${year}/${id}/${farm}`)
+    .then((crops) => {
+      console.log(crops);
+      if (!crops.result.length <= 0) {
+        cropsLists = [];
+        reset();
+        for (let i = 0; i < crops.result.length; i++) {
+          landAreaData.datasets[0].data.push(crops.result[i].landArea);
+          landAreaData.labels.push(crops.result[i].crop);
+          yieldData.datasets[0].data.push(crops.result[i].yield);
+          yieldData.labels.push(crops.result[i].crop);
+          cropsLists.push(crops.result[i].crop);
+          netIncomeData.datasets[0].data.push(crops.result[i].netIncome);
+          netIncomeData.labels.push(crops.result[i].crop);
+        }
+        cropsLists.forEach((crop) => {
+          document.getElementById("listCrops").insertAdjacentHTML(
+            "afterbegin",
+            `
+            <li class="list-group-item justify-content-between">
+              ${crop}
+            </li>
+            `
+          );
+        });
+        document.querySelectorAll(".error_msg").forEach((err_msg) => {
+          err_msg.style.display = "none";
+        });
+        document.getElementById("donutChart2").style.display = "block";
+        document.getElementById("donutChart3").style.display = "block";
+        initCharts();
+      } else {
+        document.getElementById("listCrops").innerHTML =
+          "<p class='text-center'>No Data</p>";
+        document.getElementById("donutChart2").style.display = "none";
+        document.getElementById("donutChart3").style.display = "none";
+        document.querySelectorAll(".error_msg").forEach((err_msg) => {
+          err_msg.style.display = "block";
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+document.getElementById("sortbyBtn").addEventListener("click", function () {
+  getFarmerCrops(farmyear, farmerId, selectFarm.value);
+});
