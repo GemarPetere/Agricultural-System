@@ -278,37 +278,28 @@ exports.getFarmerDetails = async (req, res) =>{
   try{
     const { id } = req.params
     let result = {}
-    Farmer.find({_id:id})
-      .then((data) =>{
-        result.farmer = data
-        FarmerAddress.find({farmerId:data[0]._id})
-        .then((farmData) =>{
-         result.farm = farmData
-        })
-        .catch((err) =>{
-          return res.status(404).json(err)
-        })
+    const data = await Farmer.find({_id:id})
+    if(data.length > 0){
+      result.farmer = data
 
-        FarmerCrop.find({farmerId:data[0]._id})
-        .then((cropDatas) =>{
-          let cropYear = []
-          cropDatas.forEach((cropData) =>{
-            if(!cropYear.includes(cropData)){
-              cropYear.push(cropData.year)
-            }
-          })
-          result.crop = cropYear
-
-          return res.status(200).json(result)
+      const farmData = await FarmerAddress.find({farmerId:data[0]._id})
+      if(farmData.length > 0){
+        result.farm = farmData
+      }
+      const cropDatas = await FarmerCrop.find({farmerId:data[0]._id})
+      if(cropDatas.length > 0){
+        let cropYear = []
+        cropDatas.forEach((cropData) =>{
+          if(!cropYear.includes(cropData)){
+            cropYear.push(cropData.year)
+          }
         })
-        .catch((error) =>{
-          return res.status(404).json(error)
-        })
-      })
-      .catch((err) =>{
-        return res.status(404).json(err)
-      })
-
+        result.crop = cropYear
+      }
+      return res.status(200).json(result)
+    }else{
+      return res.status(404).json(err)
+    }
      
   }catch(error){
     console.log(error)
