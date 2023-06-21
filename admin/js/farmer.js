@@ -361,5 +361,7 @@ const getFarmerCrops = function (year = new Date().getFullYear(), id, farm) {
 };
 
 document.getElementById("sortbyBtn").addEventListener("click", function () {
+  farmyear = document.getElementById("yearOfCroping").value;
   getFarmerCrops(farmyear, farmerId, selectFarm.value);
+  incomeChart.destroy();
 });
