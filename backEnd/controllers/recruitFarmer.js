@@ -184,6 +184,9 @@ exports.farmerCrop = async (req, res) => {
           .then((result) =>{
             return res.status(200).json({result})
           })
+          .catch((error) => {
+            return res.status(500).json({ error: 'An error occurred while updating the document.' });
+          });
       }else{
         const data = {
           crop: crop,
@@ -274,32 +277,39 @@ exports.getFarmerList = async (req, res) => {
 exports.getFarmerDetails = async (req, res) =>{
   try{
     const { id } = req.params
+    let result = {}
     Farmer.find({_id:id})
       .then((data) =>{
+        result.farmer = data
         FarmerAddress.find({farmerId:data[0]._id})
         .then((farmData) =>{
-          FarmerCrop.find({$and:[{farmerId:data[0]._id},{farmId:farmData[0]._id}]})
-          .then((cropDatas) =>{
-            let cropYear = []
-            cropDatas.forEach((cropData) =>{
-              cropYear.push(cropData.year)
-            })
-            const result = {
-              farmer: data,
-              farm: farmData,
-              crop: cropYear
-            }
-            return res.status(200).json(result)
-            //return res.status(200).json({data, farmData})
-          })
+         result.farm = farmData
         })
         .catch((err) =>{
           return res.status(404).json(err)
+        })
+
+        FarmerCrop.find({farmerId:data[0]._id})
+        .then((cropDatas) =>{
+          let cropYear = []
+          cropDatas.forEach((cropData) =>{
+            if(!cropYear.includes(cropData)){
+              cropYear.push(cropData.year)
+            }
+          })
+          result.crop = cropYear
+
+          return res.status(200).json(result)
+        })
+        .catch((error) =>{
+          return res.status(404).json(error)
         })
       })
       .catch((err) =>{
         return res.status(404).json(err)
       })
+
+     
   }catch(error){
     console.log(error)
     return res.status(500).json(err)
