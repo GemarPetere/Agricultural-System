@@ -76,13 +76,18 @@ exports.searchDataBarangay = async (req, res) =>{
     let x=0;
     let landAreas=0;
     const response = {}
+    const locations = []
+
     farmers.map((farmer) =>{
       x++;
       FarmerAddress.find({farmerId:farmer._id})
       .then((responses) =>{
         responses.map((response) =>{
           if(response){
-           
+            const lat = response.lat
+            const long = response.long
+
+            locations.push({lat, long})
             landAreas+=response.landArea
           }
         })
@@ -93,6 +98,7 @@ exports.searchDataBarangay = async (req, res) =>{
 
     if(farmerList){
       response.farmer = farmerList
+      response.locations = locations
       response.farmerCount = x
       response.farmedArea = landAreas
     }
