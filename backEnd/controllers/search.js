@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Farmer = require("../models/Farmer");
 const  RecruitFarmer = require("../models/Farmer");
 const FarmerCrop = require("../models/FarmerCrops");
+const FarmerAddress = require("../models/Address")
 
 exports.search = async (req, res) =>{
     try{
@@ -76,10 +77,16 @@ exports.searchDataBarangay = async (req, res) =>{
     let landAreas=0;
     const response = {}
     farmers.map((farmer) =>{
-      if(farmer){
-        x++;
-        landAreas+=farmer.landArea
-      }
+      x++;
+      FarmerAddress.find({farmerId:farmer._id})
+      .then((responses) =>{
+        responses.map((response) =>{
+          if(response){
+           
+            landAreas+=response.landArea
+          }
+        })
+      })
     })
 
     const farmerList = await Farmer.find().sort({ _id: -1 }).limit(10)
