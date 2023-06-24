@@ -39,6 +39,7 @@ loginForm.addEventListener("submit", function (e) {
       localStorage.setItem("userID", res.user._id);
       localStorage.setItem("userName", res.user.name);
       localStorage.setItem("userEmail", res.user.email);
+      localStorage.setItem("userRole", res.user.role);
 
       Toast.fire({
         icon: "success",

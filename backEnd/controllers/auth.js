@@ -67,14 +67,10 @@ exports.signup = (req, res) => {
       if (user.role === 0) {
         return res.json({ token, user: user });
       } else if (user.role === 1) {
-        Shop.findOne({ user: user._id }, (err, shop) => {
-          return res.json({ token, user: user, shop: shop });
+        User.findOne({ user: user._id }, (err, data) => {
+          return res.json({ token, user: user,data: data });
         });
-      } else if (user.role === 2) {
-        ShopShop.findOne({ user: user._id }, (err, store) => {
-          return res.json({ token, user: user, store: store });
-        });
-      } else {
+      }else {
         return res.json({ token, user: user, isAdmin: true });
       }
     });
