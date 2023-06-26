@@ -90,12 +90,12 @@
                       class="table table-bordered table-striped"
                     >
                       <thead>
-                        <tr>
+                        <tr id="userRoleList">
                           <th>Name</th>
                           <th>Age</th>
                           <th>Contact</th>
                           <th>Status</th>
-                          <th>Edit</th>
+                          <th id="userDecisionList">Edit</th>
                         </tr>
                       </thead>
                       <tbody></tbody>
@@ -118,6 +118,14 @@
     <!-- REQUIRED SCRIPTS -->
 
     <!-- jQuery -->
+    <script>
+      if(localStorage.getItem("userRole") === "1"){
+          document.getElementById('userRoleList').appendChild(document.getElementById('userDecisionList'));
+      }else{
+        document.getElementById('userDecisionList').remove();
+      }
+
+    </script>
     <script src="./plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>

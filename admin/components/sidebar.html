@@ -50,6 +50,7 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul
+        id="userRole"
         class="nav nav-pills nav-sidebar flex-column"
         data-widget="treeview"
         role="menu"
@@ -76,7 +77,7 @@
             <p>Lists of Farmers</p>
           </a>
         </li>
-        <li class="nav-item">
+        <li id="userDecision" class="nav-item">
           <a href="./add-subadmin.html" class="nav-link" id="add-subadmin">
             <i class="nav-icon fas fa-user-plus nav-icon"></i>
             <p>Add Sub-admin</p>
@@ -135,6 +136,13 @@
   <!-- /.sidebar -->
 </aside>
 <script>
+  
+  if(localStorage.getItem("userRole") === "1"){
+    document.getElementById('userRole').appendChild(document.getElementById('userDecision'));
+  }else{
+    document.getElementById('userDecision').remove();
+  }
+
   let url = window.location.pathname;
   let filename = url.substring(url.lastIndexOf("/") + 1).split(".")[0];
   let navItem = document.querySelectorAll(".nav-link");
@@ -149,4 +157,5 @@
   // drpdwn.addEventListener("click", () => {
   //   drpdwn.classList.toggle("menu-open");
   // });
+
 </script>

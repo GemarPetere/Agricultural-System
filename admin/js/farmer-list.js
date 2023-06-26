@@ -5,22 +5,35 @@ let tableData = [];
 sendGetRequest("/farmer/recruitement").then((res) => {
   console.log(res);
   res.map((data) => {
-    let newObj = {
-      Name: `<img src="${data.image}" width="26" height="26" class="rounded-circle"> ${data.Name}`,
-      Age: data.Age,
-      Contact: data.Contact,
-      Status: `<div class="rounded py-1 text-center ${
-        data.activeStatus ? "activeStatus" : "inactiveStatus"
-      }" role="alert">${data.activeStatus ? "Active" : "Inactive"}</div>`,
-      Edit: `<a class="btn btn-primary" style="margin-right:10px;" href="farmer.html?id=${
-        data.id
-      }">View</a>
-      <a class="editStatusBtn btn btn-${
-        data.activeStatus ? "danger" : "success"
-      }"data-id="${data.id}" >${
-        data.activeStatus ? "Deactivate" : "Activate"
-      }</a>`,
-    };
+    let newObj;
+    if(localStorage.getItem("userRole") === "1"){
+      newObj = {
+        Name: `<img src="${data.image}" width="26" height="26" class="rounded-circle"> ${data.Name}`,
+        Age: data.Age,
+        Contact: data.Contact,
+        Status: `<div class="rounded py-1 text-center ${
+          data.activeStatus ? "activeStatus" : "inactiveStatus"
+        }" role="alert">${data.activeStatus ? "Active" : "Inactive"}</div>`,
+        Edit: `<a class="btn btn-primary" style="margin-right:10px;" href="farmer.html?id=${
+          data.id
+        }">View</a>
+        <a class="editStatusBtn btn btn-${
+          data.activeStatus ? "danger" : "success"
+        }"data-id="${data.id}" >${
+          data.activeStatus ? "Deactivate" : "Activate"
+        }</a>`,
+      };
+    }else{
+      newObj = {
+        Name: `<img src="${data.image}" width="26" height="26" class="rounded-circle"> ${data.Name}`,
+        Age: data.Age,
+        Contact: data.Contact,
+        Status: `<div class="rounded py-1 text-center ${
+          data.activeStatus ? "activeStatus" : "inactiveStatus"
+        }" role="alert">${data.activeStatus ? "Active" : "Inactive"}</div>`,
+        Edit: '<p></p>',
+      };
+    }
     console.log(data);
     tableData.push(newObj);
   });
