@@ -237,7 +237,15 @@ exports.farmerCropDetails = async (req, res) =>{
         error: err,
       }); 
     }
-    res.status(200).json({ result });
+    if(!result[0].farmId){
+      return res.status(404).json({
+        error: "Check DB something missing farmId",
+      }); 
+    }
+    const farm = await FarmerAddress.find({_id:result[0].farmId})
+    const location = {lat:farm[0].lat, long:farm[0].long}
+    
+    res.status(200).json({ result, location });
   }catch(error){
     console.log(error)
     res.status(500).json({error})
