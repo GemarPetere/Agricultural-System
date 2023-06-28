@@ -182,9 +182,12 @@ $(window).on("load", function () {
           }
         }
 
-        res.crop.forEach((year) => {
-          listOfYears.push(year);
-        });
+        if (res.crop) {
+          res.crop.forEach((year) => {
+            listOfYears.push(year);
+          });
+        }
+
         cropingYears = Array.from(new Set(listOfYears)).reverse();
         // Initialize Years dropdown start
         cropingYears.forEach((year) => {
