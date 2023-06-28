@@ -165,119 +165,73 @@ $(function () {
 
 $(window).on("load", function () {
   // Get Farmer Details
-  sendGetRequest(`/farmer/recruitement/${farmerId}`).then((res) => {
-    console.log(res);
-    res.farm.forEach((data) => {
-      farmDatas[data.barangay] = data._id;
-    });
+  (async function () {
+    try {
+      sendGetRequest(`/farmer/recruitement/${farmerId}`).then((res) => {
+        console.log(res);
+        res.farm.forEach((data) => {
+          farmDatas[data.barangay] = data._id;
+        });
 
-    currentfarm = farmDatas[Object.keys(farmDatas)[0]];
+        currentfarm = farmDatas[Object.keys(farmDatas)[0]];
 
-    for (const key in farmDatas) {
-      if (farmDatas.hasOwnProperty(key)) {
-        const html = `<option value="${farmDatas[key]}">${key}</option>`;
-        selectFarm.insertAdjacentHTML("afterbegin", html);
-      }
+        for (const key in farmDatas) {
+          if (farmDatas.hasOwnProperty(key)) {
+            const html = `<option value="${farmDatas[key]}">${key}</option>`;
+            selectFarm.insertAdjacentHTML("afterbegin", html);
+          }
+        }
+
+        res.crop.forEach((year) => {
+          listOfYears.push(year);
+        });
+        cropingYears = Array.from(new Set(listOfYears)).reverse();
+        // Initialize Years dropdown start
+        cropingYears.forEach((year) => {
+          const html = `<option value="${year}" ${
+            year == defaultFarmDataYear ? "selected" : ""
+          }>${year}</option>`;
+          document
+            .getElementById("yearOfCroping")
+            .insertAdjacentHTML("afterbegin", html);
+        });
+
+        farmyear = document.getElementById("yearOfCroping").value;
+        addCropBtn.href = `add-farmer-crop.html?id=${res.farmer[0]._id}`;
+        addFarmBtn.href = `add-farm.html?id=${res.farmer[0]._id}`;
+        // Show Farmer Details
+        document.getElementById("farmerDetails").insertAdjacentHTML(
+          "afterbegin",
+          `
+          <img
+          src="${res.farmer[0].image.secure_url}"
+          width="150"
+          height="150"
+          class="mr-4"
+          alt=""
+        />
+          <div class="d-flex flex-column">
+          <span style="font-size: 20px; font-weight: 500">
+          <strong>Name:</strong> ${res.farmer[0].firstName} ${res.farmer[0].lastName} 
+          </span>
+          <span style="font-size: 20px; font-weight: 500">
+            <strong>Age:</strong> ${res.farmer[0].age} years old
+          </span>
+          <span style="font-size: 20px; font-weight: 500">
+            <strong>Location:</strong> ${res.farm[0].address}
+          </span>
+          </div>
+          `
+        );
+
+        getFarmerCrops(farmyear, res.farmer[0]._id, currentfarm);
+
+        _loadMap(res.farm[0].lat, res.farm[0].long);
+      });
+    } catch (err) {
+      console.log(err);
     }
-
-    res.crop.forEach((year) => {
-      listOfYears.push(year);
-    });
-    cropingYears = Array.from(new Set(listOfYears)).reverse();
-    // Initialize Years dropdown start
-    cropingYears.forEach((year) => {
-      const html = `<option value="${year}" ${
-        year == defaultFarmDataYear ? "selected" : ""
-      }>${year}</option>`;
-      document
-        .getElementById("yearOfCroping")
-        .insertAdjacentHTML("afterbegin", html);
-    });
-
-    farmyear = document.getElementById("yearOfCroping").value;
-    addCropBtn.href = `add-farmer-crop.html?id=${res.farmer[0]._id}`;
-    addFarmBtn.href = `add-farm.html?id=${res.farmer[0]._id}`;
-    // Show Farmer Details
-    document.getElementById("farmerDetails").insertAdjacentHTML(
-      "afterbegin",
-      `
-      <img
-      src="${res.farmer[0].image.secure_url}"
-      width="150"
-      height="150"
-      class="mr-4"
-      alt=""
-    />
-      <div class="d-flex flex-column">
-      <span style="font-size: 20px; font-weight: 500">
-      <strong>Name:</strong> ${res.farmer[0].firstName} ${res.farmer[0].lastName} 
-      </span>
-      <span style="font-size: 20px; font-weight: 500">
-        <strong>Age:</strong> ${res.farmer[0].age} years old
-      </span>
-      <span style="font-size: 20px; font-weight: 500">
-        <strong>Location:</strong> ${res.farm[0].address}
-      </span>
-      </div>
-      `
-    );
-
-    getFarmerCrops(farmyear, res.farmer[0]._id, currentfarm);
-
-    // get crops details on Select Croping year
-    // const selectElement = $("#yearOfCroping");
-    // selectElement.on("change", function (event) {
-    //   document.getElementById("listCrops").innerHTML = "";
-    //   const selectedValue = event.target.value;
-    //   sendGetRequest(
-    //     `/farmer/recruitement/farmer-crop/${selectedValue}/${res[0]._id}`
-    //   )
-    //     .then((crops) => {
-    //       if (!crops.result.length <= 0) {
-    //         cropsLists = [];
-    //         reset();
-    //         for (let i = 0; i < crops.result.length; i++) {
-    //           landAreaData.datasets[0].data.push(crops.result[i].landArea);
-    //           landAreaData.labels.push(crops.result[i].crop);
-    //           yieldData.datasets[0].data.push(crops.result[i].yield);
-    //           yieldData.labels.push(crops.result[i].crop);
-    //           cropsLists.push(crops.result[i].crop);
-    //           netIncomeData.datasets[0].data.push(crops.result[i].netIncome);
-    //           netIncomeData.labels.push(crops.result[i].crop);
-    //         }
-    //         cropsLists.forEach((crop) => {
-    //           document.getElementById("listCrops").insertAdjacentHTML(
-    //             "afterbegin",
-    //             `
-    //             <li class="list-group-item justify-content-between">
-    //               ${crop}
-    //             </li>
-    //             `
-    //           );
-    //         });
-    //         document.querySelectorAll(".error_msg").forEach((err_msg) => {
-    //           err_msg.style.display = "none";
-    //         });
-    //         document.getElementById("donutChart2").style.display = "block";
-    //         document.getElementById("donutChart3").style.display = "block";
-    //         initCharts();
-    //       } else {
-    //         document.getElementById("listCrops").innerHTML =
-    //           "<p class='text-center'>No Data</p>";
-    //         document.getElementById("donutChart2").style.display = "none";
-    //         document.getElementById("donutChart3").style.display = "none";
-    //         document.querySelectorAll(".error_msg").forEach((err_msg) => {
-    //           err_msg.style.display = "block";
-    //         });
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // });
-
-    _loadMap(res.farm[0].lat, res.farm[0].long);
-  });
+  })();
 });
 
 function _loadMap(lat, lng) {
