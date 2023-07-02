@@ -29,6 +29,7 @@ let landAreaData = {
     },
   ],
 };
+
 let yieldData = {
   labels: [],
   datasets: [
@@ -169,9 +170,11 @@ $(window).on("load", function () {
     try {
       sendGetRequest(`/farmer/recruitement/${farmerId}`).then((res) => {
         console.log(res);
-        res.farm.forEach((data) => {
-          farmDatas[data.barangay] = data._id;
-        });
+        if (res.farm) {
+          res.farm.forEach((data) => {
+            farmDatas[data.barangay] = data._id;
+          });
+        }
 
         currentfarm = farmDatas[Object.keys(farmDatas)[0]];
 
@@ -203,33 +206,35 @@ $(window).on("load", function () {
         addCropBtn.href = `add-farmer-crop.html?id=${res.farmer[0]._id}`;
         addFarmBtn.href = `add-farm.html?id=${res.farmer[0]._id}`;
         // Show Farmer Details
-        document.getElementById("farmerDetails").insertAdjacentHTML(
-          "afterbegin",
-          `
-          <img
-          src="${res.farmer[0].image.secure_url}"
-          width="150"
-          height="150"
-          class="mr-4"
-          alt=""
-        />
-          <div class="d-flex flex-column">
-          <span style="font-size: 20px; font-weight: 500">
-          <strong>Name:</strong> ${res.farmer[0].firstName} ${res.farmer[0].lastName} 
-          </span>
-          <span style="font-size: 20px; font-weight: 500">
-            <strong>Age:</strong> ${res.farmer[0].age} years old
-          </span>
-          <span style="font-size: 20px; font-weight: 500">
-            <strong>Location:</strong> ${res.farm[0].address}
-          </span>
-          </div>
-          `
-        );
-
+        if (res.farmer && res.farm) {
+          document.getElementById("farmerDetails").insertAdjacentHTML(
+            "afterbegin",
+            `
+            <img
+            src="${res.farmer[0].image.secure_url}"
+            width="150"
+            height="150"
+            class="mr-4"
+            alt=""
+          />
+            <div class="d-flex flex-column">
+            <span style="font-size: 20px; font-weight: 500">
+            <strong>Name:</strong> ${res.farmer[0].firstName} ${res.farmer[0].lastName} 
+            </span>
+            <span style="font-size: 20px; font-weight: 500">
+              <strong>Age:</strong> ${res.farmer[0].age} years old
+            </span>
+            <span style="font-size: 20px; font-weight: 500">
+              <strong>Location:</strong> ${res.farm[0].address}
+            </span>
+            </div>
+            `
+          );
+        }
+        console.log(farmyear, res.farmer[0]._id, currentfarm);
         getFarmerCrops(farmyear, res.farmer[0]._id, currentfarm);
 
-        _loadMap(res.farm[0].lat, res.farm[0].long);
+        _loadMap(res);
       });
     } catch (err) {
       console.log(err);
@@ -237,23 +242,24 @@ $(window).on("load", function () {
   })();
 });
 
-function _loadMap(lat, lng) {
-  const latitude = lat;
-  const longitude = lng;
+function _loadMap(res) {
+  console.log(res);
+  map = L.map(mapContainer).setView([res.farm[0].lat,res.farm[0].long], 13);
+  let markerOptions;
 
-  const coords = [latitude, longitude];
-  map = L.map(mapContainer).setView(coords, 17);
+  res.farm.forEach((farm) => {
+    const { lat, long } = farm;
+    console.log([lat, long]);
+    markerOptions  = {
+      title: farm.barangaysa,
+      clickable: true,
+    };
+    new L.Marker([lat, long], markerOptions).addTo(map);
+  });
 
   L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png").addTo(
     map
   );
-  let markerOptions = {
-    title: "Farmer Location",
-    clickable: true,
-  };
-  let marker = new L.Marker(coords, markerOptions);
-  marker.bindPopup("Farmer Location").openPopup();
-  marker.addTo(map);
 }
 
 function reset() {
