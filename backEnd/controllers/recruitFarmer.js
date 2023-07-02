@@ -232,22 +232,18 @@ exports.farmerCropDetails = async (req, res) =>{
       ]
     }
     const result = await FarmerCrop.find(query)
-    if(!result){
-      return res.status(404).json({
-        error: err,
+    if(result.length < 1){
+      res.status(404).json({
+        error: "Empty Data",
       }); 
     }
-    if(!result[0].farmId){
-      return res.status(404).json({
-        error: "Check DB something missing farmId",
-      }); 
-    }
-    const farm = await FarmerAddress.find({_id:result[0].farmId})
-    const location = {lat:farm[0].lat, long:farm[0].long}
-    
-    res.status(200).json({ result, location });
+    // if(!result[0].farmId){
+    //   return res.status(404).json({
+    //     error: "Check DB something missing farmId",
+    //   }); 
+    // }
+    res.status(200).json({result});
   }catch(error){
-    console.log(error)
     res.status(500).json({error})
   }
 }
