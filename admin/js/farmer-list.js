@@ -6,7 +6,7 @@ sendGetRequest("/farmer/recruitement").then((res) => {
   console.log(res);
   res.map((data) => {
     let newObj;
-    if(localStorage.getItem("userRole") === "1"){
+    if (localStorage.getItem("userRole") === "1") {
       newObj = {
         Name: `<img src="${data.image}" width="26" height="26" class="rounded-circle"> ${data.Name}`,
         Age: data.Age,
@@ -23,7 +23,7 @@ sendGetRequest("/farmer/recruitement").then((res) => {
           data.activeStatus ? "Deactivate" : "Activate"
         }</a>`,
       };
-    }else{
+    } else {
       newObj = {
         Name: `<img src="${data.image}" width="26" height="26" class="rounded-circle"> ${data.Name}`,
         Age: data.Age,
@@ -31,7 +31,9 @@ sendGetRequest("/farmer/recruitement").then((res) => {
         Status: `<div class="rounded py-1 text-center ${
           data.activeStatus ? "activeStatus" : "inactiveStatus"
         }" role="alert">${data.activeStatus ? "Active" : "Inactive"}</div>`,
-        Edit: '<p></p>',
+        Edit: `<a class="btn btn-primary" style="margin-right:10px;" href="farmer.html?id=${
+          data.id
+        }">View</a>`,
       };
     }
     console.log(data);
