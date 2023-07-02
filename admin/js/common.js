@@ -110,6 +110,7 @@ export async function editFarmerStatus(route, userInfo) {
 export async function sendGetRequest(route) {
   try {
     const response = await fetch(apiBaseUrl + route);
+    // if (!response.ok) return;
     const data = await response.json();
     return data;
   } catch (error) {

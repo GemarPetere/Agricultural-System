@@ -115,14 +115,14 @@ form.addEventListener("submit", function (e) {
     landArea: document.getElementById("landArea").value,
     farmerId: farmerId,
     lat: formLat,
-    long: formLat,
+    long: formLng,
   };
   console.log(newFarm);
   sendPostRequest("/farmer/recruitement", newFarm).then(() => {
-    Swal.fire({
+    Toast.fire({
       position: "top-end",
       icon: "success",
-      title: `Famr added!`,
+      title: `Farm added!`,
       showConfirmButton: false,
       timer: 2500,
     });
