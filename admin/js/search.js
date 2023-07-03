@@ -225,11 +225,13 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
       chartData.datasets[0].data.length = 0;
       console.log(res);
       chartData.labels.length = 0;
-      for (let i = 0; i < res.length; i++) {
+      for (let i = 0; i < res.farmData.length; i++) {
+        console.log(res.farmData[i].production);
         chartData.datasets[0].label = `Barangay's with`;
-        chartData.datasets[0].data.push(res[i].production);
-        chartData.labels.push(res[i].barangay);
+        chartData.datasets[0].data.push(res.farmData[i].production);
+        chartData.labels.push(res.farmData[i].barangay);
       }
+      console.log(chartData);
       if (res.length == 0) {
         document.getElementById("searchChartContainer").style.display = "none";
 
@@ -241,56 +243,56 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
       } else {
         document.getElementById("searchChartContainer").style.display = "block";
       }
-      let html;
-      for (let i = 0; i < res.length; i++) {
-        console.log(i);
-        let date = new Date(res[i].farmers.updatedAt);
-        html = `
-            <a href="farmer.html?id=${res[i].farmers._id}">
-            <div class="list-group-item mb-2" style="color:#000;">
-                    <div class="row">
-                      <div class="col-auto">
-                        <img
-                           width="160" height="160"
-                          src="${res[i].farmers.image.secure_url}"
-                          alt="${res[i].farmers.firstName} ${
-          res[i].farmers.lastName
-        }"
-                        />
-                      </div>
-                      <div class="col px-4">
-                        <div>
-                          <div class="float-right"> ${date.toLocaleString()}</div>
-                          <h3 class="mb-0">${res[i].farmers.firstName} ${
-          res[i].farmers.lastName
-        }</h3>
-                        <p class="mb-0">${
-                          res[i].farmers.email
-                            ? `<strong>Email: </strong>${res[i].farmers.email}`
-                            : ""
-                        }</p>
-                          <p class="mb-0">
-                            <strong>Address:</strong> ${res[i].farmers.address}
-                          </p>
-                          <p class="mb-0">
-                          <strong>Age:</strong> ${res[i].farmers.age}
-                          </p>
-                          <p class="mb-0">
-                          <strong>Religion:</strong> ${res[i].farmers.religion}
-                          </p>
-                          <p class="mb-0">
-                          <strong>Contact Number:</strong> ${
-                            res[i].farmers.contactNo
-                          }
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-            </a>
-            `;
-        searchResultsContainer.insertAdjacentHTML("afterbegin", html);
-      }
+      // let html;
+      // for (let i = 0; i < res.length; i++) {
+      //   console.log(i);
+      //   let date = new Date(res[i].farmers.updatedAt);
+      //   html = `
+      //       <a href="farmer.html?id=${res[i].farmers._id}">
+      //       <div class="list-group-item mb-2" style="color:#000;">
+      //               <div class="row">
+      //                 <div class="col-auto">
+      //                   <img
+      //                      width="160" height="160"
+      //                     src="${res[i].farmers.image.secure_url}"
+      //                     alt="${res[i].farmers.firstName} ${
+      //     res[i].farmers.lastName
+      //   }"
+      //                   />
+      //                 </div>
+      //                 <div class="col px-4">
+      //                   <div>
+      //                     <div class="float-right"> ${date.toLocaleString()}</div>
+      //                     <h3 class="mb-0">${res[i].farmers.firstName} ${
+      //     res[i].farmers.lastName
+      //   }</h3>
+      //                   <p class="mb-0">${
+      //                     res[i].farmers.email
+      //                       ? `<strong>Email: </strong>${res[i].farmers.email}`
+      //                       : ""
+      //                   }</p>
+      //                     <p class="mb-0">
+      //                       <strong>Address:</strong> ${res[i].farmers.address}
+      //                     </p>
+      //                     <p class="mb-0">
+      //                     <strong>Age:</strong> ${res[i].farmers.age}
+      //                     </p>
+      //                     <p class="mb-0">
+      //                     <strong>Religion:</strong> ${res[i].farmers.religion}
+      //                     </p>
+      //                     <p class="mb-0">
+      //                     <strong>Contact Number:</strong> ${
+      //                       res[i].farmers.contactNo
+      //                     }
+      //                     </p>
+      //                   </div>
+      //                 </div>
+      //               </div>
+      //             </div>
+      //       </a>
+      //       `;
+      //   searchResultsContainer.insertAdjacentHTML("afterbegin", html);
+      // }
       if (chart) {
         chart.destroy();
       }
