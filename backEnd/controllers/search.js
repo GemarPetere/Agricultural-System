@@ -64,7 +64,7 @@ exports.searchCrops = async (req, res) =>{
         for(let crop in crops){
           prod = crops[crop]
           const farmResponse = await FarmerAddress.find({_id:prod.farmId})
-          
+
           if(farmResponse.length < 1){
             return res.status(404).json({
               message:"Data not Found Farmer Address"
@@ -106,6 +106,7 @@ exports.searchDataBarangay = async (req, res) =>{
     const farmerList = await Farmer.find().sort({ _id: -1 }).limit(10)
 
     if(farmerList){
+      console.log(locations)
       response.farmer = farmerList
       response.locations = locations
       response.farmerCount = x
