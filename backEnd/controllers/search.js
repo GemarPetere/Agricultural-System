@@ -53,17 +53,15 @@ exports.searchCrops = async (req, res) =>{
     try{
         const { crop, year } = req.params
         const crops = await FarmerCrop.find({$and:[{crop:{$regex:crop, $options:'i'}}, {year:year}]})
-        const searched = []
-        for(const crop of crops){
-          const farmer = await Farmer.find({ $and: [
-              { _id: crop.farmerId },
-              { activeStatus: true }, // added requirement for activeStatus field
-            ],
-          })
-          const farmers = farmer[0]
-          searched.push({crop, farmers})
+        let prod;
+        let farmData = [];
+        
+        for(let crop in crops){
+          prod = crops[crop]
+          const farmResponse = await FarmerAddress.find({_id:prod.farmId})
+          farmData.push({barangay:farmResponse[0].barangay, production:prod.production})
         }
-        return res.status(200).json(searched)
+        return res.status(200).json({farmData})
       }catch(error){
         console.log(error)
       }
