@@ -53,12 +53,23 @@ exports.searchCrops = async (req, res) =>{
     try{
         const { crop, year } = req.params
         const crops = await FarmerCrop.find({$and:[{crop:{$regex:crop, $options:'i'}}, {year:year}]})
+        if(crops.length < 1){
+          return res.status(404).json({
+            message:"Data not Found"
+          })
+        }
         let prod;
         let farmData = [];
-        
+
         for(let crop in crops){
           prod = crops[crop]
           const farmResponse = await FarmerAddress.find({_id:prod.farmId})
+          
+          if(farmResponse.length < 1){
+            return res.status(404).json({
+              message:"Data not Found Farmer Address"
+            })
+          }
           farmData.push({barangay:farmResponse[0].barangay, production:prod.production})
         }
         return res.status(200).json({farmData})
