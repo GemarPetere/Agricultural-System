@@ -92,7 +92,7 @@ sendGetRequest("/search4/dashboard").then((res) => {
     totalLandArea.innerText = res.farmedArea;
     for (let i = 0; i < res.farmer.length; i++) {
       farmerCoords.push([
-        [res.farmer[i].lat, res.farmer[i].long],
+        [res.locations[i].lat, res.locations[i].long],
         {
           Name: res.farmer[i].firstName + " " + res.farmer[i].lastName,
           Barangay: res.farmer[i].barangay,
