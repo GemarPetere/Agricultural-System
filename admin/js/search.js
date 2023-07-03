@@ -225,14 +225,14 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
       chartData.datasets[0].data.length = 0;
       console.log(res);
       chartData.labels.length = 0;
-      for (let i = 0; i < res.farmData.length; i++) {
-        console.log(res.farmData[i].production);
-        chartData.datasets[0].label = `Barangay's with`;
-        chartData.datasets[0].data.push(res.farmData[i].production);
-        chartData.labels.push(res.farmData[i].barangay);
-      }
-      console.log(chartData);
-      if (res.length == 0) {
+      if(res.farmData){
+        for (let i = 0; i < res.farmData.length; i++) {
+          console.log(res.farmData[i].production);
+          chartData.datasets[0].label = `Barangay's with`;
+          chartData.datasets[0].data.push(res.farmData[i].production);
+          chartData.labels.push(res.farmData[i].barangay);
+        }
+      }else if(res.message){
         document.getElementById("searchChartContainer").style.display = "none";
 
         searchResultsContainer.innerHTML = "";
@@ -240,9 +240,22 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
           "afterbegin",
           `<h3 class="text-center py-5">No data was Found</h3>`
         );
-      } else {
+      }else{
         document.getElementById("searchChartContainer").style.display = "block";
+      
       }
+      // console.log(chartData);
+      // if (res.length == 0) {
+      //   document.getElementById("searchChartContainer").style.display = "none";
+
+      //   searchResultsContainer.innerHTML = "";
+      //   searchResultsContainer.insertAdjacentHTML(
+      //     "afterbegin",
+      //     `<h3 class="text-center py-5">No data was Found</h3>`
+      //   );
+      // } else {
+      //   document.getElementById("searchChartContainer").style.display = "block";
+      // }
       // let html;
       // for (let i = 0; i < res.length; i++) {
       //   console.log(i);
