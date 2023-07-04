@@ -29,7 +29,7 @@ function _loadMap(position) {
   });
   map.setView(coords, 13);
 
-  L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png").addTo(
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
     map
   );
 }

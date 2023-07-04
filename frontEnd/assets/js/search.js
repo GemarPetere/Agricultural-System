@@ -120,6 +120,7 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
   // Seach by Brgy
   if (searchBy == "barangay") {
     sendGetRequest(`/search3/${searchItem}/${searchYear}`).then((res) => {
+      console.log(res);
       searchResultsContainer.innerHTML = "";
       if (res.length == 0) {
         document.getElementById("searchChartContainer").style.display = "none";
@@ -127,7 +128,7 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
         searchResultsContainer.innerHTML = "";
         searchResultsContainer.insertAdjacentHTML(
           "afterbegin",
-          `<h3 class="text-center py-5">No data was Found</h3>`
+          `<h3 class="text-center py-5 text-white">No data was Found</h3>`
         );
       } else {
         document.getElementById("searchChartContainer").style.display = "block";
@@ -147,54 +148,7 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
             );
             chartData.labels.push(res[i].cropsDetails[index].crop);
           }
-          console.log(res);
         }
-        let date = new Date(res[i].farmer.updatedAt);
-        html = `
-        <a href="farmer.html?id=${res[i].farmer._id}">
-        <div class="list-group-item mb-2" style="color:#000;">
-                    <div class="row">
-                      <div class="col-auto">
-                        <img
-                           width="160" height="160"
-                          src="${res[i].farmer.image.secure_url}"
-                          alt="${res[i].farmer.firstName} ${
-          res[i].farmer.lastName
-        }"
-                        />
-                      </div>
-                      <div class="col px-4">
-                        <div>
-                          <div class="float-right"> ${date.toLocaleString()}</div>
-                          <h3 class="mb-0">${res[i].farmer.firstName} ${
-          res[i].farmer.lastName
-        }</h3>
-                        <p class="mb-0">${
-                          res[i].farmer.email
-                            ? `<strong>Email: </strong>${res[i].farmer.email}`
-                            : ""
-                        }</p>
-                          <p class="mb-0">
-                            <strong>Address:</strong> ${res[i].farmer.address}
-                          </p>
-                          <p class="mb-0">
-                          <strong>Age:</strong> ${res[i].farmer.age}
-                          </p>
-                          <p class="mb-0">
-                          <strong>Religion:</strong> ${res[i].farmer.religion}
-                          </p>
-                          <p class="mb-0">
-                          <strong>Contact Number:</strong> ${
-                            res[i].farmer.contactNo
-                          }
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-        </a>
-            `;
-        // searchResultsContainer.insertAdjacentHTML("afterbegin", html);
       }
       if (chart) {
         chart.destroy();
