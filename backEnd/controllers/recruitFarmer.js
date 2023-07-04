@@ -154,7 +154,7 @@ exports.farmerCrop = async (req, res) => {
       return res.status(400).json({ error: "One of the data is Undefined" });
     }
 
-    const farmerData = await Farmer.find({_id:id})
+    const farmerData = await FarmerAddress.find({_id:farmId})
     if(farmerData.length > 0 ){
       const landarea = farmerData[0].landArea
       if(landarea < landArea){
