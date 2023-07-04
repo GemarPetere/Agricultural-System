@@ -179,10 +179,10 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
       chartData.datasets[0].data.length = 0;
       console.log(res);
       chartData.labels.length = 0;
-      for (let i = 0; i < res.length; i++) {
+      for (let i = 0; i < res.farmData.length; i++) {
         chartData.datasets[0].label = `Barangay's with ${searchItem}`;
-        chartData.datasets[0].data.push(res[i].production);
-        chartData.labels.push(res[i].barangay);
+        chartData.datasets[0].data.push(res.farmData[i].production);
+        chartData.labels.push(res.farmData[i].barangay);
       }
       if (res.length == 0) {
         document.getElementById("searchChartContainer").style.display = "none";
