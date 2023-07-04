@@ -11,7 +11,7 @@ const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
   showConfirmButton: false,
-  timer: 1000,
+  timer: 3000,
   timerProgressBar: true,
   didOpen: (toast) => {
     toast.addEventListener("mouseenter", Swal.stopTimer);
@@ -116,6 +116,7 @@ addCropForm.addEventListener("submit", function (e) {
     newCrop
   )
     .then((res) => {
+      console.log(res);
       if (res.data) {
         Toast.fire({
           icon: "success",
@@ -124,6 +125,11 @@ addCropForm.addEventListener("submit", function (e) {
         setTimeout(() => {
           location.reload();
         }, 1100);
+      }else if(res.error){
+        Toast.fire({
+          icon: "error",
+          title: "Entered land area exceeds the farmer land area!",
+        });
       }
     })
     .catch((err) => {
