@@ -31,16 +31,10 @@ exports.search = async (req, res) =>{
 exports.searchBarangay = async (req, res) =>{
     try{
         const { barangay, year } = req.params
-
-        const farmers = await Farmer.find({
-          $and: [
-            { barangay: { $regex: barangay, $options: 'i' } },
-            { activeStatus: true }, // added requirement for activeStatus field
-          ],
-        })
+        const farmers = await FarmerAddress.find({ barangay: { $regex: barangay, $options: 'i' } })
         const searched = []
         for (const farmer of farmers) {
-          const cropsDetails = await FarmerCrop.find({ $and:[{farmerId: farmer._id }, {year:year}]})
+          const cropsDetails = await FarmerCrop.find({ $and:[{farmerId: farmer.farmerId }, {year:year}]})
           searched.push({ farmer, cropsDetails })
         }
         return res.status(200).json(searched)
