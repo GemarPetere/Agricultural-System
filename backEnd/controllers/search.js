@@ -83,6 +83,7 @@ exports.searchDataBarangay = async (req, res) =>{
     const locations = []
 
     farmers.map((farmer) =>{
+      console.log(farmer)
       x++;
       FarmerAddress.find({farmerId:farmer._id})
       .then((responses) =>{
@@ -92,8 +93,9 @@ exports.searchDataBarangay = async (req, res) =>{
             const long = response.long
             const barangay = response.barangay
             const landarea = response.landArea
+            const farmerName = `${farmer.firstName} ${farmer.lastName}`
 
-            locations.push({lat, long,barangay, landarea})
+            locations.push({lat, long, farmerName, barangay, landarea})
             landAreas+=response.landArea
           }
         })
