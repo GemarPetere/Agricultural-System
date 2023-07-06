@@ -207,7 +207,8 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
           marker.on("mouseover", function () {
             if (!this.isPopupOpen())
               this.bindTooltip(
-                `<span><strong>Brgy:</strong> ${res.farmData[i].barangay}</span>`
+                `<span><strong>Brgy:</strong> ${res.farmData[i].barangay}</span><br>
+                <span><strong>Land Area:</strong> ${res.farmData[i].landArea}</span>`
               ).openTooltip();
           });
         }
