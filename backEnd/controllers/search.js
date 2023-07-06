@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const Farmer = require("../models/Farmer");
 const  RecruitFarmer = require("../models/Farmer");
 const FarmerCrop = require("../models/FarmerCrops");
-const FarmerAddress = require("../models/Address")
+const FarmerAddress = require("../models/Address");
+const { farmerCrop } = require("./recruitFarmer");
 
 exports.search = async (req, res) =>{
     try{
@@ -64,7 +65,8 @@ exports.searchCrops = async (req, res) =>{
               message:"Data not Found Farmer Address"
             })
           }
-          farmData.push({barangay:farmResponse[0].barangay, production:prod.production})
+          const location = {lat:farmResponse[0].lat, long:farmResponse[0].long}
+          farmData.push({location,barangay:farmResponse[0].barangay, production:prod.production})
         }
         return res.status(200).json({farmData})
       }catch(error){
