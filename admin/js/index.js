@@ -95,8 +95,8 @@ sendGetRequest("/search4/dashboard").then((res) => {
         [res.locations[i].lat, res.locations[i].long],
         {
           Name: res.farmer[i].firstName + " " + res.farmer[i].lastName,
-          Barangay: res.farmer[i].barangay,
-          LandArea: res.farmer[i].landArea,
+          Barangay: res.locations[i].barangay,
+          LandArea: res.locations[i].landarea,
         },
       ]);
     }

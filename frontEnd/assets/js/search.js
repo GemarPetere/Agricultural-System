@@ -10,7 +10,8 @@ let lastFiveyears = [];
 const searchResultsContainer = document.getElementById("searchResults");
 const searchForm = document.getElementById("searchForm");
 const ctx = document.getElementById("searchChart");
-
+let mapContainer = document.querySelector(".mapContainer");
+let map;
 // populate last 5 years array
 for (let i = 0; i < 5; i++) {
   if (lastFiveyears.length == 0) {
@@ -132,6 +133,7 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
         );
       } else {
         document.getElementById("searchChartContainer").style.display = "block";
+        mapContainer.innerHTML = "";
       }
 
       let html;
@@ -179,14 +181,17 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
       chartData.datasets[0].data.length = 0;
       console.log(res);
       chartData.labels.length = 0;
-      for (let i = 0; i < res.farmData.length; i++) {
-        chartData.datasets[0].label = `Barangay's with ${searchItem}`;
-        chartData.datasets[0].data.push(res.farmData[i].production);
-        chartData.labels.push(res.farmData[i].barangay);
+      if (!res.message) {
+        for (let i = 0; i < res.farmData.length; i++) {
+          chartData.datasets[0].label = `Barangay's with ${searchItem}`;
+          chartData.datasets[0].data.push(res.farmData[i].production);
+          chartData.labels.push(res.farmData[i].barangay);
+        }
       }
-      if (res.length == 0) {
-        document.getElementById("searchChartContainer").style.display = "none";
 
+      if (res.message) {
+        document.getElementById("searchChartContainer").style.display = "none";
+        mapContainer.innerHTML = "";
         searchResultsContainer.innerHTML = "";
         searchResultsContainer.insertAdjacentHTML(
           "afterbegin",
@@ -194,6 +199,19 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
         );
       } else {
         document.getElementById("searchChartContainer").style.display = "block";
+        mapContainer.innerHTML = "";
+        mapContainer.innerHTML = `<div id='map' style='width: 100%; height: 100%;'></div>`;
+        map = L.map("map");
+        for (let i = 0; i < res.farmData.length; i++) {
+          var marker = L.marker(res.farmData[i].location).addTo(map);
+        }
+
+        map.setView([6.9522, 126.2173], 13);
+
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
       }
       let html;
       for (let i = 0; i < res.length; i++) {
