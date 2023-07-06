@@ -203,7 +203,7 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
         mapContainer.innerHTML = `<div id='map' style='width: 100%; height: 100%;'></div>`;
         map = L.map("map");
         for (let i = 0; i < res.farmData.length; i++) {
-          var marker = L.marker(res.farmData[i].location).addTo(map);
+          var marker = L.marker([res.farmData[i].lat, res.farmData[i].long]).addTo(map);
           marker.on("mouseover", function () {
             if (!this.isPopupOpen())
               this.bindTooltip(
