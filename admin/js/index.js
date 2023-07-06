@@ -90,7 +90,7 @@ sendGetRequest("/search4/dashboard").then((res) => {
     console.log(res);
     totalFarmers.innerText = res.farmerCount;
     totalLandArea.innerText = res.farmedArea;
-    for (let i = 0; i < res.farmer.length; i++) {
+    for (let i = 0; i < res.locations.length; i++) {
       farmerCoords.push([
         [res.locations[i].lat, res.locations[i].long],
         {
