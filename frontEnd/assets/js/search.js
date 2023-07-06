@@ -204,6 +204,12 @@ function search(searchItem, searchBy, searchYear = searchYearContainer.value) {
         map = L.map("map");
         for (let i = 0; i < res.farmData.length; i++) {
           var marker = L.marker(res.farmData[i].location).addTo(map);
+          marker.on("mouseover", function () {
+            if (!this.isPopupOpen())
+              this.bindTooltip(
+                `<span><strong>Brgy:</strong> ${res.farmData[i].barangay}</span>`
+              ).openTooltip();
+          });
         }
 
         map.setView([6.9522, 126.2173], 13);
