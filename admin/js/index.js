@@ -68,9 +68,15 @@ function _loadMap(position) {
     marker.on("mouseover", function () {
       if (!this.isPopupOpen())
         this.bindTooltip(
-          `<span><strong>Name:</strong> ${farmerCoords[i][1].Name}</span>
+          // `
+          // <span><strong>Name:</strong> ${farmerCoords[i][1].Name}</span>
+          // <br><span><strong>Brgy:</strong> ${farmerCoords[i][1].Barangay}</span>
+          // <br><span><strong>Area:</strong> ${farmerCoords[i][1].LandArea}</span>
+          // `
+          `
           <br><span><strong>Brgy:</strong> ${farmerCoords[i][1].Barangay}</span>
-          <br><span><strong>Area:</strong> ${farmerCoords[i][1].LandArea}</span>`
+          <br><span><strong>Area:</strong> ${farmerCoords[i][1].LandArea}</span>
+          `
         ).openTooltip();
     });
     // L.tooltip(farmerCoords[i], {
@@ -94,7 +100,7 @@ sendGetRequest("/search4/dashboard").then((res) => {
       farmerCoords.push([
         [res.locations[i].lat, res.locations[i].long],
         {
-          Name: res.farmer[i].firstName + " " + res.farmer[i].lastName,
+          // Name: res.farmer[i].firstName + " " + res.farmer[i].lastName,
           Barangay: res.locations[i].barangay,
           LandArea: res.locations[i].landarea,
         },
