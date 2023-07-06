@@ -55,7 +55,7 @@ exports.searchCrops = async (req, res) =>{
         }
         let prod;
         let farmData = [];
-
+        let location = []
         for(let crop in crops){
           prod = crops[crop]
           const farmResponse = await FarmerAddress.find({_id:prod.farmId})
@@ -65,7 +65,8 @@ exports.searchCrops = async (req, res) =>{
               message:"Data not Found Farmer Address"
             })
           }
-          const location = {lat:farmResponse[0].lat, long:farmResponse[0].long}
+          location[0] = farmResponse[0].lat
+          location[1] = farmResponse[0].long
           farmData.push({location,barangay:farmResponse[0].barangay, production:prod.production})
         }
         return res.status(200).json({farmData})
