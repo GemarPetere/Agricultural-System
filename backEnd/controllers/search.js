@@ -65,9 +65,8 @@ exports.searchCrops = async (req, res) =>{
               message:"Data not Found Farmer Address"
             })
           }
-          location[0] = farmResponse[0].lat
-          location[1] = farmResponse[0].long
-          farmData.push({location,barangay:farmResponse[0].barangay, production:prod.production})
+          //location.push(farmResponse[0].lat,farmResponse[0].long)
+          farmData.push({lat:farmResponse[0].lat,long:farmResponse[0].long,barangay:farmResponse[0].barangay, production:prod.production})
         }
         return res.status(200).json({farmData})
       }catch(error){
