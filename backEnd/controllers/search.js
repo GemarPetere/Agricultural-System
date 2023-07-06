@@ -89,8 +89,10 @@ exports.searchDataBarangay = async (req, res) =>{
           if(response){
             const lat = response.lat
             const long = response.long
+            const barangay = response.barangay
+            const landarea = response.landArea
 
-            locations.push({lat, long})
+            locations.push({lat, long,barangay, landarea})
             landAreas+=response.landArea
           }
         })
@@ -100,7 +102,6 @@ exports.searchDataBarangay = async (req, res) =>{
     const farmerList = await Farmer.find().sort({ _id: -1 }).limit(10)
 
     if(farmerList){
-      console.log(locations)
       response.farmer = farmerList
       response.locations = locations
       response.farmerCount = x
