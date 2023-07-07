@@ -36,7 +36,7 @@ app.use(fileUpload({useTempFiles:true}));
 
 
 //static folder
-app.use(express.static(path.join(__dirname, "client/build")));
+//app.use(express.static(path.join(__dirname, "client/build")));
 app.use(function (req, res, next) {
   //res.setHeader("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Origin", "*");
@@ -65,7 +65,7 @@ app.use("/docs-api", (req, res) => {
 });
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/build/index.html"));
+  res.status(404).json({message:"Error Route"});
 });
 // END MIDDLEWARES
 
