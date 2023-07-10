@@ -96,7 +96,7 @@ addUserForm.addEventListener("submit", function (e) {
     console.log(res);
     Swal.fire({
       position: "top-end",
-      icon: "error",
+      icon: "success",
       title: `${res.message}`,
       showConfirmButton: false,
       timer: 2500,
